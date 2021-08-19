@@ -1,0 +1,23 @@
+  
+{% extends "base.html" %}
+{% block title %}Analizador{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div style="padding-top: 5%;">
+        <h3 for="exampleFormControlTextarea1">Entrada</h3>
+        <div id="codeeditor">
+        </div>
+        <div class="" style="text-align: center; padding-top: 2%;">
+            <button type="button" class="btn btn-secondary btn-lg btn-block">Analizar</button>
+        </div>
+    </div>
+    <div style="padding-top: 5%; padding-bottom: 5%;">
+        <div class="form-group">
+            <h3 for="exampleFormControlTextarea1">Salida</h3>
+            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" style="background-color:#14011D; color:#FFFF"></textarea>
+          </div>
+    </div>
+</div>
+{% endblock %}
