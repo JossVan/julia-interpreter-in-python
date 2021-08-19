@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='codemirror/lib/codemirror.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='styles/styles.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='codemirror/theme/dracula.css') }}">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+</head>
+
+<body style="background-color: #ECF0F1;">
+    {% include 'navbar.html'%}
+    {% block content %}
+    {% endblock %}
+    
+    <!--codemirror scripts and stylesheet-->
+    <script src="{{ url_for('static',filename='codemirror/lib/codemirror.js') }}"></script>
+    <script src="{{ url_for('static',filename='js/editor_conf.js') }}"></script>
+    <script src="{{ url_for('static',filename='codemirror/mode/julia/julia.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+    <script>
+        var editor= CodeMirror(document.getElementById("codeeditor"),{
+            lineNumbers:true,
+            theme:'dracula'
+        });
+    </script>
+</body>
+
+</html>
