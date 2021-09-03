@@ -1,5 +1,6 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
+from Instrucciones.Print import Print
 app = Flask(__name__)
 
 #por default
@@ -14,6 +15,9 @@ def principal():
         global tmp_val
         tmp_val=inpt
         result = g(tmp_val)
+        if isinstance(result,Print):
+            print("es un print")
+        
         return render_template('principal.html', resultado=result)
     else:
         return render_template('principal.html')
