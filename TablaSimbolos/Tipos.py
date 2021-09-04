@@ -57,3 +57,8 @@ class Tipo_Print(Enum):
 
     PRINT = 1
     PRINTLN = 2
+
+class Tipo_Acceso(Enum):
+    GLOBAL = 1
+    LOCAL = 2
+    NONE = 3
