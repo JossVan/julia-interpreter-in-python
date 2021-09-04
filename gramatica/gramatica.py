@@ -171,10 +171,14 @@ lexer.lineno = 1
 
 # Asociación de operadores y precedencia
 precedence = (
+    ('left', 'OR'),
+    ('left', 'AND'),
+    ('left', 'IGUALQUE', 'NIGUALQUE'),
+    ('left', 'MENQUE','MAYQUE', 'MENORIGUAL','MAYORIGUAL'),
     ('left','MAS','MENOS'),
     ('left','POR','DIVIDIDO','MODAL'),
     ('left', 'POTENCIA'),
-    ('right','UMENOS'),
+    ('right','UMENOS', 'DIFERENTE'),
     )
 
 # Definición de la gramática
@@ -198,7 +202,7 @@ def p_inicio(t):
     if t[2] != "":
         t[1].append(t[2])
     t[0] = t[1]
-    print (t[0])
+
 def p_iniciofi(t):
     '''INICIO   : FUNCIONES
                 | INSTRUCCIONES'''
@@ -230,12 +234,12 @@ def p_instruccionesI(t):
 
 def p_impresion(t):
 
-    '''I : R_PRINT PARIZQ IMPRESION PARDER PTCOMA'''
-    t[0] = Print(Tipo_Print.PRINT, t[3],t.lineno(1), 1)
+    '''I : R_PRINT PARIZQ IMPRESIONES PARDER PTCOMA'''
+    t[0] = Print(Tipo_Print.PRINT, t[3],t.lineno(1), t.lexpos(0))
 
 def p_println(t):
-    'I : R_PRINTLN PARIZQ IMPRESION PARDER PTCOMA'
-    t[0] = Print(Tipo_Print.PRINTLN, t[3], t.lineno(1), find_column(input, t.slice[1]))
+    'I : R_PRINTLN PARIZQ IMPRESIONES PARDER PTCOMA'
+    t[0] = Print(Tipo_Print.PRINTLN, t[3], t.lineno(1), t.lexpos(0))
 
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
@@ -251,7 +255,7 @@ def p_contimpresionCont(t):
     '''IMPRESION    : E
                     | ARREGLOS
                     | NATIVAS'''
-    t[0]=t[1]
+    t[0] = t[1]
 
 def p_cont_impresionDolar(t):
     '''IMPRESION : DOLAR PARIZQ E PARDER
@@ -325,22 +329,23 @@ def p_expresiones(t):
             | E DIVIDIDO E
             | E MODAL E
             | E POTENCIA E'''
-    if( t[2]== '+'):
-        Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[2], t.lineno(2), find_column(input, t.slice[2]))
+    if( t[2] == '+'):
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[3], t.lineno(1), t.lexpos(3))
     elif( t[2] == '-' ):
-        Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[2], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[3], t.lineno(1), t.lexpos(3))
+        t[0].operacion
     elif(t[2] == '*'):
-        Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[2], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[3], t.lineno(1), t.lexpos(3))
     elif(t[2] == '/'):
-        Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[2], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[3], t.lineno(1), t.lexpos(3))
     elif(t[2] == '^'):
-        Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[2], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[3], t.lineno(1), t.lexpos(3))
     elif(t[2] == '%'):
-        Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[2], t.lineno(2), find_column(input, t.slice[2]))
-        
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[3], t.lineno(1), t.lexpos(3))
+    
 def p_expresion_unaria(t):
     'E : MENOS E %prec UMENOS'
-    
+    t[0] = Constante(Primitivo(TipoObjeto.NEGATIVO, t[2]), t.lineno(1), t.lexpos(0))
 
 def p_expresionespar(t):
     'E : PARIZQ E PARDER'
@@ -348,55 +353,55 @@ def p_expresionespar(t):
 
 def p_expresionesesp(t):
     '''E : R_LOG10 PARIZQ E PARDER'''  
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.log10, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.log10, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_seno(t):
     'E : R_SIN PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.seno, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.seno, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_coseno(t):
     'E : R_COS PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.coseno, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.coseno, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_tangente(t):
     'E : R_TAN PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.tangente, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.tangente, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_sqrt(t):
     'E : R_SQRT PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.sqrt, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.sqrt, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_upper(t):
     'E : R_UPPERCASE PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.uppercase, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.uppercase, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_lower(t):
     'E : R_LOWERCASE PARIZQ E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.lowercase, t[3], None, t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.lowercase, t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_expresiones_log(t):
     'E : R_LOG PARIZQ E COMA E PARDER'
-    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.log, t[3], t[5], t.lineno(2), find_column(input,t.slice[2]))
+    t[0] = Funciones_matematicas(Tipo_FuncionAritmetica.log, t[3], t[5], t.lineno(1), t.lexpos(1))
 
 def p_expresiones_decimal(t):
     'E : DECIMAL'
-    t[0] = Constante(Primitivo(TipoObjeto.DECIMAL,t[1]), t.lineno(2), find_column(input, t.slice[2]))
+    t[0] = Constante(Primitivo(TipoObjeto.DECIMAL,t[1]), t.lineno(0), t.lexpos(0))
 def p_expresiones_entero(t):
     'E : ENTERO'
-    t[0] = Constante(Primitivo(TipoObjeto.ENTERO, t[1]), t.lineno(2), find_column(input, t.slice[2]))
+    t[0] = Constante(Primitivo(TipoObjeto.ENTERO, t[1]), t.lineno(0), t.lexpos(0))
 
 def p_expresiones_booleanas(t):
     '''E : R_TRUE
         | R_FALSE'''
-    t[0] = Constante(Primitivo(TipoObjeto.BOOLEANO, t[1]), t.lineno(2), find_column(input, t.slice[2]))
+    t[0] = Constante(Primitivo(TipoObjeto.BOOLEANO, t[1]), t.lineno(0), t.lexpos(0))
 
 def p_expresiones_cadena(t):
     'E : CADENA'
-    t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(1), 1)
+    t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(0), t.lexpos(0))
     
 def p_expresiones_id(t):
     'E : ID'
-    t[0] = Identificador(t[1],t.lineno(1), find_column(input, t.slice[2]))
+    t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
 
 def p_expresiones_relacionales(t):
     ''' RE :  RE MENQUE RE
@@ -407,17 +412,17 @@ def p_expresiones_relacionales(t):
             | RE MAYORIGUAL RE'''
     
     if(t[2] == '>'):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR,t.lineno(1), t.lexpos(1))
     elif(t[2] == '<'):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR,t.lineno(1), t.lexpos(1))
     elif(t[3] == '=='):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.IGUAL,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.IGUAL,t.lineno(1), t.lexpos(1))
     elif(t[3] == '!='):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.DIFERENTE,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.DIFERENTE,t.lineno(1), t.lexpos(1))
     elif(t[3] == '<='):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR_IGUAL,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR_IGUAL,t.lineno(1), t.lexpos(1))
     elif(t[3] == '>='):
-        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR_IGUAL,t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR_IGUAL,t.lineno(1), t.lexpos(1))
 
 def p_expresionesE(t):
     'RE : E'
@@ -426,14 +431,14 @@ def p_expresiones_logicas(t):
     '''LO :   LO AND LO
             | LO OR LO'''
     if(t[2] == '&&'):
-        t[0] = Logica(t[1],t[3],Tipo_Logico.AND,t.lineno(1), find_column(input, t.slice[2]))
+        t[0] = Logica(t[1],t[3],Tipo_Logico.AND,t.lineno(1), t.lexpos(1))
     elif(t[2] == '||'):
-        t[0] = Logica(t[1],t[3],Tipo_Logico.OR,t.lineno(1), find_column(input, t.slice[2]))
+        t[0] = Logica(t[1],t[3],Tipo_Logico.OR,t.lineno(1), t.lexpos(1))
     
 def p_expresiones_logicas_diferente(t):
     'LO : DIFERENTE LO'
     if(t[1] == '!'):
-        t[0] = Logica(t[2],None,Tipo_Relacional.DIFERENTE,t.lineno(1), find_column(input, t.slice[1]))
+        t[0] = Logica(t[2],None,Tipo_Relacional.DIFERENTE,t.lineno(1), t.lexpos(1))
 
 def p_expresiones_logicas_re(t):
     'LO : RE'
@@ -444,32 +449,32 @@ def p_nativas(t):
                 | R_TRUNC PARIZQ TIPO COMA LISTA PARDER'''
     
     if(t[1]=='parse'):
-        t[0] = Nativas_conTipo(Tipo_Primitivas.PARSE,t[3],t[5],t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Nativas_conTipo(Tipo_Primitivas.PARSE,t[3],t[5],t.lineno(1), t.lexpos(1))
     elif(t[1] == 'trunc'):
-        t[0] = Nativas_conTipo(Tipo_Primitivas.TRUNC,t[3],t[5],t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Nativas_conTipo(Tipo_Primitivas.TRUNC,t[3],t[5],t.lineno(1), t.lexpos(1))
 
 def p_nativasp(t):
     '''NATIVAS :  R_FLOAT   PARIZQ LISTA PARDER
                 | R_SSTRING PARIZQ LISTA PARDER
                 | R_TYPEOF  PARIZQ LISTA PARDER'''
     if(t[1]=='float'):
-        t[0] = Nativas_SinTipo(Tipo_Primitivas.FLOAT,t[3], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Nativas_SinTipo(Tipo_Primitivas.FLOAT,t[3], t.lineno(1), t.lexpos(1))
     elif(t[1] == 'string'):
-        t[0] = Nativas_SinTipo(Tipo_Primitivas.STRING,t[3], t.lineno(2), find_column(input, t.slice[2]))
+        t[0] = Nativas_SinTipo(Tipo_Primitivas.STRING,t[3], t.lineno(1), t.lexpos(1))
 def p_nativaspush(t):
     ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA E PARDER'
-    id = Identificador(t[4],t.lineno(2), find_column(input, t.slice[2]))
-    t[0] = Pilas(Tipo_Primitivas.PUSH, id, t[6], t.lineno(2), find_column(input, t.slice[2]))
+    id = Identificador(t[4],t.lineno(1), t.lexpos(1))
+    t[0] = Pilas(Tipo_Primitivas.PUSH, id, t[6], t.lineno(1), t.lexpos(1))
 
 def p_nativaspop(t):
     'NATIVAS : R_POP DIFERENTE PARIZQ ID PARDER'
     id = Identificador(t[4],t.lineno(2), find_column(input, t.slice[2]))
-    t[0] = Pilas(Tipo_Primitivas.POP, id, None, t.lineno(2), find_column(input, t.slice[2]))
+    t[0] = Pilas(Tipo_Primitivas.POP, id, None, t.lineno(1), t.lexpos(1))
 
 def p_nativas_length(t):
     'NATIVAS : ID PUNTO R_LENGTH'
-    id = Identificador(t[4],t.lineno(2), find_column(input, t.slice[2]))
-    t[0] = Pilas(Tipo_Primitivas.LENGTH, id, None,t.lineno(2), find_column(input, t.slice[2]))
+    id = Identificador(t[4],t.lineno(1), t.lexpos(1))
+    t[0] = Pilas(Tipo_Primitivas.LENGTH, id, None,t.lineno(1), t.lexpos(1))
 def p_returns(t):
     'RETURN : R_RETURN LISTA'
 
