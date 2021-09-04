@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 import re
 
 reservadas = {
@@ -22,7 +23,7 @@ reservadas = {
      'local' : 'R_LOCAL',
      'function' : 'R_FUNCTION',
      'if' : 'R_IF',
-     'elseif' : 'R_ELSEIF',
+     'elseif' :'R_ELSEIF',
      'else' : 'R_ELSE',
      'for' : 'R_FOR',
      'while' : 'R_WHILE',
@@ -178,13 +179,14 @@ precedence = (
     ('left','MAS','MENOS'),
     ('left','POR','DIVIDIDO','MODAL'),
     ('left', 'POTENCIA'),
-    ('right','UMENOS', 'DIFERENTE'),
+    ('right', 'DIFERENTE'),
+    ('right','UMENOS'),
     )
 
 # Definición de la gramática
 
 from Expresiones.Aritmetica import Aritmetica
-from TablaSimbolos.Tipos import Tipo_Aritmetico, Tipo_Dato, Tipo_Logico, Tipo_Relacional, Tipo_FuncionAritmetica, Tipo_Primitivas, Tipo_Print
+from TablaSimbolos.Tipos import Tipo_Aritmetico, Tipo_Dato, Tipo_Logico, Tipo_Relacional, Tipo_FuncionAritmetica, Tipo_Primitivas, Tipo_Print, Tipo_Acceso
 from Abstractas.Objeto import TipoObjeto
 from Expresiones.Funciones import Funciones_matematicas
 from Expresiones.Constante import Constante
@@ -195,6 +197,9 @@ from Expresiones.Logica import Logica
 from Expresiones.Unaria import Unaria
 from Instrucciones.Nativas import Nativas_conTipo,Nativas_SinTipo, Pilas
 from Instrucciones.Print import Print
+from Instrucciones.Asignacion import Asignacion
+from Instrucciones.If import If
+from Instrucciones.While import While
 def p_inicio(t):
     '''INICIO : INICIO FUNCIONES
             |   INICIO INSTRUCCIONES'''
@@ -207,7 +212,7 @@ def p_iniciofi(t):
     '''INICIO   : FUNCIONES
                 | INSTRUCCIONES'''
     t[0] = t[1]
-    
+    print (t[0])
 def p_instrucciones(t):
     '''INSTRUCCIONES    : INSTRUCCIONES IFS
                         | INSTRUCCIONES FORS
@@ -265,9 +270,10 @@ def p_cont_impresionDolar(t):
 def p_arreglos(t):
     'ARREGLOS : CORIZQ LISTAS CORDER'
 
+
 def p_arreglos2(t):
     'ARREGLOS : CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER'
-
+    
 def p_listas(t):
     'LISTAS : LISTAS COMA LISTA'
 
@@ -283,17 +289,36 @@ def p_lista(t):
 def p_asignaciones(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA
                   | R_LOCAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA'''
+    
+    t [2] = Identificador(t[2], t.lineno(2), t.lexpos(2))
+    if t[1] == 'global':
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
+    elif t[1] == 'local':
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
 def p_asignacionesp(t):
     'ASIGNACION : ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA'
+
+    t[1] = Identificador(t[1], t.lineno(0), t.lexpos(0))
+    t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
 
 def p_asginacionesp2(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA PTCOMA
                   | R_LOCAL ID IGUAL LISTA PTCOMA'''
 
+    t[2] = Identificador(t[2], t.lineno(0), t.lexpos(0))
+    if t[1] == 'global':
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
+    elif t[1] == 'local':
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
 def p_asignacionesp3(t):
     '''ASIGNACION : R_GLOBAL ID PTCOMA
                   | R_LOCAL ID PTCOMA'''
 
+    t[2] = Identificador(t[2], t.lineno(0), t.lexpos(0))
+    if t[1] == 'global':
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
+    elif t[1] == 'local':
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(1), t.lexpos(1))
 def p_tipo(t):
     '''TIPO : R_NOTHING
             | R_INT64
@@ -477,10 +502,10 @@ def p_nativas_length(t):
     t[0] = Pilas(Tipo_Primitivas.LENGTH, id, None,t.lineno(1), t.lexpos(1))
 def p_returns(t):
     'RETURN : R_RETURN LISTA'
-
+    t[0] = Return(t[2],t.lineno(0), t.lexpos(0))
 def p_returnUnico(t):
     'RETURN : R_RETURN'
-
+    t[0] = Return(None,t.lineno(0), t.lexpos(0))
 def p_funciones(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END PTCOMA'
 
@@ -505,53 +530,73 @@ def p_funciones_proc_vacia(t):
 def p_funciones_proc_vacia_return(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER RETURN R_END PTCOMA'
 
-def p_ifs(t):
+################################ EMPIEZAN LOS IFS ######################################
+def p_if_solo(t) :
     'IFS : R_IF LO INSTRUCCIONES R_END PTCOMA'
-    print("paso por el if")
+    t[0] = If(t[2], t[3], None, None,t.lineno(1), t.lexpos(0))
+def p_if_else(t) :
+    'IFS : R_IF LO  INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA'
+    t[0] = If(t[2], t[3], None, t[5], t.lineno(1), t.lexpos(0))
 
-def p_ifs_completo(t):
-    'IFS : R_IF LO INSTRUCCIONES ELSEIF R_ELSE INSTRUCCIONES R_END PTCOMA'
+def p_if_elseif(t) :
+    'IFS : R_IF LO INSTRUCCIONES ELSEIF'
+    t[0] = If(t[2], t[3], t[4], None,t.lineno(1), t.lexpos(0))
 
-def p_ifs_elsevacio(t):
-    'IFS : R_IF LO INSTRUCCIONES ELSEIF R_ELSE R_END PTCOMA'
+################################ IFS VACIOS ############################################
+def p_if_solo2(t) :
+    'IFS : R_IF LO  R_END PTCOMA'
+    t[0] = If(t[2], None, None, None,t.lineno(1), t.lexpos(1))
 
-def p_ifs_soloelseif(t):
-    'IFS :  R_IF LO INSTRUCCIONES ELSEIF R_END PTCOMA'
+def p_if_else2(t) :
+    'IFS : R_IF LO  R_ELSE INSTRUCCIONES R_END PTCOMA'
+    t[0] = If(t[2], None, None, t[4], t.lineno(0), t.lexpos(0))
 
-def p_ifs_soloelse(t):
-    'IFS : R_IF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA'
+def p_if_elseif2(t) :
+    'IFS : R_IF LO ELSEIF'
+    t[0] = If(t[2], None, t[3], None,t.lineno(0), t.lexpos(0))
 
-def p_ifs_elsevacio_sinelseif(t):
-    'IFS : R_IF LO INSTRUCCIONES R_ELSE R_END PTCOMA'
+def p_if_else3(t) :
+    'IFS : R_IF LO INSTRUCCIONES R_ELSE  R_END PTCOMA'
+    t[0] = If(t[2], t[3], None, None,t.lineno(0), t.lexpos(0))
 
-def p_ifs_solo(t):
-    'IFS : R_IF LO R_END PTCOMA'
-    print("pasó por el if vacío")
+def p_if_else4(t) :
+    'IFS : R_IF LO  R_ELSE  R_END PTCOMA'
+    t[0] = If(t[2], None, None, None,t.lineno(0), t.lexpos(0))
 
-def p_ifs1(t):
-    'IFS : R_IF LO ELSEIF R_ELSE INSTRUCCIONES R_END PTCOMA'
+#************************************ELSIF EMPIEZAN****************************************
+def p_elseif_solo(t) :
+    'ELSEIF : R_ELSEIF LO INSTRUCCIONES R_END PTCOMA'
+    t[0] = If(t[2], t[3], None, None,t.lineno(0), t.lexpos(0))
+def p_elseif_else(t) :
+    'ELSEIF : R_ELSEIF LO  INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA'
+    t[0] = If(t[2], t[3], None, t[5], t.lineno(0), t.lexpos(0))
 
-def p_ifs2(t):
-    'IFS : R_IF LO ELSEIF R_ELSE R_END PTCOMA'
+def p_elseif_elseif(t) :
+    'ELSEIF : R_ELSEIF LO INSTRUCCIONES ELSEIF'
+    t[0] = If(t[2], t[3], t[4], None,t.lineno(0), t.lexpos(0))
 
-def p_ifs3(t):
-    'IFS : R_IF LO R_ELSE INSTRUCCIONES R_END PTCOMA'
+################################ ELSEIF VACIOS ############################################
+def p_elseif_solo2(t) :
+    'ELSEIF : R_ELSEIF LO  R_END PTCOMA'
+    t[0] = If(t[2], None, None, None,t.lineno(0), t.lexpos(0))
 
-def p_ifs4(t):
-    'IFS : R_IF LO R_ELSE R_END PTCOMA'
+def p_elseif_else2(t) :
+    'ELSEIF : R_ELSEIF LO  R_ELSE INSTRUCCIONES R_END PTCOMA'
+    t[0] = If(t[2], None, None, t[4], t.lineno(0), t.lexpos(0))
 
-def p_elseifs(t):
-    'ELSEIF : ELSEIF R_ELSEIF INSTRUCCIONES'
+def p_elseif_elseif2(t) :
+    'ELSEIF : R_ELSEIF LO ELSEIF'
+    t[0] = If(t[2], None, t[3], None, t.lineno(0), t.lexpos(0))
 
-def p_elseifs1(t):
-    'ELSEIF : ELSEIF R_ELSEIF'
+def p_elseif_else3(t) :
+    'ELSEIF : R_ELSEIF LO INSTRUCCIONES R_ELSE  R_END PTCOMA'
+    t[0] = If(t[2], t[3], None, None,t.lineno(0), t.lexpos(0))
 
-def p_elseifs2(t):
-    'ELSEIF : R_ELSEIF INSTRUCCIONES'
+def p_elseif_else4(t) :
+    'ELSEIF : R_ELSEIF LO  R_ELSE  R_END PTCOMA'
+    t[0] = If(t[2], None, None, None,t.lineno(0), t.lexpos(0))
 
-def p_elseifs3(t):
-    'ELSEIF : R_ELSEIF'
-
+#*************************************ELSEIF TERMINAN******************************************
 def p_instrucciones_loop(t):
     '''INSTRUCCIONES_LOOP :   INSTRUCCIONES_LOOP IFS
                             | INSTRUCCIONES_LOOP FORS
@@ -561,7 +606,6 @@ def p_instrucciones_loop(t):
                             | INSTRUCCIONES_LOOP LLAMADAS
                             | INSTRUCCIONES_LOOP NATIVAS
                             | INSTRUCCIONES_LOOP STRUCTS
-                            | INSTRUCCIONES_LOOP RETURN
                             | INSTRUCCIONES_LOOP R_BREAK
                             | INSTRUCCIONES_LOOP R_CONTINUE'''
     if t[2] != "":
@@ -577,17 +621,16 @@ def p_instrucciones_loop_inst(t):
                             | LLAMADAS
                             | NATIVAS
                             | STRUCTS
-                            | RETURN
                             | R_BREAK
                             | R_CONTINUE'''
     t[0] = t[1]
 
 def p_whiles(t):
     'WHILES : R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA'
-
+    t[0] = While(t[2],t[3], t.lineno(0), t.lexpos(0))
 def p_whiles_vacios(t):
     'WHILES :  R_WHILE LO R_END PTCOMA'
-
+    t[0] = While(t[2],None, t.lineno(0), t.lexpos(0))
 def p_fors(t):
     'FORS : R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END PTCOMA'
 
