@@ -15,10 +15,10 @@ def principal():
         global tmp_val
         tmp_val=inpt
         result = g(tmp_val)
-        if isinstance(result,Print):
-            print("es un print")
-        
-        return render_template('principal.html', resultado=result)
+
+        valor= result.ejecutar("tree", "table")
+        return render_template('principal.html', resultado=valor)
+
     else:
         return render_template('principal.html')
 

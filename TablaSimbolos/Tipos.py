@@ -2,11 +2,11 @@ from enum import Enum
 
 class Tipo_Aritmetico(Enum):
     SUMA = 1
-    RESTA = 1
-    MULTIPLICACION = 2
-    DIVISION = 3
-    MODAL = 4
-    POTENCIA = 5
+    RESTA = 2
+    MULTIPLICACION = 3
+    DIVISION = 4
+    MODAL = 5
+    POTENCIA = 6
 
 
 class Tipo_Dato(Enum):

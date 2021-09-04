@@ -6,7 +6,8 @@ class TipoObjeto(Enum):
     DECIMAL = 2
     BOOLEANO = 3
     CADENA = 4
-    ERROR = 5
+    NEGATIVO = 5
+    ERROR = 6
 
 
 class Objeto(ABC):
