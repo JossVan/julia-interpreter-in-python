@@ -200,6 +200,13 @@ from Instrucciones.Print import Print
 from Instrucciones.Asignacion import Asignacion
 from Instrucciones.If import If
 from Instrucciones.While import While
+from Instrucciones.For import For
+from Expresiones.Rango import Rango
+from Instrucciones.Funciones import Funciones
+from Instrucciones.Llamadas import Llamadas
+from Instrucciones.Structs import Struct
+from Expresiones.Elementos import Elemento
+from Expresiones.Arreglos import Arreglos
 def p_inicio(t):
     '''INICIO : INICIO FUNCIONES
             |   INICIO INSTRUCCIONES'''
@@ -235,7 +242,10 @@ def p_instruccionesI(t):
                         | LLAMADAS
                         | NATIVAS
                         | STRUCTS'''
-    t[0]=t[1]
+    if t[1] == "":
+        t[0] = []
+    else:
+        t[0] = [t[1]]
 
 def p_impresion(t):
 
@@ -254,7 +264,10 @@ def p_contImpresion(t):
 
 def p_contimpresiones(t):
     'IMPRESIONES : IMPRESION'
-    t[0] = t[1]
+    if t[1] == "":
+        t[0] = []
+    else:
+        t[0] = [t[1]]
 
 def p_contimpresionCont(t):
     '''IMPRESION    : E
@@ -268,24 +281,40 @@ def p_cont_impresionDolar(t):
                  | DOLAR PARIZQ NATIVAS PARDER'''
     
 def p_arreglos(t):
-    'ARREGLOS : CORIZQ LISTAS CORDER'
-
-
+    'ARREGLOS : ID CORIZQ LISTAS CORDER'
+    t[1] = Identificador(t[1],t.lineno(1), t.lexpos(1))
+    t[0] = Arreglos(t[1],t[3],None, t.lineno(1), t.lexpos(1))
 def p_arreglos2(t):
+    'ARREGLOS : CORIZQ LISTAS CORDER'
+    t[0] = Arreglos(None,t[2],None, t.lineno(1), t.lexpos(1))
+
+def p_arreglos3(t):
+    'ARREGLOS : ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER'
+    t[1] = Identificador(t[1],t.lineno(1), t.lexpos(1))
+    t[0] = Arreglos(t[1],t[3],t[6], t.lineno(1), t.lexpos(1))
+def p_arreglos4(t):
     'ARREGLOS : CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER'
-    
+    t[0] = Arreglos(None,t[2],t[5], t.lineno(1), t.lexpos(1))
 def p_listas(t):
     'LISTAS : LISTAS COMA LISTA'
+    if t[2] != "":
+        t[1].append(t[2])
+    t[0] = t[1]
 
 def p_listasp(t):
     'LISTAS : LISTA'
+    if t[1] == "":
+        t[0] = []
+    else:
+        t[0] = [t[1]]
 
 def p_lista(t):
     '''LISTA : E
             | NATIVAS
             | ARREGLOS
             | LLAMADAS'''
-    t[0]=t[1]      
+    t[0]=t[1]    
+
 def p_asignaciones(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA
                   | R_LOCAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA'''
@@ -342,10 +371,10 @@ def p_tipo(t):
 
 def p_llamadas(t):
     'LLAMADAS : ID PARIZQ LISTAS PARIZQ PTCOMA'
-
+    t[0] = Llamadas(t[1],t[3], t.lineno(1), t.lexpos(0))
 def p_llamadassinparametro(t):
     'LLAMADAS : ID PARIZQ PARDER PTCOMA'
-
+    t[0] = Llamadas(t[1],None, t.lineno(1), t.lexpos(0))
 
 def p_expresiones(t):
     '''E    : E MAS E 
@@ -355,18 +384,18 @@ def p_expresiones(t):
             | E MODAL E
             | E POTENCIA E'''
     if( t[2] == '+'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[3], t.lineno(1), t.lexpos(0))
     elif( t[2] == '-' ):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[3], t.lineno(1), t.lexpos(0))
         t[0].operacion
     elif(t[2] == '*'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[3], t.lineno(1), t.lexpos(0))
     elif(t[2] == '/'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[3], t.lineno(1), t.lexpos(0))
     elif(t[2] == '^'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[3], t.lineno(1), t.lexpos(0))
     elif(t[2] == '%'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[3], t.lineno(1), t.lexpos(3))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[3], t.lineno(1), t.lexpos(0))
     
 def p_expresion_unaria(t):
     'E : MENOS E %prec UMENOS'
@@ -508,28 +537,29 @@ def p_returnUnico(t):
     t[0] = Return(None,t.lineno(0), t.lexpos(0))
 def p_funciones(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END PTCOMA'
+    t[0] =Funciones(t[2],t[4],t[6], None, t.lineno(1), t.lexpos(0))
 
 def p_funciones_return(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN R_END PTCOMA'
-
+    t[0] =Funciones(t[2],t[4],t[6],t[7], t.lineno(1), t.lexpos(0))
 def p_funciones_parametros_vacia(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER  R_END PTCOMA'
-
+    t[0] =Funciones(t[2],t[4],None,None, t.lineno(1), t.lexpos(0))
 def p_funciones_vacia_return(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER RETURN R_END PTCOMA'
-
+    t[0] =Funciones(t[2],t[4],None,t[6], t.lineno(1), t.lexpos(0))
 def p_funciones_proce(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER INSTRUCCIONES R_END PTCOMA'
-
+    t[0] =Funciones(t[2],None,t[5],None, t.lineno(1), t.lexpos(0))
 def p_funciones_proc_return(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER INSTRUCCIONES RETURN R_END PTCOMA'
-
+    t[0] =Funciones(t[2],None,t[5],t[6], t.lineno(1), t.lexpos(0))
 def p_funciones_proc_vacia(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER  R_END PTCOMA'
-
+    t[0] =Funciones(t[2],None,None,None, t.lineno(1), t.lexpos(0))
 def p_funciones_proc_vacia_return(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER RETURN R_END PTCOMA'
-
+    t[0] =Funciones(t[2],None,None,t[5], t.lineno(1), t.lexpos(0))
 ################################ EMPIEZAN LOS IFS ######################################
 def p_if_solo(t) :
     'IFS : R_IF LO INSTRUCCIONES R_END PTCOMA'
@@ -623,49 +653,69 @@ def p_instrucciones_loop_inst(t):
                             | STRUCTS
                             | R_BREAK
                             | R_CONTINUE'''
-    t[0] = t[1]
+    if t[1] == "":
+        t[0] = []
+    else:
+        t[0] = [t[1]]
 
 def p_whiles(t):
     'WHILES : R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA'
-    t[0] = While(t[2],t[3], t.lineno(0), t.lexpos(0))
+    t[0] = While(t[2],t[3], t.lineno(1), t.lexpos(0))
 def p_whiles_vacios(t):
     'WHILES :  R_WHILE LO R_END PTCOMA'
-    t[0] = While(t[2],None, t.lineno(0), t.lexpos(0))
+    t[0] = While(t[2],None, t.lineno(1), t.lexpos(0))
 def p_fors(t):
     'FORS : R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END PTCOMA'
-
+    t[0] = For(t[2], t[4], t[5],t.lineno(1), t.lexpos(0))
 def p_fors_vacios(t):
     'FORS : R_FOR ID R_IN RANGO  R_END PTCOMA'
-
+    t[0] = For(t[2], t[4], None,t.lineno(1), t.lexpos(0))
 def p_rango(t):
-    '''RANGO :    E DOSPUNTOS E
-                | E
-                | ID CORIZQ E DOSPUNTOS E CORDER
-                | ARREGLOS'''
+    '''RANGO :    E DOSPUNTOS E'''
+    t[0] = Rango(None, t[1],t[3],t.lineno(1), t.lexpos(0))
+
+def p_rango_unaExpresion(t):
+    '''RANGO : E
+            | ARREGLOS'''
+    t[0] = Rango(None, t[1],None,t.lineno(1), t.lexpos(0))
+def p_rango_arreglos(t):
+    'RANGO : ID CORIZQ E DOSPUNTOS E CORDER'
+    t[0] = Rango(t[1], t[3],t[5],t.lineno(1), t.lexpos(0))
 
 def p_structs(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID ELEMENTOS R_END PTCOMA'
-
+    t[0] = Struct(True,t[3], t[4],t.lineno(1), t.lexpos(0) )
 def p_structs2(t):
     'STRUCTS : R_STRUCT ID ELEMENTOS PTCOMA'
-
+    t[0] = Struct(False,t[2], t[3],t.lineno(1), t.lexpos(0) )
 def p_structs_mutables(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID R_END PTCOMA'
-
+    t[0] = Struct(True,t[3], None,t.lineno(1), t.lexpos(0) )
 def p_structs_vacios(t):
     'STRUCTS : R_STRUCT ID R_END PTCOMA'
-
+    t[0] = Struct(False,t[2], None,t.lineno(1), t.lexpos(0) )
 def p_elementos(t):
     'ELEMENTOS : ELEMENTOS COMA ELEMENTO'
+    if t[2] != "":
+        t[1].append(t[2])
+    t[0] = t[1]
 
 def p_elementos_elemento(t):
     'ELEMENTOS : ELEMENTO'
+    if t[1] == "":
+        t[0] = []
+    else:
+        t[0] = [t[1]]
 
 def p_elemento(t):
     'ELEMENTO  : ID'
+    t[1] = Identificador(t[1],t.lineno(0), t.lexpos(0))
+    t[0] = Elemento(None, t[1],t.lineno(1), t.lexpos(1))
 
 def p_elemento_declaraciontipo(t):
     'ELEMENTO : ID DOSPUNTOS DOSPUNTOS TIPO'
+    t[1] = Identificador(t[1],t.lineno(0), t.lexpos(0))
+    t[0] = Elemento(t[4], t[1],t.lineno(1), t.lexpos(1))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % str(t))
