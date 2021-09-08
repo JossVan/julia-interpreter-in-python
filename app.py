@@ -16,8 +16,8 @@ def principal():
         tmp_val=inpt
         result = g(tmp_val)
 
-        valor= result.ejecutar("tree", "table")
-        return render_template('principal.html', resultado=valor)
+       # valor= result.ejecutar("tree", "table")
+        return render_template('principal.html', resultado=result)
 
     else:
         return render_template('principal.html')

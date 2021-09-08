@@ -38,9 +38,9 @@ class Tipo_FuncionAritmetica(Enum):
     coseno = 3
     tangente = 4
     sqrt = 5
-    uppercase = 4
-    lowercase = 5
-    log = 6
+    uppercase = 6
+    lowercase = 7
+    log = 8
 
 class Tipo_Primitivas(Enum):
 

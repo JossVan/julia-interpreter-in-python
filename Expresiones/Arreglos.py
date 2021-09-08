@@ -10,4 +10,7 @@ class Arreglos(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        return "soy un arreglo"
+
+    def getNodo(self):
+        return super().getNodo()

@@ -12,13 +12,12 @@ class Print(NodoAST):
 
     def ejecutar(self, tree, table):
 
-        if self.tipo == Tipo_Print.PRINT:
-            print((self.contenido))
-            resultado = self.contenido.ejecutar(tree,table)
+        if self.tipo == Tipo_Print.PRINT:  
+            resultado = str(self.contenido.ejecutar(tree,table))
             return resultado
         if self.tipo == Tipo_Print.PRINTLN:
-            print(type(self.contenido))
-            resultado = self.contenido.ejecutar(tree,table)
-            return resultado+"\n"
+            resultado = str(self.contenido.ejecutar(tree,table))
+
+            return resultado+"\r"
     def getNodo(self):
         return super().getNodo()

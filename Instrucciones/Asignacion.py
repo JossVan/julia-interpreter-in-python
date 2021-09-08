@@ -11,7 +11,9 @@ class Asignacion(NodoAST):
         self.columna = columna
 
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        self.valor = self.valor.ejecutar(tree, table)
+        print(self.valor)
+        return self.valor
     
     def getNodo(self):
         return super().getNodo()

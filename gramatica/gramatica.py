@@ -3,11 +3,11 @@ import re
 
 reservadas = {
      'nothing' : 'R_NOTHING',
-     'Int64' : 'R_INT64',
-     'Float64' : 'R_FLOAT64',
-     'String' : 'R_STRING',
-     'Char' : 'R_CHAR',
-     'Bool' : 'R_BOOL',
+     'int64' : 'R_INT64',
+     'float64' : 'R_FLOAT64',
+     'string' : 'R_STRING',
+     'char' : 'R_CHAR',
+     'bool' : 'R_BOOL',
      'struct' : 'R_STRUCT',
      'uppercase' : 'R_UPPERCASE',
      'lowercase' : 'R_LOWERCASE',
@@ -30,7 +30,6 @@ reservadas = {
      'trunc' : 'R_TRUNC',
      'parse' : 'R_PARSE',
      'float' : 'R_FLOAT',
-     'string' : 'R_SSTRING',
      'typeof' : 'R_TYPEOF',
      'push' : 'R_PUSH',
      'pop' : 'R_POP',
@@ -73,8 +72,8 @@ tokens  = [
     'DECIMAL',
     'ENTERO',
     'CADENA',
-    'ID',
-    'DOLAR'
+    'DOLAR',
+    'ID'
 ] + list(reservadas.values())
 
 # Tokens
@@ -98,7 +97,7 @@ t_MENORIGUAL= r'<='
 t_MAYORIGUAL= r'>='
 t_COMA      = r','
 t_PUNTO     = r'.'
-t_DOSPUNTOS = r':'
+t_DOSPUNTOS = r'\:\:'
 t_OR       = r'\|\|'
 t_AND       = r'&&'
 t_DIFERENTE = r'!'
@@ -136,7 +135,6 @@ def t_CADENA(t):
 def t_COMENTARIO_MULTILINEA(t):
     r'\#\=(.|\n)*\=\#'
     t.lexer.lineno += t.value.count('\n')
-    print(t.value)
 # Comentario simple // ...
 
 def t_COMENTARIO_SIMPLE(t):
@@ -148,13 +146,12 @@ def t_COMENTARIO_SIMPLE(t):
 def t_newline(t):
     r'\n+'
     t.lexer.lineno += t.value.count("\n")
-    print(t)
 
 def t_IGNORAR(t):
     r'\ |\t|\r'
     global columna
-    if t.value == '\r':
-       print("salto de linea")    
+   # if t.value == '\r':
+    #   print("salto de linea")    
     
 def t_error(t):
     print("Illegal character '%s'" % t.value[0])
@@ -207,6 +204,7 @@ from Instrucciones.Llamadas import Llamadas
 from Instrucciones.Structs import Struct
 from Expresiones.Elementos import Elemento
 from Expresiones.Arreglos import Arreglos
+from Expresiones.Lista_Impresion import Lista_impresion
 def p_inicio(t):
     '''INICIO : INICIO FUNCIONES
             |   INICIO INSTRUCCIONES'''
@@ -219,7 +217,7 @@ def p_iniciofi(t):
     '''INICIO   : FUNCIONES
                 | INSTRUCCIONES'''
     t[0] = t[1]
-    print (t[0])
+
 def p_instrucciones(t):
     '''INSTRUCCIONES    : INSTRUCCIONES IFS
                         | INSTRUCCIONES FORS
@@ -227,7 +225,7 @@ def p_instrucciones(t):
                         | INSTRUCCIONES ASIGNACION
                         | INSTRUCCIONES I
                         | INSTRUCCIONES LLAMADAS
-                        | INSTRUCCIONES NATIVAS
+                        | INSTRUCCIONES NATIVAS PTCOMA
                         | INSTRUCCIONES STRUCTS'''
     if t[2] != "":
         t[1].append(t[2])
@@ -240,7 +238,7 @@ def p_instruccionesI(t):
                         | ASIGNACION
                         | I
                         | LLAMADAS
-                        | NATIVAS
+                        | NATIVAS PTCOMA
                         | STRUCTS'''
     if t[1] == "":
         t[0] = []
@@ -258,21 +256,17 @@ def p_println(t):
 
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
-    if t[2] != "":
-        t[1].append(t[2])
-    t[0] = t[1]
+    t[0] = Lista_impresion(t[1],t[3], t.lineno(0), t.lexpos(0))
 
 def p_contimpresiones(t):
     'IMPRESIONES : IMPRESION'
-    if t[1] == "":
-        t[0] = []
-    else:
-        t[0] = [t[1]]
+    t[0] = t[1]
 
 def p_contimpresionCont(t):
-    '''IMPRESION    : E
+    '''IMPRESION    : NATIVAS
                     | ARREGLOS
-                    | NATIVAS'''
+                    | LLAMADAS
+                    | E'''
     t[0] = t[1]
 
 def p_cont_impresionDolar(t):
@@ -309,23 +303,24 @@ def p_listasp(t):
         t[0] = [t[1]]
 
 def p_lista(t):
-    '''LISTA : E
-            | NATIVAS
+    '''LISTA : NATIVAS
             | ARREGLOS
-            | LLAMADAS'''
+            | LLAMADAS
+            | E'''
     t[0]=t[1]    
 
 def p_asignaciones(t):
-    '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA
-                  | R_LOCAL ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA'''
-    
+    '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA
+                  | R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
+
     t [2] = Identificador(t[2], t.lineno(2), t.lexpos(2))
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
+
 def p_asignacionesp(t):
-    'ASIGNACION : ID IGUAL LISTA DOSPUNTOS DOSPUNTOS TIPO PTCOMA'
+    'ASIGNACION : ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
 
     t[1] = Identificador(t[1], t.lineno(0), t.lexpos(0))
     t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
@@ -335,11 +330,19 @@ def p_asginacionesp2(t):
                   | R_LOCAL ID IGUAL LISTA PTCOMA'''
 
     t[2] = Identificador(t[2], t.lineno(0), t.lexpos(0))
+
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
-def p_asignacionesp3(t):
+
+def p_asginacionesp3(t):
+    '''ASIGNACION :  ID IGUAL LISTA PTCOMA'''
+
+    t[1] = Identificador(t[1], t.lineno(0), t.lexpos(0))
+    t[0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], None, t.lineno(1), t.lexpos(1))
+
+def p_asignacionesp4(t):
     '''ASIGNACION : R_GLOBAL ID PTCOMA
                   | R_LOCAL ID PTCOMA'''
 
@@ -348,6 +351,7 @@ def p_asignacionesp3(t):
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(1), t.lexpos(1))
+        
 def p_tipo(t):
     '''TIPO : R_NOTHING
             | R_INT64
@@ -360,13 +364,13 @@ def p_tipo(t):
         t[0] = Tipo_Dato.NULO
     elif(t[1] == 'Int64'):
         t[0] = Tipo_Dato.ENTERO
-    elif( t[2] == 'Float64'):
+    elif(t[1] == 'Float64'):
         t[0] = Tipo_Dato.DECIMAL
-    elif(t[2] == 'String'):
+    elif(t[1] == 'String'):
         t[0] = Tipo_Dato.CADENA
-    elif(t[2] == 'Char'):
+    elif(t[1] == 'Char'):
         t[0] == Tipo_Dato.CARACTER
-    elif(t[2] == 'Bool'):
+    elif(t[1] == 'Bool'):
         t[0] == Tipo_Dato.BOOLEANO
 
 def p_llamadas(t):
@@ -452,7 +456,7 @@ def p_expresiones_booleanas(t):
 def p_expresiones_cadena(t):
     'E : CADENA'
     t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(0), t.lexpos(0))
-    
+    print("paso por cadena")
 def p_expresiones_id(t):
     'E : ID'
     t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
@@ -509,12 +513,15 @@ def p_nativas(t):
 
 def p_nativasp(t):
     '''NATIVAS :  R_FLOAT   PARIZQ LISTA PARDER
-                | R_SSTRING PARIZQ LISTA PARDER
+                | R_STRING PARIZQ LISTA PARDER
                 | R_TYPEOF  PARIZQ LISTA PARDER'''
+
     if(t[1]=='float'):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.FLOAT,t[3], t.lineno(1), t.lexpos(1))
     elif(t[1] == 'string'):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.STRING,t[3], t.lineno(1), t.lexpos(1))
+    elif(t[1] == 'typeof'):
+        t[0] = Nativas_SinTipo(Tipo_Primitivas.TYPEOF,t[3], t.lineno(1), t.lexpos(1))
 def p_nativaspush(t):
     ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA E PARDER'
     id = Identificador(t[4],t.lineno(1), t.lexpos(1))
@@ -713,7 +720,7 @@ def p_elemento(t):
     t[0] = Elemento(None, t[1],t.lineno(1), t.lexpos(1))
 
 def p_elemento_declaraciontipo(t):
-    'ELEMENTO : ID DOSPUNTOS DOSPUNTOS TIPO'
+    'ELEMENTO : ID DOSPUNTOS TIPO'
     t[1] = Identificador(t[1],t.lineno(0), t.lexpos(0))
     t[0] = Elemento(t[4], t[1],t.lineno(1), t.lexpos(1))
 
@@ -725,4 +732,14 @@ parser = yacc.yacc()
 
 
 def parse(input) :
-    return parser.parse(input)
+    global lexer
+    lexer = lex.lex(reflags= re.IGNORECASE)
+    parser = yacc.yacc()
+    instrucciones=parser.parse(input)
+    retorno=""
+    if isinstance(instrucciones,list):
+        for instruccion in instrucciones:
+            retorno+= str(instruccion.ejecutar("table","tree"))
+    else:
+        retorno = instrucciones.ejecutar("table","tree")
+    return retorno
