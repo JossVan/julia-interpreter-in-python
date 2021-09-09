@@ -1,3 +1,4 @@
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Abstractas.NodoAST import NodoAST
 
 class If(NodoAST):
@@ -11,7 +12,20 @@ class If(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return "Hola, soy el if"
+        condicion = self.condicion.ejecutar(tree,table)
+        if(bool(condicion) == True):
+            nuevaTabla = TablaSimbolos("If",table)
+            for instruccion in self.instrucciones_if:
+                instruccion.ejecutar(tree,nuevaTabla)
+        else:
+            if(self.instrucciones_else!=None):
+                nuevaTabla = TablaSimbolos("else",table)
+                for instruccion in self.instrucciones_else:
+                    instruccion.ejecutar(tree,nuevaTabla)
+
+        if self.instrucciones_elseif != None :
+            nuevaTabla = TablaSimbolos("elseif",table)
+            self.instrucciones_elseif.ejecutar(tree,nuevaTabla)
     
     def getNodo(self):
         return super().getNodo()

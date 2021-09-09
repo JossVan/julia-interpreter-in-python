@@ -191,7 +191,6 @@ from Objetos.Primitivos import Primitivo
 from Expresiones.Identificador import Identificador
 from Expresiones.Relacional import Relacional
 from Expresiones.Logica import Logica
-from Expresiones.Unaria import Unaria
 from Instrucciones.Nativas import Nativas_conTipo,Nativas_SinTipo, Pilas
 from Instrucciones.Print import Print
 from Instrucciones.Asignacion import Asignacion
@@ -313,7 +312,6 @@ def p_asignaciones(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA
                   | R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
 
-    t [2] = Identificador(t[2], t.lineno(2), t.lexpos(2))
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
@@ -322,14 +320,12 @@ def p_asignaciones(t):
 def p_asignacionesp(t):
     'ASIGNACION : ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
 
-    t[1] = Identificador(t[1], t.lineno(0), t.lexpos(0))
     t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
 
 def p_asginacionesp2(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA PTCOMA
                   | R_LOCAL ID IGUAL LISTA PTCOMA'''
 
-    t[2] = Identificador(t[2], t.lineno(0), t.lexpos(0))
 
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
@@ -339,14 +335,12 @@ def p_asginacionesp2(t):
 def p_asginacionesp3(t):
     '''ASIGNACION :  ID IGUAL LISTA PTCOMA'''
 
-    t[1] = Identificador(t[1], t.lineno(0), t.lexpos(0))
     t[0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_asignacionesp4(t):
     '''ASIGNACION : R_GLOBAL ID PTCOMA
                   | R_LOCAL ID PTCOMA'''
 
-    t[2] = Identificador(t[2], t.lineno(0), t.lexpos(0))
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
@@ -456,7 +450,7 @@ def p_expresiones_booleanas(t):
 def p_expresiones_cadena(t):
     'E : CADENA'
     t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(0), t.lexpos(0))
-    print("paso por cadena")
+
 def p_expresiones_id(t):
     'E : ID'
     t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
@@ -473,18 +467,22 @@ def p_expresiones_relacionales(t):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR,t.lineno(1), t.lexpos(1))
     elif(t[2] == '<'):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR,t.lineno(1), t.lexpos(1))
-    elif(t[3] == '=='):
+    elif(t[2] == '=='):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.IGUAL,t.lineno(1), t.lexpos(1))
-    elif(t[3] == '!='):
+    elif(t[2] == '!='):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.DIFERENTE,t.lineno(1), t.lexpos(1))
-    elif(t[3] == '<='):
+    elif(t[2] == '<='):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.MENOR_IGUAL,t.lineno(1), t.lexpos(1))
-    elif(t[3] == '>='):
+    elif(t[2] == '>='):
         t[0] = Relacional(t[1],t[3],Tipo_Relacional.MAYOR_IGUAL,t.lineno(1), t.lexpos(1))
 
+def p_expresionesE_par(t):
+    'RE : PARIZQ RE PARDER'
+    t[0] = t[2]
 def p_expresionesE(t):
     'RE : E'
     t[0] = t[1]
+
 def p_expresiones_logicas(t):
     '''LO :   LO AND LO
             | LO OR LO'''
@@ -497,6 +495,10 @@ def p_expresiones_logicas_diferente(t):
     'LO : DIFERENTE LO'
     if(t[1] == '!'):
         t[0] = Logica(t[2],None,Tipo_Relacional.DIFERENTE,t.lineno(1), t.lexpos(1))
+
+def p_expresiones_logicas_par(t):
+    'LO : PARIZQ LO PARDER'
+    t[0] = t[2]
 
 def p_expresiones_logicas_re(t):
     'LO : RE'
@@ -730,16 +732,29 @@ def p_error(t):
 import ply.yacc as yacc
 parser = yacc.yacc()
 
-
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
+from TablaSimbolos.Arbolito import Arbolito
+from Instrucciones.Funciones import Funciones
 def parse(input) :
     global lexer
     lexer = lex.lex(reflags= re.IGNORECASE)
     parser = yacc.yacc()
     instrucciones=parser.parse(input)
+
+    AST = Arbolito(instrucciones)
+    tablaGlobal = TablaSimbolos("Global")
+    AST.setTSglobal(tablaGlobal)
+
     retorno=""
-    if isinstance(instrucciones,list):
-        for instruccion in instrucciones:
-            retorno+= str(instruccion.ejecutar("table","tree"))
-    else:
-        retorno = instrucciones.ejecutar("table","tree")
-    return retorno
+    for instruccion in AST.getInstrucciones():
+        if isinstance(instruccion, Funciones):
+            AST.addFuncion(instruccion)
+        # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
+        else:
+            instruccion.ejecutar(AST,tablaGlobal)
+
+   # tablita = AST.getTSGlobal().tabla
+
+    """for simbolo in tablita.values():
+        print(simbolo.getValor())"""
+    return AST.getConsola()

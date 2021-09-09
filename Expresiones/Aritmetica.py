@@ -14,7 +14,6 @@ class Aritmetica(NodoAST):
         if self.operador1!=None and self.operador2!= None:
             result1 = self.operador1.ejecutar(tree,table)
             result2 = self.operador2.ejecutar(tree,table)
-            print(self.operacion)
             if self.operacion == Tipo_Aritmetico.SUMA:
                 if isinstance(result1, str) or isinstance(result2,str):
                     return str(result1)+str(result2)  

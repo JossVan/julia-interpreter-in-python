@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from Abstractas.NodoAST import NodoAST
 
 class Identificador(NodoAST):
@@ -8,7 +9,13 @@ class Identificador(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        
+        self.id = self.id.lower()
+        resultado = table.BuscarIdentificador(self.id)
+        if resultado == None:
+            tree.insertError(Errores("Variable no encontrada","Semántico","No definida", self.fila,self.columna))
+            return "No existe la variable"
+        return resultado.getValor()
     
     def getNodo(self):
         return super().getNodo()

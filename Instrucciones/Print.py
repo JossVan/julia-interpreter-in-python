@@ -14,10 +14,10 @@ class Print(NodoAST):
 
         if self.tipo == Tipo_Print.PRINT:  
             resultado = str(self.contenido.ejecutar(tree,table))
-            return resultado
+            tree.updateConsola(resultado)
         if self.tipo == Tipo_Print.PRINTLN:
             resultado = str(self.contenido.ejecutar(tree,table))
+            tree.updateConsola(resultado+"\r")
 
-            return resultado+"\r"
     def getNodo(self):
         return super().getNodo()

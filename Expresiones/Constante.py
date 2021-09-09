@@ -19,6 +19,9 @@ class Constante(NodoAST):
                 return self.valor.getFloat()
             elif self.valor.tipo == TipoObjeto.BOOLEANO:
                 return self.valor.getBoolean()
+            elif self.valor.tipo == TipoObjeto.NEGATIVO:
+                resultado = self.valor.valor.ejecutar(tree,table)
+                return resultado * (-1)
             return "F"
     
     def getNodo(self):
