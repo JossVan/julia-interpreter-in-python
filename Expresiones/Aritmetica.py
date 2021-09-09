@@ -1,4 +1,5 @@
 from TablaSimbolos.Tipos import Tipo_Aritmetico
+from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
 
 class Aritmetica(NodoAST):
@@ -40,4 +41,19 @@ class Aritmetica(NodoAST):
                         cadena+=result1
                     return cadena
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("Operación_Aritmetica")
+        NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+        if self.operacion == Tipo_Aritmetico.SUMA:
+            NuevoNodo.agregarHijo("+")
+        elif self.operacion == Tipo_Aritmetico.RESTA:
+            NuevoNodo.agregarHijo("-")
+        elif self.operacion == Tipo_Aritmetico.MULTIPLICACION:
+            NuevoNodo.agregarHijo("*")
+        elif self.operacion == Tipo_Aritmetico.DIVISION:
+            NuevoNodo.agregarHijo("/")
+        elif self.operacion == Tipo_Aritmetico.MODAL:
+            NuevoNodo.agregarHijo("%")
+        elif self.operacion == Tipo_Aritmetico.POTENCIA:
+            NuevoNodo.agregarHijo("^")
+        NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        return NuevoNodo

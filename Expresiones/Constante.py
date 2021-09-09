@@ -1,4 +1,5 @@
 from Abstractas.Objeto import TipoObjeto
+from Abstractas.NodoArbol import NodoArbol
 from Objetos.Primitivos import Primitivo
 from Abstractas.NodoAST import NodoAST
 
@@ -25,4 +26,6 @@ class Constante(NodoAST):
             return "F"
     
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("Constante")
+        NuevoNodo.agregarHijo(str(self.valor))
+        return NuevoNodo

@@ -255,7 +255,11 @@ def p_println(t):
 
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
-    t[0] = Lista_impresion(t[1],t[3], t.lineno(0), t.lexpos(0))
+    #t[0] = Lista_impresion(t[1],t[3], t.lineno(0), t.lexpos(0))
+    
+    if t[3] != "":
+        t[1].append(t[3])
+    t[0] = t[1]
 
 def p_contimpresiones(t):
     'IMPRESIONES : IMPRESION'

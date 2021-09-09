@@ -1,4 +1,5 @@
 from TablaSimbolos.Tipos import Tipo_FuncionAritmetica
+from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
 import math
 
@@ -50,4 +51,20 @@ class Funciones_matematicas(NodoAST):
                 except:
                     return "El parámetro debe ser un número"
     def getNodo(self):
-        return super().getNodo()
+        
+        if self.funcion == Tipo_FuncionAritmetica.lowercase:
+            NuevoNodo = NodoArbol("Lowercase")
+        elif self.funcion == Tipo_FuncionAritmetica.uppercase:
+            NuevoNodo = NodoArbol("Uppercase")
+        elif self.funcion == Tipo_FuncionAritmetica.seno:
+            NuevoNodo = NodoArbol("Sin")
+        elif self.funcion == Tipo_FuncionAritmetica.coseno:
+            NuevoNodo = NodoArbol("Cos")
+        elif self.funcion == Tipo_FuncionAritmetica.tangente:
+            NuevoNodo = NodoArbol("Tan")
+        elif self.funcion == Tipo_FuncionAritmetica.sqrt:
+            NuevoNodo = NodoArbol("Sqrt")
+        elif self.funcion == Tipo_FuncionAritmetica.log10:
+            NuevoNodo = NodoArbol("Log10")
+        NuevoNodo.agregarHijoNodo(self.valor1)
+        return NuevoNodo
