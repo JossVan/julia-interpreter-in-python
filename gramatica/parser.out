@@ -52,7 +52,7 @@ Rule 46    ASIGNACION -> R_LOCAL ID IGUAL LISTA PTCOMA
 Rule 47    ASIGNACION -> ID IGUAL LISTA PTCOMA
 Rule 48    ASIGNACION -> R_GLOBAL ID PTCOMA
 Rule 49    ASIGNACION -> R_LOCAL ID PTCOMA
-Rule 50    BREAK -> R_BREAK
+Rule 50    BREAK -> R_BREAK PTCOMA
 Rule 51    TIPO -> R_NOTHING
 Rule 52    TIPO -> R_INT64
 Rule 53    TIPO -> R_FLOAT64
@@ -196,7 +196,7 @@ PARDER               : 21 22 29 30 31 58 66 67 68 69 70 71 72 73 74 87 92 94 95 
 PARIZQ               : 21 22 29 30 31 57 57 58 66 67 68 69 70 71 72 73 74 87 92 94 95 96 97 98 99 100 104 105 106 107 108 109 110 111
 POR                  : 61
 POTENCIA             : 64
-PTCOMA               : 11 19 21 22 42 43 44 45 46 47 48 49 57 58 104 105 106 107 108 109 110 111 112 113 115 116 118 119 120 121 123 124 126 127 148 149 150 151 156 157 158 159
+PTCOMA               : 11 19 21 22 42 43 44 45 46 47 48 49 50 57 58 104 105 106 107 108 109 110 111 112 113 115 116 118 119 120 121 123 124 126 127 148 149 150 151 156 157 158 159
 PUNTO                : 101
 R_BOOL               : 56
 R_BREAK              : 50
@@ -2411,7 +2411,7 @@ state 66
     (157) STRUCTS -> . R_STRUCT ID ELEMENTOS PTCOMA
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
-    (50) BREAK -> . R_BREAK
+    (50) BREAK -> . R_BREAK PTCOMA
 
     R_END           shift and go to state 128
     AND             shift and go to state 98
@@ -4958,7 +4958,7 @@ state 127
     (157) STRUCTS -> . R_STRUCT ID ELEMENTOS PTCOMA
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
-    (50) BREAK -> . R_BREAK
+    (50) BREAK -> . R_BREAK PTCOMA
 
     R_END           shift and go to state 217
     R_CONTINUE      shift and go to state 227
@@ -5260,28 +5260,9 @@ state 138
 
 state 139
 
-    (50) BREAK -> R_BREAK .
+    (50) BREAK -> R_BREAK . PTCOMA
 
-    R_END           reduce using rule 50 (BREAK -> R_BREAK .)
-    R_CONTINUE      reduce using rule 50 (BREAK -> R_BREAK .)
-    R_IF            reduce using rule 50 (BREAK -> R_BREAK .)
-    R_FOR           reduce using rule 50 (BREAK -> R_BREAK .)
-    R_WHILE         reduce using rule 50 (BREAK -> R_BREAK .)
-    R_GLOBAL        reduce using rule 50 (BREAK -> R_BREAK .)
-    R_LOCAL         reduce using rule 50 (BREAK -> R_BREAK .)
-    ID              reduce using rule 50 (BREAK -> R_BREAK .)
-    R_PRINT         reduce using rule 50 (BREAK -> R_BREAK .)
-    R_PRINTLN       reduce using rule 50 (BREAK -> R_BREAK .)
-    R_PARSE         reduce using rule 50 (BREAK -> R_BREAK .)
-    R_TRUNC         reduce using rule 50 (BREAK -> R_BREAK .)
-    R_FLOAT         reduce using rule 50 (BREAK -> R_BREAK .)
-    R_STRING        reduce using rule 50 (BREAK -> R_BREAK .)
-    R_TYPEOF        reduce using rule 50 (BREAK -> R_BREAK .)
-    R_PUSH          reduce using rule 50 (BREAK -> R_BREAK .)
-    R_POP           reduce using rule 50 (BREAK -> R_BREAK .)
-    R_MUTABLE       reduce using rule 50 (BREAK -> R_BREAK .)
-    R_STRUCT        reduce using rule 50 (BREAK -> R_BREAK .)
-    R_BREAK         reduce using rule 50 (BREAK -> R_BREAK .)
+    PTCOMA          shift and go to state 229
 
 
 state 140
@@ -5354,7 +5335,7 @@ state 140
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTA                          shift and go to state 229
+    LISTA                          shift and go to state 230
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
@@ -5461,7 +5442,7 @@ state 142
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTA                          shift and go to state 230
+    LISTA                          shift and go to state 231
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
@@ -5503,8 +5484,8 @@ state 144
     (21) I -> R_PRINT PARIZQ IMPRESIONES . PARDER PTCOMA
     (23) IMPRESIONES -> IMPRESIONES . COMA IMPRESION
 
-    PARDER          shift and go to state 231
-    COMA            shift and go to state 232
+    PARDER          shift and go to state 232
+    COMA            shift and go to state 233
 
 
 state 145
@@ -5565,7 +5546,7 @@ state 150
     (30) IMPRESION -> DOLAR . PARIZQ ARREGLOS PARDER
     (31) IMPRESION -> DOLAR . PARIZQ NATIVAS PARDER
 
-    PARIZQ          shift and go to state 233
+    PARIZQ          shift and go to state 234
 
 
 state 151
@@ -5573,15 +5554,15 @@ state 151
     (22) I -> R_PRINTLN PARIZQ IMPRESIONES . PARDER PTCOMA
     (23) IMPRESIONES -> IMPRESIONES . COMA IMPRESION
 
-    PARDER          shift and go to state 234
-    COMA            shift and go to state 232
+    PARDER          shift and go to state 235
+    COMA            shift and go to state 233
 
 
 state 152
 
     (94) NATIVAS -> R_PARSE PARIZQ TIPO . COMA LISTA PARDER
 
-    COMA            shift and go to state 235
+    COMA            shift and go to state 236
 
 
 state 153
@@ -5642,42 +5623,42 @@ state 159
 
     (95) NATIVAS -> R_TRUNC PARIZQ TIPO . COMA LISTA PARDER
 
-    COMA            shift and go to state 236
+    COMA            shift and go to state 237
 
 
 state 160
 
     (96) NATIVAS -> R_FLOAT PARIZQ LISTA . PARDER
 
-    PARDER          shift and go to state 237
+    PARDER          shift and go to state 238
 
 
 state 161
 
     (97) NATIVAS -> R_STRING PARIZQ LISTA . PARDER
 
-    PARDER          shift and go to state 238
+    PARDER          shift and go to state 239
 
 
 state 162
 
     (98) NATIVAS -> R_TYPEOF PARIZQ LISTA . PARDER
 
-    PARDER          shift and go to state 239
+    PARDER          shift and go to state 240
 
 
 state 163
 
     (99) NATIVAS -> R_PUSH DIFERENTE PARIZQ . ID COMA E PARDER
 
-    ID              shift and go to state 240
+    ID              shift and go to state 241
 
 
 state 164
 
     (100) NATIVAS -> R_POP DIFERENTE PARIZQ . ID PARDER
 
-    ID              shift and go to state 241
+    ID              shift and go to state 242
 
 
 state 165
@@ -5689,10 +5670,10 @@ state 165
     (162) ELEMENTO -> . ID
     (163) ELEMENTO -> . ID DOSPUNTOS TIPO
 
-    R_END           shift and go to state 243
+    R_END           shift and go to state 244
     ID              shift and go to state 166
 
-    ELEMENTOS                      shift and go to state 242
+    ELEMENTOS                      shift and go to state 243
     ELEMENTO                       shift and go to state 169
 
 state 166
@@ -5703,7 +5684,7 @@ state 166
     PTCOMA          reduce using rule 162 (ELEMENTO -> ID .)
     COMA            reduce using rule 162 (ELEMENTO -> ID .)
     R_END           reduce using rule 162 (ELEMENTO -> ID .)
-    DOSPUNTOS       shift and go to state 244
+    DOSPUNTOS       shift and go to state 245
 
 
 state 167
@@ -5711,15 +5692,15 @@ state 167
     (157) STRUCTS -> R_STRUCT ID ELEMENTOS . PTCOMA
     (160) ELEMENTOS -> ELEMENTOS . COMA ELEMENTO
 
-    PTCOMA          shift and go to state 245
-    COMA            shift and go to state 246
+    PTCOMA          shift and go to state 246
+    COMA            shift and go to state 247
 
 
 state 168
 
     (159) STRUCTS -> R_STRUCT ID R_END . PTCOMA
 
-    PTCOMA          shift and go to state 247
+    PTCOMA          shift and go to state 248
 
 
 state 169
@@ -5739,7 +5720,7 @@ state 170
     (107) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS . PARDER RETURN R_END PTCOMA
     (36) LISTAS -> LISTAS . COMA LISTA
 
-    PARDER          shift and go to state 248
+    PARDER          shift and go to state 249
     COMA            shift and go to state 178
 
 
@@ -5804,8 +5785,8 @@ state 171
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 250
-    R_RETURN        shift and go to state 252
+    R_END           shift and go to state 251
+    R_RETURN        shift and go to state 253
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -5824,8 +5805,8 @@ state 171
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 249
-    RETURN                         shift and go to state 251
+    INSTRUCCIONES                  shift and go to state 250
+    RETURN                         shift and go to state 252
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -5907,7 +5888,7 @@ state 172
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTAS                         shift and go to state 253
+    LISTAS                         shift and go to state 254
     LISTA                          shift and go to state 92
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
@@ -5931,7 +5912,7 @@ state 173
     R_CHAR          shift and go to state 157
     R_BOOL          shift and go to state 158
 
-    TIPO                           shift and go to state 254
+    TIPO                           shift and go to state 255
 
 state 174
 
@@ -5989,7 +5970,7 @@ state 176
     (35) ARREGLOS -> CORIZQ LISTAS . CORDER CORIZQ LISTAS CORDER
     (36) LISTAS -> LISTAS . COMA LISTA
 
-    CORDER          shift and go to state 255
+    CORDER          shift and go to state 256
     COMA            shift and go to state 178
 
 
@@ -5997,7 +5978,7 @@ state 177
 
     (57) LLAMADAS -> ID PARIZQ LISTAS PARIZQ . PTCOMA
 
-    PTCOMA          shift and go to state 256
+    PTCOMA          shift and go to state 257
 
 
 state 178
@@ -6069,7 +6050,7 @@ state 178
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTA                          shift and go to state 257
+    LISTA                          shift and go to state 258
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
@@ -6116,7 +6097,7 @@ state 180
 
     (112) IFS -> R_IF LO INSTRUCCIONES R_END . PTCOMA
 
-    PTCOMA          shift and go to state 258
+    PTCOMA          shift and go to state 259
 
 
 state 181
@@ -6176,7 +6157,7 @@ state 181
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 260
+    R_END           shift and go to state 261
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -6195,7 +6176,7 @@ state 181
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 259
+    INSTRUCCIONES                  shift and go to state 260
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -6315,7 +6296,7 @@ state 184
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 261
+    R_END           shift and go to state 262
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -6347,7 +6328,7 @@ state 185
 
     (119) IFS -> R_IF LO R_ELSE R_END . PTCOMA
 
-    PTCOMA          shift and go to state 262
+    PTCOMA          shift and go to state 263
 
 
 state 186
@@ -6495,8 +6476,8 @@ state 188
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 264
-    R_ELSE          shift and go to state 265
+    R_END           shift and go to state 265
+    R_ELSE          shift and go to state 266
     AND             shift and go to state 98
     OR              shift and go to state 99
     R_ELSEIF        shift and go to state 100
@@ -6518,8 +6499,8 @@ state 188
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 263
-    ELSEIF                         shift and go to state 266
+    INSTRUCCIONES                  shift and go to state 264
+    ELSEIF                         shift and go to state 267
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -6747,7 +6728,7 @@ state 193
     CADENA          shift and go to state 63
     ID              shift and go to state 64
 
-    RE                             shift and go to state 267
+    RE                             shift and go to state 268
     E                              shift and go to state 104
 
 state 194
@@ -7376,7 +7357,7 @@ state 205
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 268
+    PARDER          shift and go to state 269
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7395,7 +7376,7 @@ state 206
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 269
+    PARDER          shift and go to state 270
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7414,7 +7395,7 @@ state 207
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 270
+    PARDER          shift and go to state 271
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7433,7 +7414,7 @@ state 208
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 271
+    PARDER          shift and go to state 272
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7452,7 +7433,7 @@ state 209
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 272
+    PARDER          shift and go to state 273
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7471,7 +7452,7 @@ state 210
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 273
+    PARDER          shift and go to state 274
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7490,7 +7471,7 @@ state 211
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 274
+    PARDER          shift and go to state 275
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7509,7 +7490,7 @@ state 212
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    COMA            shift and go to state 275
+    COMA            shift and go to state 276
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -7525,7 +7506,7 @@ state 213
     (32) ARREGLOS -> ID . CORIZQ LISTAS CORDER
     (34) ARREGLOS -> ID . CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER
 
-    CORIZQ          shift and go to state 276
+    CORIZQ          shift and go to state 277
     DOSPUNTOS       reduce using rule 80 (E -> ID .)
     MAS             reduce using rule 80 (E -> ID .)
     MENOS           reduce using rule 80 (E -> ID .)
@@ -7615,9 +7596,9 @@ state 214
     (157) STRUCTS -> . R_STRUCT ID ELEMENTOS PTCOMA
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
-    (50) BREAK -> . R_BREAK
+    (50) BREAK -> . R_BREAK PTCOMA
 
-    R_END           shift and go to state 278
+    R_END           shift and go to state 279
     R_CONTINUE      shift and go to state 138
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
@@ -7638,7 +7619,7 @@ state 214
     R_STRUCT        shift and go to state 29
     R_BREAK         shift and go to state 139
 
-    INSTRUCCIONES_LOOP             shift and go to state 277
+    INSTRUCCIONES_LOOP             shift and go to state 278
     IFS                            shift and go to state 129
     FORS                           shift and go to state 130
     WHILES                         shift and go to state 131
@@ -7660,7 +7641,7 @@ state 215
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    DOSPUNTOS       shift and go to state 279
+    DOSPUNTOS       shift and go to state 280
     R_END           reduce using rule 153 (RANGO -> E .)
     R_CONTINUE      reduce using rule 153 (RANGO -> E .)
     R_IF            reduce using rule 153 (RANGO -> E .)
@@ -7719,7 +7700,7 @@ state 217
 
     (148) WHILES -> R_WHILE LO INSTRUCCIONES_LOOP R_END . PTCOMA
 
-    PTCOMA          shift and go to state 280
+    PTCOMA          shift and go to state 281
 
 
 state 218
@@ -8015,30 +7996,56 @@ state 228
 
 state 229
 
-    (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA . DOSPUNTOS TIPO PTCOMA
-    (45) ASIGNACION -> R_GLOBAL ID IGUAL LISTA . PTCOMA
+    (50) BREAK -> R_BREAK PTCOMA .
 
-    DOSPUNTOS       shift and go to state 281
-    PTCOMA          shift and go to state 282
+    R_END           reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_CONTINUE      reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_IF            reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_FOR           reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_WHILE         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_GLOBAL        reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_LOCAL         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    ID              reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_PRINT         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_PRINTLN       reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_PARSE         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_TRUNC         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_FLOAT         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_STRING        reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_TYPEOF        reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_PUSH          reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_POP           reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_MUTABLE       reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_STRUCT        reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
+    R_BREAK         reduce using rule 50 (BREAK -> R_BREAK PTCOMA .)
 
 
 state 230
 
-    (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA . DOSPUNTOS TIPO PTCOMA
-    (46) ASIGNACION -> R_LOCAL ID IGUAL LISTA . PTCOMA
+    (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA . DOSPUNTOS TIPO PTCOMA
+    (45) ASIGNACION -> R_GLOBAL ID IGUAL LISTA . PTCOMA
 
-    DOSPUNTOS       shift and go to state 283
-    PTCOMA          shift and go to state 284
+    DOSPUNTOS       shift and go to state 282
+    PTCOMA          shift and go to state 283
 
 
 state 231
 
-    (21) I -> R_PRINT PARIZQ IMPRESIONES PARDER . PTCOMA
+    (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA . DOSPUNTOS TIPO PTCOMA
+    (46) ASIGNACION -> R_LOCAL ID IGUAL LISTA . PTCOMA
 
+    DOSPUNTOS       shift and go to state 284
     PTCOMA          shift and go to state 285
 
 
 state 232
+
+    (21) I -> R_PRINT PARIZQ IMPRESIONES PARDER . PTCOMA
+
+    PTCOMA          shift and go to state 286
+
+
+state 233
 
     (23) IMPRESIONES -> IMPRESIONES COMA . IMPRESION
     (25) IMPRESION -> . NATIVAS
@@ -8111,13 +8118,13 @@ state 232
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    IMPRESION                      shift and go to state 286
+    IMPRESION                      shift and go to state 287
     NATIVAS                        shift and go to state 146
     ARREGLOS                       shift and go to state 147
     LLAMADAS                       shift and go to state 148
     E                              shift and go to state 149
 
-state 233
+state 234
 
     (29) IMPRESION -> DOLAR PARIZQ . E PARDER
     (30) IMPRESION -> DOLAR PARIZQ . ARREGLOS PARDER
@@ -8172,7 +8179,7 @@ state 233
     R_TRUE          shift and go to state 61
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
-    ID              shift and go to state 290
+    ID              shift and go to state 291
     CORIZQ          shift and go to state 89
     R_PARSE         shift and go to state 21
     R_TRUNC         shift and go to state 22
@@ -8182,95 +8189,20 @@ state 233
     R_PUSH          shift and go to state 26
     R_POP           shift and go to state 27
 
-    E                              shift and go to state 287
-    ARREGLOS                       shift and go to state 288
-    NATIVAS                        shift and go to state 289
-
-state 234
-
-    (22) I -> R_PRINTLN PARIZQ IMPRESIONES PARDER . PTCOMA
-
-    PTCOMA          shift and go to state 291
-
+    E                              shift and go to state 288
+    ARREGLOS                       shift and go to state 289
+    NATIVAS                        shift and go to state 290
 
 state 235
 
-    (94) NATIVAS -> R_PARSE PARIZQ TIPO COMA . LISTA PARDER
-    (38) LISTA -> . NATIVAS
-    (39) LISTA -> . ARREGLOS
-    (40) LISTA -> . LLAMADAS
-    (41) LISTA -> . E
-    (94) NATIVAS -> . R_PARSE PARIZQ TIPO COMA LISTA PARDER
-    (95) NATIVAS -> . R_TRUNC PARIZQ TIPO COMA LISTA PARDER
-    (96) NATIVAS -> . R_FLOAT PARIZQ LISTA PARDER
-    (97) NATIVAS -> . R_STRING PARIZQ LISTA PARDER
-    (98) NATIVAS -> . R_TYPEOF PARIZQ LISTA PARDER
-    (99) NATIVAS -> . R_PUSH DIFERENTE PARIZQ ID COMA E PARDER
-    (100) NATIVAS -> . R_POP DIFERENTE PARIZQ ID PARDER
-    (101) NATIVAS -> . ID PUNTO R_LENGTH
-    (32) ARREGLOS -> . ID CORIZQ LISTAS CORDER
-    (33) ARREGLOS -> . CORIZQ LISTAS CORDER
-    (34) ARREGLOS -> . ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER
-    (35) ARREGLOS -> . CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER
-    (57) LLAMADAS -> . ID PARIZQ LISTAS PARIZQ PTCOMA
-    (58) LLAMADAS -> . ID PARIZQ PARDER PTCOMA
-    (59) E -> . E MAS E
-    (60) E -> . E MENOS E
-    (61) E -> . E POR E
-    (62) E -> . E DIVIDIDO E
-    (63) E -> . E MODAL E
-    (64) E -> . E POTENCIA E
-    (65) E -> . MENOS E
-    (66) E -> . PARIZQ E PARDER
-    (67) E -> . R_LOG10 PARIZQ E PARDER
-    (68) E -> . R_SIN PARIZQ E PARDER
-    (69) E -> . R_COS PARIZQ E PARDER
-    (70) E -> . R_TAN PARIZQ E PARDER
-    (71) E -> . R_SQRT PARIZQ E PARDER
-    (72) E -> . R_UPPERCASE PARIZQ E PARDER
-    (73) E -> . R_LOWERCASE PARIZQ E PARDER
-    (74) E -> . R_LOG PARIZQ E COMA E PARDER
-    (75) E -> . DECIMAL
-    (76) E -> . ENTERO
-    (77) E -> . R_TRUE
-    (78) E -> . R_FALSE
-    (79) E -> . CADENA
-    (80) E -> . ID
+    (22) I -> R_PRINTLN PARIZQ IMPRESIONES PARDER . PTCOMA
 
-    R_PARSE         shift and go to state 21
-    R_TRUNC         shift and go to state 22
-    R_FLOAT         shift and go to state 23
-    R_STRING        shift and go to state 24
-    R_TYPEOF        shift and go to state 25
-    R_PUSH          shift and go to state 26
-    R_POP           shift and go to state 27
-    ID              shift and go to state 82
-    CORIZQ          shift and go to state 89
-    MENOS           shift and go to state 50
-    PARIZQ          shift and go to state 88
-    R_LOG10         shift and go to state 51
-    R_SIN           shift and go to state 52
-    R_COS           shift and go to state 53
-    R_TAN           shift and go to state 54
-    R_SQRT          shift and go to state 55
-    R_UPPERCASE     shift and go to state 56
-    R_LOWERCASE     shift and go to state 57
-    R_LOG           shift and go to state 58
-    DECIMAL         shift and go to state 59
-    ENTERO          shift and go to state 60
-    R_TRUE          shift and go to state 61
-    R_FALSE         shift and go to state 62
-    CADENA          shift and go to state 63
+    PTCOMA          shift and go to state 292
 
-    LISTA                          shift and go to state 292
-    NATIVAS                        shift and go to state 84
-    ARREGLOS                       shift and go to state 85
-    LLAMADAS                       shift and go to state 86
-    E                              shift and go to state 87
 
 state 236
 
-    (95) NATIVAS -> R_TRUNC PARIZQ TIPO COMA . LISTA PARDER
+    (94) NATIVAS -> R_PARSE PARIZQ TIPO COMA . LISTA PARDER
     (38) LISTA -> . NATIVAS
     (39) LISTA -> . ARREGLOS
     (40) LISTA -> . LLAMADAS
@@ -8345,6 +8277,81 @@ state 236
 
 state 237
 
+    (95) NATIVAS -> R_TRUNC PARIZQ TIPO COMA . LISTA PARDER
+    (38) LISTA -> . NATIVAS
+    (39) LISTA -> . ARREGLOS
+    (40) LISTA -> . LLAMADAS
+    (41) LISTA -> . E
+    (94) NATIVAS -> . R_PARSE PARIZQ TIPO COMA LISTA PARDER
+    (95) NATIVAS -> . R_TRUNC PARIZQ TIPO COMA LISTA PARDER
+    (96) NATIVAS -> . R_FLOAT PARIZQ LISTA PARDER
+    (97) NATIVAS -> . R_STRING PARIZQ LISTA PARDER
+    (98) NATIVAS -> . R_TYPEOF PARIZQ LISTA PARDER
+    (99) NATIVAS -> . R_PUSH DIFERENTE PARIZQ ID COMA E PARDER
+    (100) NATIVAS -> . R_POP DIFERENTE PARIZQ ID PARDER
+    (101) NATIVAS -> . ID PUNTO R_LENGTH
+    (32) ARREGLOS -> . ID CORIZQ LISTAS CORDER
+    (33) ARREGLOS -> . CORIZQ LISTAS CORDER
+    (34) ARREGLOS -> . ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER
+    (35) ARREGLOS -> . CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER
+    (57) LLAMADAS -> . ID PARIZQ LISTAS PARIZQ PTCOMA
+    (58) LLAMADAS -> . ID PARIZQ PARDER PTCOMA
+    (59) E -> . E MAS E
+    (60) E -> . E MENOS E
+    (61) E -> . E POR E
+    (62) E -> . E DIVIDIDO E
+    (63) E -> . E MODAL E
+    (64) E -> . E POTENCIA E
+    (65) E -> . MENOS E
+    (66) E -> . PARIZQ E PARDER
+    (67) E -> . R_LOG10 PARIZQ E PARDER
+    (68) E -> . R_SIN PARIZQ E PARDER
+    (69) E -> . R_COS PARIZQ E PARDER
+    (70) E -> . R_TAN PARIZQ E PARDER
+    (71) E -> . R_SQRT PARIZQ E PARDER
+    (72) E -> . R_UPPERCASE PARIZQ E PARDER
+    (73) E -> . R_LOWERCASE PARIZQ E PARDER
+    (74) E -> . R_LOG PARIZQ E COMA E PARDER
+    (75) E -> . DECIMAL
+    (76) E -> . ENTERO
+    (77) E -> . R_TRUE
+    (78) E -> . R_FALSE
+    (79) E -> . CADENA
+    (80) E -> . ID
+
+    R_PARSE         shift and go to state 21
+    R_TRUNC         shift and go to state 22
+    R_FLOAT         shift and go to state 23
+    R_STRING        shift and go to state 24
+    R_TYPEOF        shift and go to state 25
+    R_PUSH          shift and go to state 26
+    R_POP           shift and go to state 27
+    ID              shift and go to state 82
+    CORIZQ          shift and go to state 89
+    MENOS           shift and go to state 50
+    PARIZQ          shift and go to state 88
+    R_LOG10         shift and go to state 51
+    R_SIN           shift and go to state 52
+    R_COS           shift and go to state 53
+    R_TAN           shift and go to state 54
+    R_SQRT          shift and go to state 55
+    R_UPPERCASE     shift and go to state 56
+    R_LOWERCASE     shift and go to state 57
+    R_LOG           shift and go to state 58
+    DECIMAL         shift and go to state 59
+    ENTERO          shift and go to state 60
+    R_TRUE          shift and go to state 61
+    R_FALSE         shift and go to state 62
+    CADENA          shift and go to state 63
+
+    LISTA                          shift and go to state 294
+    NATIVAS                        shift and go to state 84
+    ARREGLOS                       shift and go to state 85
+    LLAMADAS                       shift and go to state 86
+    E                              shift and go to state 87
+
+state 238
+
     (96) NATIVAS -> R_FLOAT PARIZQ LISTA PARDER .
 
     PTCOMA          reduce using rule 96 (NATIVAS -> R_FLOAT PARIZQ LISTA PARDER .)
@@ -8375,7 +8382,7 @@ state 237
     CORDER          reduce using rule 96 (NATIVAS -> R_FLOAT PARIZQ LISTA PARDER .)
 
 
-state 238
+state 239
 
     (97) NATIVAS -> R_STRING PARIZQ LISTA PARDER .
 
@@ -8407,7 +8414,7 @@ state 238
     CORDER          reduce using rule 97 (NATIVAS -> R_STRING PARIZQ LISTA PARDER .)
 
 
-state 239
+state 240
 
     (98) NATIVAS -> R_TYPEOF PARIZQ LISTA PARDER .
 
@@ -8439,37 +8446,37 @@ state 239
     CORDER          reduce using rule 98 (NATIVAS -> R_TYPEOF PARIZQ LISTA PARDER .)
 
 
-state 240
+state 241
 
     (99) NATIVAS -> R_PUSH DIFERENTE PARIZQ ID . COMA E PARDER
 
-    COMA            shift and go to state 294
-
-
-state 241
-
-    (100) NATIVAS -> R_POP DIFERENTE PARIZQ ID . PARDER
-
-    PARDER          shift and go to state 295
+    COMA            shift and go to state 295
 
 
 state 242
 
-    (156) STRUCTS -> R_MUTABLE R_STRUCT ID ELEMENTOS . R_END PTCOMA
-    (160) ELEMENTOS -> ELEMENTOS . COMA ELEMENTO
+    (100) NATIVAS -> R_POP DIFERENTE PARIZQ ID . PARDER
 
-    R_END           shift and go to state 296
-    COMA            shift and go to state 246
+    PARDER          shift and go to state 296
 
 
 state 243
 
-    (158) STRUCTS -> R_MUTABLE R_STRUCT ID R_END . PTCOMA
+    (156) STRUCTS -> R_MUTABLE R_STRUCT ID ELEMENTOS . R_END PTCOMA
+    (160) ELEMENTOS -> ELEMENTOS . COMA ELEMENTO
 
-    PTCOMA          shift and go to state 297
+    R_END           shift and go to state 297
+    COMA            shift and go to state 247
 
 
 state 244
+
+    (158) STRUCTS -> R_MUTABLE R_STRUCT ID R_END . PTCOMA
+
+    PTCOMA          shift and go to state 298
+
+
+state 245
 
     (163) ELEMENTO -> ID DOSPUNTOS . TIPO
     (51) TIPO -> . R_NOTHING
@@ -8486,9 +8493,9 @@ state 244
     R_CHAR          shift and go to state 157
     R_BOOL          shift and go to state 158
 
-    TIPO                           shift and go to state 298
+    TIPO                           shift and go to state 299
 
-state 245
+state 246
 
     (157) STRUCTS -> R_STRUCT ID ELEMENTOS PTCOMA .
 
@@ -8519,7 +8526,7 @@ state 245
     R_RETURN        reduce using rule 157 (STRUCTS -> R_STRUCT ID ELEMENTOS PTCOMA .)
 
 
-state 246
+state 247
 
     (160) ELEMENTOS -> ELEMENTOS COMA . ELEMENTO
     (162) ELEMENTO -> . ID
@@ -8527,9 +8534,9 @@ state 246
 
     ID              shift and go to state 166
 
-    ELEMENTO                       shift and go to state 299
+    ELEMENTO                       shift and go to state 300
 
-state 247
+state 248
 
     (159) STRUCTS -> R_STRUCT ID R_END PTCOMA .
 
@@ -8560,7 +8567,7 @@ state 247
     R_RETURN        reduce using rule 159 (STRUCTS -> R_STRUCT ID R_END PTCOMA .)
 
 
-state 248
+state 249
 
     (104) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER . INSTRUCCIONES R_END PTCOMA
     (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER . INSTRUCCIONES RETURN R_END PTCOMA
@@ -8621,8 +8628,8 @@ state 248
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 301
-    R_RETURN        shift and go to state 252
+    R_END           shift and go to state 302
+    R_RETURN        shift and go to state 253
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -8641,8 +8648,8 @@ state 248
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 300
-    RETURN                         shift and go to state 302
+    INSTRUCCIONES                  shift and go to state 301
+    RETURN                         shift and go to state 303
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -8652,7 +8659,7 @@ state 248
     NATIVAS                        shift and go to state 12
     STRUCTS                        shift and go to state 13
 
-state 249
+state 250
 
     (108) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES . R_END PTCOMA
     (109) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES . RETURN R_END PTCOMA
@@ -8703,8 +8710,8 @@ state 249
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 303
-    R_RETURN        shift and go to state 252
+    R_END           shift and go to state 304
+    R_RETURN        shift and go to state 253
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -8723,7 +8730,7 @@ state 249
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    RETURN                         shift and go to state 304
+    RETURN                         shift and go to state 305
     IFS                            shift and go to state 32
     FORS                           shift and go to state 33
     WHILES                         shift and go to state 34
@@ -8733,21 +8740,21 @@ state 249
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 250
+state 251
 
     (110) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER R_END . PTCOMA
 
-    PTCOMA          shift and go to state 305
-
-
-state 251
-
-    (111) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER RETURN . R_END PTCOMA
-
-    R_END           shift and go to state 306
+    PTCOMA          shift and go to state 306
 
 
 state 252
+
+    (111) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER RETURN . R_END PTCOMA
+
+    R_END           shift and go to state 307
+
+
+state 253
 
     (102) RETURN -> R_RETURN . LISTA
     (103) RETURN -> R_RETURN .
@@ -8818,30 +8825,30 @@ state 252
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTA                          shift and go to state 307
+    LISTA                          shift and go to state 308
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
     E                              shift and go to state 87
 
-state 253
+state 254
 
     (32) ARREGLOS -> ID CORIZQ LISTAS . CORDER
     (34) ARREGLOS -> ID CORIZQ LISTAS . CORDER CORIZQ LISTAS CORDER
     (36) LISTAS -> LISTAS . COMA LISTA
 
-    CORDER          shift and go to state 308
+    CORDER          shift and go to state 309
     COMA            shift and go to state 178
 
 
-state 254
+state 255
 
     (44) ASIGNACION -> ID IGUAL LISTA DOSPUNTOS TIPO . PTCOMA
 
-    PTCOMA          shift and go to state 309
+    PTCOMA          shift and go to state 310
 
 
-state 255
+state 256
 
     (33) ARREGLOS -> CORIZQ LISTAS CORDER .
     (35) ARREGLOS -> CORIZQ LISTAS CORDER . CORIZQ LISTAS CORDER
@@ -8872,10 +8879,10 @@ state 255
     R_MUTABLE       reduce using rule 33 (ARREGLOS -> CORIZQ LISTAS CORDER .)
     R_STRUCT        reduce using rule 33 (ARREGLOS -> CORIZQ LISTAS CORDER .)
     R_BREAK         reduce using rule 33 (ARREGLOS -> CORIZQ LISTAS CORDER .)
-    CORIZQ          shift and go to state 310
+    CORIZQ          shift and go to state 311
 
 
-state 256
+state 257
 
     (57) LLAMADAS -> ID PARIZQ LISTAS PARIZQ PTCOMA .
 
@@ -8912,7 +8919,7 @@ state 256
     R_RETURN        reduce using rule 57 (LLAMADAS -> ID PARIZQ LISTAS PARIZQ PTCOMA .)
 
 
-state 257
+state 258
 
     (36) LISTAS -> LISTAS COMA LISTA .
 
@@ -8922,7 +8929,7 @@ state 257
     CORDER          reduce using rule 36 (LISTAS -> LISTAS COMA LISTA .)
 
 
-state 258
+state 259
 
     (112) IFS -> R_IF LO INSTRUCCIONES R_END PTCOMA .
 
@@ -8953,7 +8960,7 @@ state 258
     R_RETURN        reduce using rule 112 (IFS -> R_IF LO INSTRUCCIONES R_END PTCOMA .)
 
 
-state 259
+state 260
 
     (113) IFS -> R_IF LO INSTRUCCIONES R_ELSE INSTRUCCIONES . R_END PTCOMA
     (5) INSTRUCCIONES -> INSTRUCCIONES . IFS
@@ -9001,7 +9008,7 @@ state 259
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 311
+    R_END           shift and go to state 312
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -9029,21 +9036,21 @@ state 259
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 260
-
-    (118) IFS -> R_IF LO INSTRUCCIONES R_ELSE R_END . PTCOMA
-
-    PTCOMA          shift and go to state 312
-
-
 state 261
 
-    (116) IFS -> R_IF LO R_ELSE INSTRUCCIONES R_END . PTCOMA
+    (118) IFS -> R_IF LO INSTRUCCIONES R_ELSE R_END . PTCOMA
 
     PTCOMA          shift and go to state 313
 
 
 state 262
+
+    (116) IFS -> R_IF LO R_ELSE INSTRUCCIONES R_END . PTCOMA
+
+    PTCOMA          shift and go to state 314
+
+
+state 263
 
     (119) IFS -> R_IF LO R_ELSE R_END PTCOMA .
 
@@ -9074,7 +9081,7 @@ state 262
     R_RETURN        reduce using rule 119 (IFS -> R_IF LO R_ELSE R_END PTCOMA .)
 
 
-state 263
+state 264
 
     (120) ELSEIF -> R_ELSEIF LO INSTRUCCIONES . R_END PTCOMA
     (121) ELSEIF -> R_ELSEIF LO INSTRUCCIONES . R_ELSE INSTRUCCIONES R_END PTCOMA
@@ -9133,8 +9140,8 @@ state 263
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 314
-    R_ELSE          shift and go to state 315
+    R_END           shift and go to state 315
+    R_ELSE          shift and go to state 316
     R_ELSEIF        shift and go to state 100
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
@@ -9154,7 +9161,7 @@ state 263
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    ELSEIF                         shift and go to state 316
+    ELSEIF                         shift and go to state 317
     IFS                            shift and go to state 32
     FORS                           shift and go to state 33
     WHILES                         shift and go to state 34
@@ -9164,14 +9171,14 @@ state 263
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 264
+state 265
 
     (123) ELSEIF -> R_ELSEIF LO R_END . PTCOMA
 
-    PTCOMA          shift and go to state 317
+    PTCOMA          shift and go to state 318
 
 
-state 265
+state 266
 
     (124) ELSEIF -> R_ELSEIF LO R_ELSE . INSTRUCCIONES R_END PTCOMA
     (127) ELSEIF -> R_ELSEIF LO R_ELSE . R_END PTCOMA
@@ -9228,7 +9235,7 @@ state 265
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 319
+    R_END           shift and go to state 320
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -9247,7 +9254,7 @@ state 265
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 318
+    INSTRUCCIONES                  shift and go to state 319
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -9257,7 +9264,7 @@ state 265
     NATIVAS                        shift and go to state 12
     STRUCTS                        shift and go to state 13
 
-state 266
+state 267
 
     (125) ELSEIF -> R_ELSEIF LO ELSEIF .
 
@@ -9288,7 +9295,7 @@ state 266
     R_RETURN        reduce using rule 125 (ELSEIF -> R_ELSEIF LO ELSEIF .)
 
 
-state 267
+state 268
 
     (87) RE -> PARIZQ RE . PARDER
     (81) RE -> RE . MENQUE RE
@@ -9307,7 +9314,7 @@ state 267
     MAYORIGUAL      shift and go to state 110
 
 
-state 268
+state 269
 
     (67) E -> R_LOG10 PARIZQ E PARDER .
 
@@ -9355,7 +9362,7 @@ state 268
     CORDER          reduce using rule 67 (E -> R_LOG10 PARIZQ E PARDER .)
 
 
-state 269
+state 270
 
     (68) E -> R_SIN PARIZQ E PARDER .
 
@@ -9403,7 +9410,7 @@ state 269
     CORDER          reduce using rule 68 (E -> R_SIN PARIZQ E PARDER .)
 
 
-state 270
+state 271
 
     (69) E -> R_COS PARIZQ E PARDER .
 
@@ -9451,7 +9458,7 @@ state 270
     CORDER          reduce using rule 69 (E -> R_COS PARIZQ E PARDER .)
 
 
-state 271
+state 272
 
     (70) E -> R_TAN PARIZQ E PARDER .
 
@@ -9499,7 +9506,7 @@ state 271
     CORDER          reduce using rule 70 (E -> R_TAN PARIZQ E PARDER .)
 
 
-state 272
+state 273
 
     (71) E -> R_SQRT PARIZQ E PARDER .
 
@@ -9547,7 +9554,7 @@ state 272
     CORDER          reduce using rule 71 (E -> R_SQRT PARIZQ E PARDER .)
 
 
-state 273
+state 274
 
     (72) E -> R_UPPERCASE PARIZQ E PARDER .
 
@@ -9595,7 +9602,7 @@ state 273
     CORDER          reduce using rule 72 (E -> R_UPPERCASE PARIZQ E PARDER .)
 
 
-state 274
+state 275
 
     (73) E -> R_LOWERCASE PARIZQ E PARDER .
 
@@ -9643,7 +9650,7 @@ state 274
     CORDER          reduce using rule 73 (E -> R_LOWERCASE PARIZQ E PARDER .)
 
 
-state 275
+state 276
 
     (74) E -> R_LOG PARIZQ E COMA . E PARDER
     (59) E -> . E MAS E
@@ -9686,9 +9693,9 @@ state 275
     CADENA          shift and go to state 63
     ID              shift and go to state 64
 
-    E                              shift and go to state 320
+    E                              shift and go to state 321
 
-state 276
+state 277
 
     (155) RANGO -> ID CORIZQ . E DOSPUNTOS E CORDER
     (32) ARREGLOS -> ID CORIZQ . LISTAS CORDER
@@ -9751,7 +9758,7 @@ state 276
     R_TRUE          shift and go to state 61
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
-    ID              shift and go to state 321
+    ID              shift and go to state 322
     R_PARSE         shift and go to state 21
     R_TRUNC         shift and go to state 22
     R_FLOAT         shift and go to state 23
@@ -9761,14 +9768,14 @@ state 276
     R_POP           shift and go to state 27
     CORIZQ          shift and go to state 89
 
-    E                              shift and go to state 322
-    LISTAS                         shift and go to state 253
+    E                              shift and go to state 323
+    LISTAS                         shift and go to state 254
     LISTA                          shift and go to state 92
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
 
-state 277
+state 278
 
     (150) FORS -> R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP . R_END PTCOMA
     (128) INSTRUCCIONES_LOOP -> INSTRUCCIONES_LOOP . IFS
@@ -9817,9 +9824,9 @@ state 277
     (157) STRUCTS -> . R_STRUCT ID ELEMENTOS PTCOMA
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
-    (50) BREAK -> . R_BREAK
+    (50) BREAK -> . R_BREAK PTCOMA
 
-    R_END           shift and go to state 323
+    R_END           shift and go to state 324
     R_CONTINUE      shift and go to state 227
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
@@ -9850,14 +9857,14 @@ state 277
     STRUCTS                        shift and go to state 225
     BREAK                          shift and go to state 226
 
-state 278
+state 279
 
     (151) FORS -> R_FOR ID R_IN RANGO R_END . PTCOMA
 
-    PTCOMA          shift and go to state 324
+    PTCOMA          shift and go to state 325
 
 
-state 279
+state 280
 
     (152) RANGO -> E DOSPUNTOS . E
     (59) E -> . E MAS E
@@ -9900,9 +9907,9 @@ state 279
     CADENA          shift and go to state 63
     ID              shift and go to state 64
 
-    E                              shift and go to state 325
+    E                              shift and go to state 326
 
-state 280
+state 281
 
     (148) WHILES -> R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA .
 
@@ -9933,7 +9940,7 @@ state 280
     R_RETURN        reduce using rule 148 (WHILES -> R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA .)
 
 
-state 281
+state 282
 
     (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA DOSPUNTOS . TIPO PTCOMA
     (51) TIPO -> . R_NOTHING
@@ -9950,9 +9957,9 @@ state 281
     R_CHAR          shift and go to state 157
     R_BOOL          shift and go to state 158
 
-    TIPO                           shift and go to state 326
+    TIPO                           shift and go to state 327
 
-state 282
+state 283
 
     (45) ASIGNACION -> R_GLOBAL ID IGUAL LISTA PTCOMA .
 
@@ -9983,7 +9990,7 @@ state 282
     R_RETURN        reduce using rule 45 (ASIGNACION -> R_GLOBAL ID IGUAL LISTA PTCOMA .)
 
 
-state 283
+state 284
 
     (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA DOSPUNTOS . TIPO PTCOMA
     (51) TIPO -> . R_NOTHING
@@ -10000,9 +10007,9 @@ state 283
     R_CHAR          shift and go to state 157
     R_BOOL          shift and go to state 158
 
-    TIPO                           shift and go to state 327
+    TIPO                           shift and go to state 328
 
-state 284
+state 285
 
     (46) ASIGNACION -> R_LOCAL ID IGUAL LISTA PTCOMA .
 
@@ -10033,7 +10040,7 @@ state 284
     R_RETURN        reduce using rule 46 (ASIGNACION -> R_LOCAL ID IGUAL LISTA PTCOMA .)
 
 
-state 285
+state 286
 
     (21) I -> R_PRINT PARIZQ IMPRESIONES PARDER PTCOMA .
 
@@ -10064,7 +10071,7 @@ state 285
     R_RETURN        reduce using rule 21 (I -> R_PRINT PARIZQ IMPRESIONES PARDER PTCOMA .)
 
 
-state 286
+state 287
 
     (23) IMPRESIONES -> IMPRESIONES COMA IMPRESION .
 
@@ -10072,7 +10079,7 @@ state 286
     COMA            reduce using rule 23 (IMPRESIONES -> IMPRESIONES COMA IMPRESION .)
 
 
-state 287
+state 288
 
     (29) IMPRESION -> DOLAR PARIZQ E . PARDER
     (59) E -> E . MAS E
@@ -10082,7 +10089,7 @@ state 287
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 328
+    PARDER          shift and go to state 329
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -10091,21 +10098,21 @@ state 287
     POTENCIA        shift and go to state 116
 
 
-state 288
-
-    (30) IMPRESION -> DOLAR PARIZQ ARREGLOS . PARDER
-
-    PARDER          shift and go to state 329
-
-
 state 289
 
-    (31) IMPRESION -> DOLAR PARIZQ NATIVAS . PARDER
+    (30) IMPRESION -> DOLAR PARIZQ ARREGLOS . PARDER
 
     PARDER          shift and go to state 330
 
 
 state 290
+
+    (31) IMPRESION -> DOLAR PARIZQ NATIVAS . PARDER
+
+    PARDER          shift and go to state 331
+
+
+state 291
 
     (80) E -> ID .
     (32) ARREGLOS -> ID . CORIZQ LISTAS CORDER
@@ -10123,7 +10130,7 @@ state 290
     PUNTO           shift and go to state 43
 
 
-state 291
+state 292
 
     (22) I -> R_PRINTLN PARIZQ IMPRESIONES PARDER PTCOMA .
 
@@ -10154,21 +10161,21 @@ state 291
     R_RETURN        reduce using rule 22 (I -> R_PRINTLN PARIZQ IMPRESIONES PARDER PTCOMA .)
 
 
-state 292
-
-    (94) NATIVAS -> R_PARSE PARIZQ TIPO COMA LISTA . PARDER
-
-    PARDER          shift and go to state 331
-
-
 state 293
 
-    (95) NATIVAS -> R_TRUNC PARIZQ TIPO COMA LISTA . PARDER
+    (94) NATIVAS -> R_PARSE PARIZQ TIPO COMA LISTA . PARDER
 
     PARDER          shift and go to state 332
 
 
 state 294
+
+    (95) NATIVAS -> R_TRUNC PARIZQ TIPO COMA LISTA . PARDER
+
+    PARDER          shift and go to state 333
+
+
+state 295
 
     (99) NATIVAS -> R_PUSH DIFERENTE PARIZQ ID COMA . E PARDER
     (59) E -> . E MAS E
@@ -10211,9 +10218,9 @@ state 294
     CADENA          shift and go to state 63
     ID              shift and go to state 64
 
-    E                              shift and go to state 333
+    E                              shift and go to state 334
 
-state 295
+state 296
 
     (100) NATIVAS -> R_POP DIFERENTE PARIZQ ID PARDER .
 
@@ -10245,14 +10252,14 @@ state 295
     CORDER          reduce using rule 100 (NATIVAS -> R_POP DIFERENTE PARIZQ ID PARDER .)
 
 
-state 296
+state 297
 
     (156) STRUCTS -> R_MUTABLE R_STRUCT ID ELEMENTOS R_END . PTCOMA
 
-    PTCOMA          shift and go to state 334
+    PTCOMA          shift and go to state 335
 
 
-state 297
+state 298
 
     (158) STRUCTS -> R_MUTABLE R_STRUCT ID R_END PTCOMA .
 
@@ -10283,7 +10290,7 @@ state 297
     R_RETURN        reduce using rule 158 (STRUCTS -> R_MUTABLE R_STRUCT ID R_END PTCOMA .)
 
 
-state 298
+state 299
 
     (163) ELEMENTO -> ID DOSPUNTOS TIPO .
 
@@ -10292,7 +10299,7 @@ state 298
     R_END           reduce using rule 163 (ELEMENTO -> ID DOSPUNTOS TIPO .)
 
 
-state 299
+state 300
 
     (160) ELEMENTOS -> ELEMENTOS COMA ELEMENTO .
 
@@ -10301,7 +10308,7 @@ state 299
     R_END           reduce using rule 160 (ELEMENTOS -> ELEMENTOS COMA ELEMENTO .)
 
 
-state 300
+state 301
 
     (104) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES . R_END PTCOMA
     (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES . RETURN R_END PTCOMA
@@ -10352,8 +10359,8 @@ state 300
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 335
-    R_RETURN        shift and go to state 252
+    R_END           shift and go to state 336
+    R_RETURN        shift and go to state 253
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -10372,7 +10379,7 @@ state 300
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    RETURN                         shift and go to state 336
+    RETURN                         shift and go to state 337
     IFS                            shift and go to state 32
     FORS                           shift and go to state 33
     WHILES                         shift and go to state 34
@@ -10382,35 +10389,35 @@ state 300
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 301
+state 302
 
     (106) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER R_END . PTCOMA
 
-    PTCOMA          shift and go to state 337
-
-
-state 302
-
-    (107) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER RETURN . R_END PTCOMA
-
-    R_END           shift and go to state 338
+    PTCOMA          shift and go to state 338
 
 
 state 303
 
-    (108) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES R_END . PTCOMA
+    (107) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER RETURN . R_END PTCOMA
 
-    PTCOMA          shift and go to state 339
+    R_END           shift and go to state 339
 
 
 state 304
 
-    (109) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES RETURN . R_END PTCOMA
+    (108) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES R_END . PTCOMA
 
-    R_END           shift and go to state 340
+    PTCOMA          shift and go to state 340
 
 
 state 305
+
+    (109) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES RETURN . R_END PTCOMA
+
+    R_END           shift and go to state 341
+
+
+state 306
 
     (110) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER R_END PTCOMA .
 
@@ -10435,21 +10442,21 @@ state 305
     $end            reduce using rule 110 (FUNCIONES -> R_FUNCTION ID PARIZQ PARDER R_END PTCOMA .)
 
 
-state 306
+state 307
 
     (111) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER RETURN R_END . PTCOMA
 
-    PTCOMA          shift and go to state 341
+    PTCOMA          shift and go to state 342
 
 
-state 307
+state 308
 
     (102) RETURN -> R_RETURN LISTA .
 
     R_END           reduce using rule 102 (RETURN -> R_RETURN LISTA .)
 
 
-state 308
+state 309
 
     (32) ARREGLOS -> ID CORIZQ LISTAS CORDER .
     (34) ARREGLOS -> ID CORIZQ LISTAS CORDER . CORIZQ LISTAS CORDER
@@ -10480,10 +10487,10 @@ state 308
     R_MUTABLE       reduce using rule 32 (ARREGLOS -> ID CORIZQ LISTAS CORDER .)
     R_STRUCT        reduce using rule 32 (ARREGLOS -> ID CORIZQ LISTAS CORDER .)
     R_BREAK         reduce using rule 32 (ARREGLOS -> ID CORIZQ LISTAS CORDER .)
-    CORIZQ          shift and go to state 342
+    CORIZQ          shift and go to state 343
 
 
-state 309
+state 310
 
     (44) ASIGNACION -> ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .
 
@@ -10514,7 +10521,7 @@ state 309
     R_RETURN        reduce using rule 44 (ASIGNACION -> ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .)
 
 
-state 310
+state 311
 
     (35) ARREGLOS -> CORIZQ LISTAS CORDER CORIZQ . LISTAS CORDER
     (36) LISTAS -> . LISTAS COMA LISTA
@@ -10585,21 +10592,21 @@ state 310
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTAS                         shift and go to state 343
+    LISTAS                         shift and go to state 344
     LISTA                          shift and go to state 92
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
     E                              shift and go to state 87
 
-state 311
+state 312
 
     (113) IFS -> R_IF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END . PTCOMA
 
-    PTCOMA          shift and go to state 344
+    PTCOMA          shift and go to state 345
 
 
-state 312
+state 313
 
     (118) IFS -> R_IF LO INSTRUCCIONES R_ELSE R_END PTCOMA .
 
@@ -10630,7 +10637,7 @@ state 312
     R_RETURN        reduce using rule 118 (IFS -> R_IF LO INSTRUCCIONES R_ELSE R_END PTCOMA .)
 
 
-state 313
+state 314
 
     (116) IFS -> R_IF LO R_ELSE INSTRUCCIONES R_END PTCOMA .
 
@@ -10661,14 +10668,14 @@ state 313
     R_RETURN        reduce using rule 116 (IFS -> R_IF LO R_ELSE INSTRUCCIONES R_END PTCOMA .)
 
 
-state 314
+state 315
 
     (120) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_END . PTCOMA
 
-    PTCOMA          shift and go to state 345
+    PTCOMA          shift and go to state 346
 
 
-state 315
+state 316
 
     (121) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE . INSTRUCCIONES R_END PTCOMA
     (126) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE . R_END PTCOMA
@@ -10725,7 +10732,7 @@ state 315
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 347
+    R_END           shift and go to state 348
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -10744,7 +10751,7 @@ state 315
     R_MUTABLE       shift and go to state 28
     R_STRUCT        shift and go to state 29
 
-    INSTRUCCIONES                  shift and go to state 346
+    INSTRUCCIONES                  shift and go to state 347
     IFS                            shift and go to state 6
     FORS                           shift and go to state 7
     WHILES                         shift and go to state 8
@@ -10754,7 +10761,7 @@ state 315
     NATIVAS                        shift and go to state 12
     STRUCTS                        shift and go to state 13
 
-state 316
+state 317
 
     (122) ELSEIF -> R_ELSEIF LO INSTRUCCIONES ELSEIF .
 
@@ -10785,7 +10792,7 @@ state 316
     R_RETURN        reduce using rule 122 (ELSEIF -> R_ELSEIF LO INSTRUCCIONES ELSEIF .)
 
 
-state 317
+state 318
 
     (123) ELSEIF -> R_ELSEIF LO R_END PTCOMA .
 
@@ -10816,7 +10823,7 @@ state 317
     R_RETURN        reduce using rule 123 (ELSEIF -> R_ELSEIF LO R_END PTCOMA .)
 
 
-state 318
+state 319
 
     (124) ELSEIF -> R_ELSEIF LO R_ELSE INSTRUCCIONES . R_END PTCOMA
     (5) INSTRUCCIONES -> INSTRUCCIONES . IFS
@@ -10864,7 +10871,7 @@ state 318
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 348
+    R_END           shift and go to state 349
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -10892,14 +10899,14 @@ state 318
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 319
+state 320
 
     (127) ELSEIF -> R_ELSEIF LO R_ELSE R_END . PTCOMA
 
-    PTCOMA          shift and go to state 349
+    PTCOMA          shift and go to state 350
 
 
-state 320
+state 321
 
     (74) E -> R_LOG PARIZQ E COMA E . PARDER
     (59) E -> E . MAS E
@@ -10909,7 +10916,7 @@ state 320
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 350
+    PARDER          shift and go to state 351
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -10918,7 +10925,7 @@ state 320
     POTENCIA        shift and go to state 116
 
 
-state 321
+state 322
 
     (80) E -> ID .
     (101) NATIVAS -> ID . PUNTO R_LENGTH
@@ -10941,7 +10948,7 @@ state 321
     PARIZQ          shift and go to state 42
 
 
-state 322
+state 323
 
     (155) RANGO -> ID CORIZQ E . DOSPUNTOS E CORDER
     (59) E -> E . MAS E
@@ -10952,7 +10959,7 @@ state 322
     (64) E -> E . POTENCIA E
     (41) LISTA -> E .
 
-    DOSPUNTOS       shift and go to state 351
+    DOSPUNTOS       shift and go to state 352
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -10963,14 +10970,14 @@ state 322
     COMA            reduce using rule 41 (LISTA -> E .)
 
 
-state 323
+state 324
 
     (150) FORS -> R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END . PTCOMA
 
-    PTCOMA          shift and go to state 352
+    PTCOMA          shift and go to state 353
 
 
-state 324
+state 325
 
     (151) FORS -> R_FOR ID R_IN RANGO R_END PTCOMA .
 
@@ -11001,7 +11008,7 @@ state 324
     R_RETURN        reduce using rule 151 (FORS -> R_FOR ID R_IN RANGO R_END PTCOMA .)
 
 
-state 325
+state 326
 
     (152) RANGO -> E DOSPUNTOS E .
     (59) E -> E . MAS E
@@ -11039,21 +11046,21 @@ state 325
     POTENCIA        shift and go to state 116
 
 
-state 326
-
-    (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO . PTCOMA
-
-    PTCOMA          shift and go to state 353
-
-
 state 327
 
-    (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO . PTCOMA
+    (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO . PTCOMA
 
     PTCOMA          shift and go to state 354
 
 
 state 328
+
+    (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO . PTCOMA
+
+    PTCOMA          shift and go to state 355
+
+
+state 329
 
     (29) IMPRESION -> DOLAR PARIZQ E PARDER .
 
@@ -11061,7 +11068,7 @@ state 328
     COMA            reduce using rule 29 (IMPRESION -> DOLAR PARIZQ E PARDER .)
 
 
-state 329
+state 330
 
     (30) IMPRESION -> DOLAR PARIZQ ARREGLOS PARDER .
 
@@ -11069,7 +11076,7 @@ state 329
     COMA            reduce using rule 30 (IMPRESION -> DOLAR PARIZQ ARREGLOS PARDER .)
 
 
-state 330
+state 331
 
     (31) IMPRESION -> DOLAR PARIZQ NATIVAS PARDER .
 
@@ -11077,7 +11084,7 @@ state 330
     COMA            reduce using rule 31 (IMPRESION -> DOLAR PARIZQ NATIVAS PARDER .)
 
 
-state 331
+state 332
 
     (94) NATIVAS -> R_PARSE PARIZQ TIPO COMA LISTA PARDER .
 
@@ -11109,7 +11116,7 @@ state 331
     CORDER          reduce using rule 94 (NATIVAS -> R_PARSE PARIZQ TIPO COMA LISTA PARDER .)
 
 
-state 332
+state 333
 
     (95) NATIVAS -> R_TRUNC PARIZQ TIPO COMA LISTA PARDER .
 
@@ -11141,7 +11148,7 @@ state 332
     CORDER          reduce using rule 95 (NATIVAS -> R_TRUNC PARIZQ TIPO COMA LISTA PARDER .)
 
 
-state 333
+state 334
 
     (99) NATIVAS -> R_PUSH DIFERENTE PARIZQ ID COMA E . PARDER
     (59) E -> E . MAS E
@@ -11151,7 +11158,7 @@ state 333
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    PARDER          shift and go to state 355
+    PARDER          shift and go to state 356
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -11160,7 +11167,7 @@ state 333
     POTENCIA        shift and go to state 116
 
 
-state 334
+state 335
 
     (156) STRUCTS -> R_MUTABLE R_STRUCT ID ELEMENTOS R_END PTCOMA .
 
@@ -11191,21 +11198,21 @@ state 334
     R_RETURN        reduce using rule 156 (STRUCTS -> R_MUTABLE R_STRUCT ID ELEMENTOS R_END PTCOMA .)
 
 
-state 335
+state 336
 
     (104) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END . PTCOMA
 
-    PTCOMA          shift and go to state 356
-
-
-state 336
-
-    (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN . R_END PTCOMA
-
-    R_END           shift and go to state 357
+    PTCOMA          shift and go to state 357
 
 
 state 337
+
+    (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN . R_END PTCOMA
+
+    R_END           shift and go to state 358
+
+
+state 338
 
     (106) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER R_END PTCOMA .
 
@@ -11230,14 +11237,14 @@ state 337
     $end            reduce using rule 106 (FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER R_END PTCOMA .)
 
 
-state 338
+state 339
 
     (107) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER RETURN R_END . PTCOMA
 
-    PTCOMA          shift and go to state 358
+    PTCOMA          shift and go to state 359
 
 
-state 339
+state 340
 
     (108) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES R_END PTCOMA .
 
@@ -11262,14 +11269,14 @@ state 339
     $end            reduce using rule 108 (FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES R_END PTCOMA .)
 
 
-state 340
+state 341
 
     (109) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES RETURN R_END . PTCOMA
 
-    PTCOMA          shift and go to state 359
+    PTCOMA          shift and go to state 360
 
 
-state 341
+state 342
 
     (111) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER RETURN R_END PTCOMA .
 
@@ -11294,7 +11301,7 @@ state 341
     $end            reduce using rule 111 (FUNCIONES -> R_FUNCTION ID PARIZQ PARDER RETURN R_END PTCOMA .)
 
 
-state 342
+state 343
 
     (34) ARREGLOS -> ID CORIZQ LISTAS CORDER CORIZQ . LISTAS CORDER
     (36) LISTAS -> . LISTAS COMA LISTA
@@ -11365,23 +11372,23 @@ state 342
     R_FALSE         shift and go to state 62
     CADENA          shift and go to state 63
 
-    LISTAS                         shift and go to state 360
+    LISTAS                         shift and go to state 361
     LISTA                          shift and go to state 92
     NATIVAS                        shift and go to state 84
     ARREGLOS                       shift and go to state 85
     LLAMADAS                       shift and go to state 86
     E                              shift and go to state 87
 
-state 343
+state 344
 
     (35) ARREGLOS -> CORIZQ LISTAS CORDER CORIZQ LISTAS . CORDER
     (36) LISTAS -> LISTAS . COMA LISTA
 
-    CORDER          shift and go to state 361
+    CORDER          shift and go to state 362
     COMA            shift and go to state 178
 
 
-state 344
+state 345
 
     (113) IFS -> R_IF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA .
 
@@ -11412,7 +11419,7 @@ state 344
     R_RETURN        reduce using rule 113 (IFS -> R_IF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA .)
 
 
-state 345
+state 346
 
     (120) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_END PTCOMA .
 
@@ -11443,7 +11450,7 @@ state 345
     R_RETURN        reduce using rule 120 (ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_END PTCOMA .)
 
 
-state 346
+state 347
 
     (121) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE INSTRUCCIONES . R_END PTCOMA
     (5) INSTRUCCIONES -> INSTRUCCIONES . IFS
@@ -11491,7 +11498,7 @@ state 346
     (158) STRUCTS -> . R_MUTABLE R_STRUCT ID R_END PTCOMA
     (159) STRUCTS -> . R_STRUCT ID R_END PTCOMA
 
-    R_END           shift and go to state 362
+    R_END           shift and go to state 363
     R_IF            shift and go to state 14
     R_FOR           shift and go to state 15
     R_WHILE         shift and go to state 16
@@ -11519,21 +11526,21 @@ state 346
     NATIVAS                        shift and go to state 38
     STRUCTS                        shift and go to state 39
 
-state 347
-
-    (126) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE R_END . PTCOMA
-
-    PTCOMA          shift and go to state 363
-
-
 state 348
 
-    (124) ELSEIF -> R_ELSEIF LO R_ELSE INSTRUCCIONES R_END . PTCOMA
+    (126) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE R_END . PTCOMA
 
     PTCOMA          shift and go to state 364
 
 
 state 349
+
+    (124) ELSEIF -> R_ELSEIF LO R_ELSE INSTRUCCIONES R_END . PTCOMA
+
+    PTCOMA          shift and go to state 365
+
+
+state 350
 
     (127) ELSEIF -> R_ELSEIF LO R_ELSE R_END PTCOMA .
 
@@ -11564,7 +11571,7 @@ state 349
     R_RETURN        reduce using rule 127 (ELSEIF -> R_ELSEIF LO R_ELSE R_END PTCOMA .)
 
 
-state 350
+state 351
 
     (74) E -> R_LOG PARIZQ E COMA E PARDER .
 
@@ -11612,7 +11619,7 @@ state 350
     CORDER          reduce using rule 74 (E -> R_LOG PARIZQ E COMA E PARDER .)
 
 
-state 351
+state 352
 
     (155) RANGO -> ID CORIZQ E DOSPUNTOS . E CORDER
     (59) E -> . E MAS E
@@ -11655,9 +11662,9 @@ state 351
     CADENA          shift and go to state 63
     ID              shift and go to state 64
 
-    E                              shift and go to state 365
+    E                              shift and go to state 366
 
-state 352
+state 353
 
     (150) FORS -> R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END PTCOMA .
 
@@ -11688,7 +11695,7 @@ state 352
     R_RETURN        reduce using rule 150 (FORS -> R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END PTCOMA .)
 
 
-state 353
+state 354
 
     (42) ASIGNACION -> R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .
 
@@ -11719,7 +11726,7 @@ state 353
     R_RETURN        reduce using rule 42 (ASIGNACION -> R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .)
 
 
-state 354
+state 355
 
     (43) ASIGNACION -> R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .
 
@@ -11750,7 +11757,7 @@ state 354
     R_RETURN        reduce using rule 43 (ASIGNACION -> R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA .)
 
 
-state 355
+state 356
 
     (99) NATIVAS -> R_PUSH DIFERENTE PARIZQ ID COMA E PARDER .
 
@@ -11782,7 +11789,7 @@ state 355
     CORDER          reduce using rule 99 (NATIVAS -> R_PUSH DIFERENTE PARIZQ ID COMA E PARDER .)
 
 
-state 356
+state 357
 
     (104) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END PTCOMA .
 
@@ -11807,14 +11814,14 @@ state 356
     $end            reduce using rule 104 (FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END PTCOMA .)
 
 
-state 357
+state 358
 
     (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN R_END . PTCOMA
 
-    PTCOMA          shift and go to state 366
+    PTCOMA          shift and go to state 367
 
 
-state 358
+state 359
 
     (107) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER RETURN R_END PTCOMA .
 
@@ -11839,7 +11846,7 @@ state 358
     $end            reduce using rule 107 (FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER RETURN R_END PTCOMA .)
 
 
-state 359
+state 360
 
     (109) FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES RETURN R_END PTCOMA .
 
@@ -11864,16 +11871,16 @@ state 359
     $end            reduce using rule 109 (FUNCIONES -> R_FUNCTION ID PARIZQ PARDER INSTRUCCIONES RETURN R_END PTCOMA .)
 
 
-state 360
+state 361
 
     (34) ARREGLOS -> ID CORIZQ LISTAS CORDER CORIZQ LISTAS . CORDER
     (36) LISTAS -> LISTAS . COMA LISTA
 
-    CORDER          shift and go to state 367
+    CORDER          shift and go to state 368
     COMA            shift and go to state 178
 
 
-state 361
+state 362
 
     (35) ARREGLOS -> CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER .
 
@@ -11905,14 +11912,14 @@ state 361
     R_BREAK         reduce using rule 35 (ARREGLOS -> CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER .)
 
 
-state 362
+state 363
 
     (121) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END . PTCOMA
 
-    PTCOMA          shift and go to state 368
+    PTCOMA          shift and go to state 369
 
 
-state 363
+state 364
 
     (126) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE R_END PTCOMA .
 
@@ -11943,7 +11950,7 @@ state 363
     R_RETURN        reduce using rule 126 (ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE R_END PTCOMA .)
 
 
-state 364
+state 365
 
     (124) ELSEIF -> R_ELSEIF LO R_ELSE INSTRUCCIONES R_END PTCOMA .
 
@@ -11974,7 +11981,7 @@ state 364
     R_RETURN        reduce using rule 124 (ELSEIF -> R_ELSEIF LO R_ELSE INSTRUCCIONES R_END PTCOMA .)
 
 
-state 365
+state 366
 
     (155) RANGO -> ID CORIZQ E DOSPUNTOS E . CORDER
     (59) E -> E . MAS E
@@ -11984,7 +11991,7 @@ state 365
     (63) E -> E . MODAL E
     (64) E -> E . POTENCIA E
 
-    CORDER          shift and go to state 369
+    CORDER          shift and go to state 370
     MAS             shift and go to state 111
     MENOS           shift and go to state 112
     POR             shift and go to state 113
@@ -11993,7 +12000,7 @@ state 365
     POTENCIA        shift and go to state 116
 
 
-state 366
+state 367
 
     (105) FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN R_END PTCOMA .
 
@@ -12018,7 +12025,7 @@ state 366
     $end            reduce using rule 105 (FUNCIONES -> R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN R_END PTCOMA .)
 
 
-state 367
+state 368
 
     (34) ARREGLOS -> ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER .
 
@@ -12050,7 +12057,7 @@ state 367
     R_BREAK         reduce using rule 34 (ARREGLOS -> ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER .)
 
 
-state 368
+state 369
 
     (121) ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA .
 
@@ -12081,7 +12088,7 @@ state 368
     R_RETURN        reduce using rule 121 (ELSEIF -> R_ELSEIF LO INSTRUCCIONES R_ELSE INSTRUCCIONES R_END PTCOMA .)
 
 
-state 369
+state 370
 
     (155) RANGO -> ID CORIZQ E DOSPUNTOS E CORDER .
 

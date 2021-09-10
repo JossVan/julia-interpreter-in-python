@@ -10,12 +10,12 @@ class Identificador(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        
+        id = self.id
         self.id = self.id.lower()
         resultado = table.BuscarIdentificador(self.id)
         if resultado == None:
-            tree.insertError(Errores("Variable no encontrada","Semántico","No definida", self.fila,self.columna))
-            return "No existe la variable"
+            tree.insertError(Errores(id,"Semántico","No definida", self.fila,self.columna))
+            return
         return resultado.getValor()
     
     def getNodo(self):

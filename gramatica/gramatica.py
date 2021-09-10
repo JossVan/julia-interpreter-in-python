@@ -1,6 +1,7 @@
 from Instrucciones.Return import Return
 import re
 
+
 reservadas = {
      'nothing' : 'R_NOTHING',
      'int64' : 'R_INT64',
@@ -96,7 +97,7 @@ t_NIGUALQUE = r'!='
 t_MENORIGUAL= r'<='
 t_MAYORIGUAL= r'>='
 t_COMA      = r','
-t_PUNTO     = r'.'
+t_PUNTO     = r'\.'
 t_DOSPUNTOS = r'\:\:'
 t_OR       = r'\|\|'
 t_AND       = r'&&'
@@ -317,14 +318,14 @@ def p_asignaciones(t):
                   | R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
 
     if t[1] == 'global':
-        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
-        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[7], t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
 
 def p_asignacionesp(t):
     'ASIGNACION : ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
 
-    t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[6], t.lineno(1), t.lexpos(1))
+    t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[5], t.lineno(1), t.lexpos(1))
 
 def p_asginacionesp2(t):
     '''ASIGNACION : R_GLOBAL ID IGUAL LISTA PTCOMA
@@ -351,7 +352,7 @@ def p_asignacionesp4(t):
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(1), t.lexpos(1))
 
 def p_break(t):
-    'BREAK : R_BREAK'
+    'BREAK : R_BREAK PTCOMA'
     t[0] = Break(t.lineno(1), t.lexpos(1))
 def p_tipo(t):
     '''TIPO : R_NOTHING
@@ -764,4 +765,9 @@ def parse(input) :
 
     """for simbolo in tablita.values():
         print(simbolo.getValor())"""
+    if len(AST.getErrores()) > 0:
+        err=""
+        for error in AST.getErrores():
+            err+=">>" +error.getCadena()+"\n"
+        return err
     return AST.getConsola()

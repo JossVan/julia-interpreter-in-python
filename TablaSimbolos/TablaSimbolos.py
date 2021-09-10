@@ -10,23 +10,18 @@ class TablaSimbolos:
 
     def AddSimbolo(self, simbolo):    
         if simbolo.getID() in self.tabla :
-            return Errores("Semantico", "Variable " + simbolo.identificador + " ya existe", simbolo.fila, simbolo.columna)
+            self.tabla[simbolo.getID()] = simbolo
         else:
             self.tabla[simbolo.getID()] = simbolo
             return None
 
     def BuscarIdentificador(self, id):            
         tablaActual = self
-        contador = 0
         while tablaActual != None:
             if id.lower() in tablaActual.tabla :
-                if tablaActual.tabla[id.lower()].getAmbito() == Tipo_Acceso.LOCAL and contador > 0:
-                    print("Sin acceso a esa variable")
-                else:
-                    return tablaActual.tabla[id.lower()]
+                return tablaActual.tabla[id.lower()]
             else:
                 tablaActual = tablaActual.anterior
-                contador= contador +1
         return None
 
     def actualizarSimbolo(self, simbolo):

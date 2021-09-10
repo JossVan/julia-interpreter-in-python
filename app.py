@@ -14,7 +14,7 @@ def principal():
         inpt = request.form['codigo']
         global tmp_val
         tmp_val=inpt
-        result = g(tmp_val)
+        result = g(tmp_val+"\n")
 
        # valor= result.ejecutar("tree", "table")
         return render_template('principal.html', resultado=result)

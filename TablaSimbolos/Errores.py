@@ -11,6 +11,6 @@ class Errores:
         self.tipo = TipoObjeto.ERROR
     
     def getCadena(self):
-        return "Error en "+ self.error + ", "+ self.descripcion+", fila "+self.fila+", columna "+self.columna
-    
+        cadena ="Error en "+ str(self.error) + ", "+ str(self.descripcion)+", fila "+ str(self.fila)+ ", columna "+str(self.columna)
+        return cadena
     

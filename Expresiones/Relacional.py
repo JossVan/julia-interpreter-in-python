@@ -15,11 +15,13 @@ class Relacional(NodoAST):
         if self.operador1!=None and self.operador2!=None:
             resultado1 = self.operador1.ejecutar(tree,table)
             resultado2 = self.operador2.ejecutar(tree,table)
+
             if self.tipooperacion == Tipo_Relacional.MAYOR:
                 if resultado1>resultado2:
                     return True
                 return False
             elif self.tipooperacion == Tipo_Relacional.MENOR:
+               
                 if resultado1<resultado2:
                     return True
                 return False
