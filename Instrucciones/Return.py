@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
 
 class Return(NodoAST):
@@ -8,7 +9,13 @@ class Return(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        if self.valor != None:
+            return self.valor.ejecutar(tree,table)
+        else:
+            return self
     
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("Break")
+        if self.valor != None:
+            return NodoNuevo.agregarHijoNodo(self.valor)
+        return NodoNuevo

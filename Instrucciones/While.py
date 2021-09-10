@@ -10,3 +10,6 @@ class While(NodoAST):
 
     def ejecutar(self, tree, table):
         return super().ejecutar(tree, table)
+
+    def getNodo(self):
+        return super().getNodo()

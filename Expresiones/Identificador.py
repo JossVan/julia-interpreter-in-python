@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Errores import Errores
 from Abstractas.NodoAST import NodoAST
 
@@ -18,5 +19,6 @@ class Identificador(NodoAST):
         return resultado.getValor()
     
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("ID")
+        NuevoNodo.agregarHijo(self.id)
         

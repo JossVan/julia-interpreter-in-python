@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Logico, Tipo_Relacional
 from Abstractas.NodoAST import NodoAST
 
@@ -34,4 +35,16 @@ class Logica(NodoAST):
                 return False
 
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("Lógicas")
+        if self.tipooperacion == Tipo_Logico.AND:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("AND")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Logico.OR:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("OR")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Logico.DIFERENTE:
+            NuevoNodo.agregarHijo("!")
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            

@@ -203,7 +203,7 @@ from Instrucciones.Llamadas import Llamadas
 from Instrucciones.Structs import Struct
 from Expresiones.Elementos import Elemento
 from Expresiones.Arreglos import Arreglos
-from Expresiones.Lista_Impresion import Lista_impresion
+from Instrucciones.Break import Break
 def p_inicio(t):
     '''INICIO : INICIO FUNCIONES
             |   INICIO INSTRUCCIONES'''
@@ -256,7 +256,7 @@ def p_println(t):
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
     #t[0] = Lista_impresion(t[1],t[3], t.lineno(0), t.lexpos(0))
-    
+
     if t[3] != "":
         t[1].append(t[3])
     t[0] = t[1]
@@ -349,7 +349,10 @@ def p_asignacionesp4(t):
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
     elif t[1] == 'local':
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(1), t.lexpos(1))
-        
+
+def p_break(t):
+    'BREAK : R_BREAK'
+    t[0] = Break(t.lineno(1), t.lexpos(1))
 def p_tipo(t):
     '''TIPO : R_NOTHING
             | R_INT64
@@ -649,7 +652,7 @@ def p_instrucciones_loop(t):
                             | INSTRUCCIONES_LOOP LLAMADAS
                             | INSTRUCCIONES_LOOP NATIVAS
                             | INSTRUCCIONES_LOOP STRUCTS
-                            | INSTRUCCIONES_LOOP R_BREAK
+                            | INSTRUCCIONES_LOOP BREAK
                             | INSTRUCCIONES_LOOP R_CONTINUE'''
     if t[2] != "":
        t[1].append(t[2])
@@ -664,7 +667,7 @@ def p_instrucciones_loop_inst(t):
                             | LLAMADAS
                             | NATIVAS
                             | STRUCTS
-                            | R_BREAK
+                            | BREAK
                             | R_CONTINUE'''
     if t[1] == "":
         t[0] = []

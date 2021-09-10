@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Relacional
 from Abstractas.NodoAST import NodoAST
 
@@ -41,5 +42,30 @@ class Relacional(NodoAST):
             
     
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("Lógicas")
+        if self.tipooperacion == Tipo_Relacional.MAYOR:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo(">")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Relacional.MENOR:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("<")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Relacional.MAYOR_IGUAL:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo(">=")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Relacional.MENOR_IGUAL:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("<=")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Relacional.IGUAL:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("==")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        elif self.tipooperacion == Tipo_Relacional.DIFERENTE:
+            NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+            NuevoNodo.agregarHijo("!=")
+            NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
+        return NuevoNodo
     

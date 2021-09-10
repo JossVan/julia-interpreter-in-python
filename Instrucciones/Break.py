@@ -1,4 +1,5 @@
 
+from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
 
 from Abstractas.NodoAST import NodoAST
@@ -12,4 +13,5 @@ class Break(NodoAST):
     def ejecutar(self, tree, table):
         return self
     def getNodo(self):
-        return super().getNodo()
+        NuevoNodo = NodoArbol("Break")
+        return NuevoNodo

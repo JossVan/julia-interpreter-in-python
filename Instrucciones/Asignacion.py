@@ -16,17 +16,29 @@ class Asignacion(NodoAST):
         self.columna = columna
 
     def ejecutar(self, tree, table):
-        #SE EJECUTA EL VALOR DE LA VARIABLE
-        self.valor = self.valor.ejecutar(tree, table)
-        #SE CREA UN OBJETO TIPO SIMBOLO PARA AGREGARLO A LA TABLA ACTUAL
-        simbolo = Simbolo(self.id,self.valor,self.acceso,self.fila,self.columna)
+        
+        if self.valor == None:
+            #SE CREA UN OBJETO TIPO SIMBOLO PARA AGREGARLO A LA TABLA ACTUAL
+            simbolo = Simbolo(self.id,None,self.acceso,self.fila,self.columna)
+            resultado = table.AddSimbolo(simbolo)
+            # SE VERIFICA QUE DEVOLVIÓ SIMBOLO
+            if isinstance(resultado,Errores):
+                tree.insertError(resultado)
+                return "Hay un error"
+            return "Hecho"
+        else:
+            #SE EJECUTA EL VALOR DE LA VARIABLE
+            self.valor = self.valor.ejecutar(tree,table)
+            #SE CREA UN OBJETO TIPO SIMBOLO PARA AGREGARLO A LA TABLA ACTUAL
+            simbolo = Simbolo(self.id,self.valor,self.acceso,self.fila,self.columna)
 
-        resultado = table.AddSimbolo(simbolo)
-        # SE VERIFICA QUE DEVOLVIÓ SIMBOLO
-        if isinstance(resultado,Errores):
-            tree.insertError(resultado)
-            return "Hay un error"
-        return "Hecho"
+            resultado = table.AddSimbolo(simbolo)
+            # SE VERIFICA QUE DEVOLVIÓ SIMBOLO
+            if isinstance(resultado,Errores):
+                tree.insertError(resultado)
+                return "Hay un error"
+            return "Hecho"
+
     
     def getNodo(self):
         return super().getNodo()

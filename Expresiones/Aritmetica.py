@@ -16,22 +16,46 @@ class Aritmetica(NodoAST):
             result1 = self.operador1.ejecutar(tree,table)
             result2 = self.operador2.ejecutar(tree,table)
             if self.operacion == Tipo_Aritmetico.SUMA:
-                if isinstance(result1, str) or isinstance(result2,str):
+                if isinstance(result1, str) or isinstance(result2,str) and result1!=None and result2 !=None:
                     return str(result1)+str(result2)  
-                resultado = result1+result2
-                return resultado
+                elif result1 == None:
+                    return "el operador: "+self.operador1.id+", es indefinido"
+                elif result2 == None:
+                    return "El operador: "+self.operador2.id+", es indefinido"
+                else:
+                    return result1+result2
             if self.operacion == Tipo_Aritmetico.RESTA:
-                return result1-result2
+                if result1 == None:
+                    return "el operador: "+self.operador1.id+", es indefinido"
+                elif result2 == None:
+                    return "El operador: "+self.operador2.id+", es indefinido"
+                else:
+                    return result1-result2
             if self.operacion == Tipo_Aritmetico.MULTIPLICACION:
-                return result1*result2
+                if result1 == None:
+                    return "el operador: "+self.operador1.id+", es indefinido"
+                elif result2 == None:
+                    return "El operador: "+self.operador2.id+", es indefinido"
+                else:
+                    return result1*result2
             if self.operacion == Tipo_Aritmetico.DIVISION:
                 if result2==0:
                     return "No se puede dividir entre 0"
-                return result1/result2
+                if result1 == None:
+                    return "el operador: "+self.operador1.id+", es indefinido"
+                elif result2 == None:
+                    return "El operador: "+self.operador2.id+", es indefinido"
+                else:
+                    return result1/result2
             if self.operacion == Tipo_Aritmetico.MODAL:
                 if result2==0:
                     return "No se puede dividir entre 0"
-                return result1%result2
+                if result1 == None:
+                    return "el operador: "+self.operador1.id+", es indefinido"
+                elif result2 == None:
+                    return "El operador: "+self.operador2.id+", es indefinido"
+                else:
+                    return result1%result2
             if self.operacion == Tipo_Aritmetico.POTENCIA:
                 if (isinstance(result1,int) or isinstance(result1,float)) and (isinstance(result2,int) or isinstance(result2,float)):
                     return pow(result1,result2)
