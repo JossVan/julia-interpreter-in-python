@@ -29,6 +29,12 @@ class Rango(NodoAST):
                     if isinstance(izquierdo,int) and isinstance(derecho,int):
                         derecho = derecho +1
                         return [izquierdo,derecho]
+                    elif isinstance(izquierdo, float) and isinstance(derecho,float):
+                        return [izquierdo,derecho]
+                    else:
+                        err= Errores(str(izquierdo)+":"+str(derecho),"Semántico", "Error en el rango", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                 except:
                     err= Errores(str(izquierdo)+":"+str(derecho),"Semántico", "Error en el rango", self.fila,self.columna)
                     tree.insertError(err)

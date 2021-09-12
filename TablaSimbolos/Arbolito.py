@@ -31,7 +31,7 @@ class Arbolito:
         self.consola = consola
 
     def updateConsola(self,cadena):
-        self.consola += str(cadena) + '\n'
+        self.consola += str(cadena)
 
     def getTSGlobal(self):
         return self.TSglobal

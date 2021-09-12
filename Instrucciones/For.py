@@ -26,39 +26,64 @@ class For(NodoAST):
         if isinstance(rango,list):
             rango1 = rango[0]
             rango2 = rango[1]
-            for i in range(rango1,rango2):
-                if isinstance(rango1,int):                 
+            if isinstance(rango1,int) and isinstance(rango2,int):
+                for i in range(rango1,rango2):
+                    #if isinstance(rango1,int):                 
                     nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
-                elif isinstance(rango1,float):
-                    nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, i), self.fila, self.columna)
-                else:
-                    return Errores((str(rango1)+","+str(rango2)),"Semántico","Rango no aceptado", self.fila,self.columna)
-                nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None, self.fila,self.columna)
-                nuevaAsignacion.ejecutar(tree,nuevaTabla)
-                for instruccion in self.instrucciones:
-                    resp= instruccion.ejecutar(tree,nuevaTabla)
-                    if isinstance(resp,Break):
-                        return None
-                    elif isinstance(resp,Continue):
-                        return None
+                    '''elif isinstance(rango1,float):
+                        nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, i), self.fila, self.columna)
+                    else:
+                        return Errores((str(rango1)+","+str(rango2)),"Semántico","Rango no aceptado", self.fila,self.columna)'''
+                    nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None, self.fila,self.columna)
+                    nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                    for instruccion in self.instrucciones:
+                        resp= instruccion.ejecutar(tree,nuevaTabla)
+                        if isinstance(resp,Break):
+                            return None
+                        elif isinstance(resp,Continue):
+                            return None
+            elif isinstance(rango1,float) and isinstance(rango2,float):
+                total = int(rango2-rango1)+1
+                if total >0:
+                    for i in range(0,total):
+                        variable = rango1
+                        nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, variable), self.fila, self.columna)
+                        rango1 = rango1+1
+                        nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None, self.fila,self.columna)
+                        nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                        for instruccion in self.instrucciones:
+                            resp= instruccion.ejecutar(tree,nuevaTabla)
+                            if isinstance(resp,Break):
+                                return None
+                            elif isinstance(resp,Continue):
+                                return None
         else:
             if isinstance(rango,int) or isinstance(rango,float):
-                nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,self.id,rango,None,self.fila,self.columna)
+                if isinstance(rango, int):
+                    nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, rango), self.fila, self.columna)
+                else:
+                    nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, rango), self.fila, self.columna)
+
+                nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
                 nuevaAsignacion.ejecutar(tree,nuevaTabla)
                 if self.instrucciones != None:
                     for instruccion in self.instrucciones:
                         resp=instruccion.ejecutar(tree,nuevaTabla)
                         if isinstance(resp,Break):
                             return None
+                        elif isinstance(resp,Continue):
+                            return None
             else:
-
                 for i in rango:
-                    nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,self.id,i,None,self.fila,self.columna)
+                    nuevaConstante = Constante(Primitivo(TipoObjeto.CADENA, i), self.fila, self.columna)
+                    nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
                     nuevaAsignacion.ejecutar(tree,nuevaTabla)
                     if self.instrucciones != None:
                         for instruccion in self.instrucciones:
                             resp=instruccion.ejecutar(tree,nuevaTabla)
                             if isinstance(resp,Break):
+                                return None
+                            elif isinstance(resp, Continue):
                                 return None
                 
         
