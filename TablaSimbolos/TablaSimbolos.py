@@ -28,10 +28,20 @@ class TablaSimbolos:
         tablaActual = self
         while tablaActual != None:
             if simbolo.getID() in tablaActual.tabla :
-                tablaActual.tabla[simbolo.getID()].setValor(simbolo.getValor())
+                tablaActual.tabla[simbolo.getID()] = simbolo
                 return None          
             else:
                 tablaActual = tablaActual.anterior
         
         self.tabla[simbolo.getID()] = simbolo
+        return None
+
+    def actualizarSimboloGlobal(self,simbolo):
+        tablaActual = self
+        while tablaActual.anterior != None:
+                tablaActual = tablaActual.anterior
+    
+        i = simbolo.getID()
+        tablaActual.tabla[i.lower()] = simbolo
+
         return None

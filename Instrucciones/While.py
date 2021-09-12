@@ -1,3 +1,5 @@
+from Instrucciones.Continue import Continue
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Abstractas.NodoAST import NodoAST
 from Instrucciones.Break import Break
@@ -19,7 +21,16 @@ class While(NodoAST):
                     resp = instruccion.ejecutar(tree,nuevaTabla)
                     if isinstance(resp, Break):
                         return None
+                    if isinstance(resp, Continue):
+                        print("paso una vez")
+                        break
             else:
                 break
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("While")
+        NodoNuevo.agregarHijoNodo(self.condicion.getNodo())
+        inst = NodoArbol("Instrucciones")
+        for instruccion in self.instrucciones:
+            inst.agregarHijoNodo(instruccion.getNodo())
+        NodoNuevo.agregarHijoNodo(inst)
+        return NodoNuevo

@@ -70,6 +70,7 @@ tokens  = [
     'OR',
     'DIFERENTE',
     'DOSPUNTOS',
+    'DOSPUNTITOS',
     'DECIMAL',
     'ENTERO',
     'CADENA',
@@ -99,6 +100,7 @@ t_MAYORIGUAL= r'>='
 t_COMA      = r','
 t_PUNTO     = r'\.'
 t_DOSPUNTOS = r'\:\:'
+t_DOSPUNTITOS = r'\:'
 t_OR       = r'\|\|'
 t_AND       = r'&&'
 t_DIFERENTE = r'!'
@@ -205,6 +207,7 @@ from Instrucciones.Structs import Struct
 from Expresiones.Elementos import Elemento
 from Expresiones.Arreglos import Arreglos
 from Instrucciones.Break import Break
+from Instrucciones.Continue import Continue
 def p_inicio(t):
     '''INICIO : INICIO FUNCIONES
             |   INICIO INSTRUCCIONES'''
@@ -226,7 +229,9 @@ def p_instrucciones(t):
                         | INSTRUCCIONES I
                         | INSTRUCCIONES LLAMADAS
                         | INSTRUCCIONES NATIVAS PTCOMA
-                        | INSTRUCCIONES STRUCTS'''
+                        | INSTRUCCIONES STRUCTS
+                        | INSTRUCCIONES BREAK
+                        | INSTRUCCIONES CONTINUE'''
     if t[2] != "":
         t[1].append(t[2])
     t[0] = t[1]
@@ -239,7 +244,9 @@ def p_instruccionesI(t):
                         | I
                         | LLAMADAS
                         | NATIVAS PTCOMA
-                        | STRUCTS'''
+                        | STRUCTS
+                        | BREAK
+                        | CONTINUE'''
     if t[1] == "":
         t[0] = []
     else:
@@ -643,6 +650,9 @@ def p_elseif_else4(t) :
     'ELSEIF : R_ELSEIF LO  R_ELSE  R_END PTCOMA'
     t[0] = If(t[2], None, None, None,t.lineno(0), t.lexpos(0))
 
+def p_continue12(t):
+    'CONTINUE : R_CONTINUE PTCOMA'
+    t[0] = Continue(t.lineno(1), t.lexpos(1))
 #*************************************ELSEIF TERMINAN******************************************
 def p_instrucciones_loop(t):
     '''INSTRUCCIONES_LOOP :   INSTRUCCIONES_LOOP IFS
@@ -654,11 +664,10 @@ def p_instrucciones_loop(t):
                             | INSTRUCCIONES_LOOP NATIVAS
                             | INSTRUCCIONES_LOOP STRUCTS
                             | INSTRUCCIONES_LOOP BREAK
-                            | INSTRUCCIONES_LOOP R_CONTINUE'''
+                            | INSTRUCCIONES_LOOP CONTINUE'''
     if t[2] != "":
        t[1].append(t[2])
     t[0] = t[1]
-
 def p_instrucciones_loop_inst(t):
     '''INSTRUCCIONES_LOOP :   IFS
                             | FORS
@@ -669,12 +678,12 @@ def p_instrucciones_loop_inst(t):
                             | NATIVAS
                             | STRUCTS
                             | BREAK
-                            | R_CONTINUE'''
+                            | CONTINUE'''
     if t[1] == "":
         t[0] = []
     else:
         t[0] = [t[1]]
-
+    
 def p_whiles(t):
     'WHILES : R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA'
     t[0] = While(t[2],t[3], t.lineno(1), t.lexpos(0))
@@ -683,12 +692,14 @@ def p_whiles_vacios(t):
     t[0] = While(t[2],None, t.lineno(1), t.lexpos(0))
 def p_fors(t):
     'FORS : R_FOR ID R_IN RANGO INSTRUCCIONES_LOOP R_END PTCOMA'
+    t[2] = Asignacion(Tipo_Acceso.NONE, t[2], None, None, t.lineno(1), t.lexpos(1))
     t[0] = For(t[2], t[4], t[5],t.lineno(1), t.lexpos(0))
 def p_fors_vacios(t):
     'FORS : R_FOR ID R_IN RANGO  R_END PTCOMA'
+    t[2] = Asignacion(Tipo_Acceso.NONE, t[2], None, None, t.lineno(1), t.lexpos(0))
     t[0] = For(t[2], t[4], None,t.lineno(1), t.lexpos(0))
 def p_rango(t):
-    '''RANGO :    E DOSPUNTOS E'''
+    '''RANGO :    E DOSPUNTITOS E'''
     t[0] = Rango(None, t[1],t[3],t.lineno(1), t.lexpos(0))
 
 def p_rango_unaExpresion(t):
@@ -697,19 +708,24 @@ def p_rango_unaExpresion(t):
     t[0] = Rango(None, t[1],None,t.lineno(1), t.lexpos(0))
 def p_rango_arreglos(t):
     'RANGO : ID CORIZQ E DOSPUNTOS E CORDER'
+    t[1] = Identificador(t[1],t.lineno(1), t.lexpos(1))
     t[0] = Rango(t[1], t[3],t[5],t.lineno(1), t.lexpos(0))
 
 def p_structs(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID ELEMENTOS R_END PTCOMA'
+    t[3] = Identificador(t[3],t.lineno(1), t.lexpos(1))
     t[0] = Struct(True,t[3], t[4],t.lineno(1), t.lexpos(0) )
 def p_structs2(t):
     'STRUCTS : R_STRUCT ID ELEMENTOS PTCOMA'
+    t[2] = Identificador(t[2],t.lineno(1), t.lexpos(1))
     t[0] = Struct(False,t[2], t[3],t.lineno(1), t.lexpos(0) )
 def p_structs_mutables(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID R_END PTCOMA'
+    t[3] = Identificador(t[3],t.lineno(1), t.lexpos(1))
     t[0] = Struct(True,t[3], None,t.lineno(1), t.lexpos(0) )
 def p_structs_vacios(t):
     'STRUCTS : R_STRUCT ID R_END PTCOMA'
+    t[2] = Identificador(t[2],t.lineno(1), t.lexpos(1))
     t[0] = Struct(False,t[2], None,t.lineno(1), t.lexpos(0) )
 def p_elementos(t):
     'ELEMENTOS : ELEMENTOS COMA ELEMENTO'
