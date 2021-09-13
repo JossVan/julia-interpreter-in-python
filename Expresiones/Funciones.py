@@ -27,7 +27,7 @@ class Funciones_matematicas(NodoAST):
                 return "El parámetro debe ser una cadena upper"
             elif self.funcion == Tipo_FuncionAritmetica.log10:
                 try:
-                    return math.log(self.valor1)
+                    return round(math.log(self.valor1,10))
                 except:
                     return "El parámetro debe ser un número"
             elif self.funcion == Tipo_FuncionAritmetica.seno:

@@ -16,7 +16,8 @@ class Identificador(NodoAST):
         if resultado == None:
             tree.insertError(Errores(id,"Semántico","No definida", self.fila,self.columna))
             return
-        return resultado.getValor()
+        b = resultado.getValor()
+        return b
     
     def getNodo(self):
         NuevoNodo = NodoArbol("ID")

@@ -10,12 +10,13 @@ class Return(NodoAST):
     
     def ejecutar(self, tree, table):
         if self.valor != None:
-            return self.valor.ejecutar(tree,table)
+            self.valor = self.valor.ejecutar(tree,table)
+            return self
         else:
             return self
     
     def getNodo(self):
-        NodoNuevo = NodoArbol("Break")
+        NodoNuevo = NodoArbol("Return")
         if self.valor != None:
-            return NodoNuevo.agregarHijoNodo(self.valor)
+            return NodoNuevo.agregarHijoNodo(self.valor.getNodo())
         return NodoNuevo

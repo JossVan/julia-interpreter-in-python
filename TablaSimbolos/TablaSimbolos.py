@@ -7,14 +7,7 @@ class TablaSimbolos:
         self.tabla = {} 
         self.anterior = anterior
         self.nombre = nombre
-
-    def AddSimbolo(self, simbolo):    
-        if simbolo.getID() in self.tabla :
-            self.tabla[simbolo.getID()] = simbolo
-        else:
-            self.tabla[simbolo.getID()] = simbolo
-            return None
-
+        
     def BuscarIdentificador(self, id):            
         tablaActual = self
         while tablaActual != None:
@@ -33,6 +26,10 @@ class TablaSimbolos:
             else:
                 tablaActual = tablaActual.anterior
         
+        self.tabla[simbolo.getID()] = simbolo
+        return None
+
+    def addSimboloLocal(self, simbolo):
         self.tabla[simbolo.getID()] = simbolo
         return None
 

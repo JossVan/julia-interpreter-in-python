@@ -1,3 +1,6 @@
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
+from Instrucciones.Return import Return
+from TablaSimbolos.Errores import Errores
 from Abstractas.NodoAST import NodoAST
 
 class Funciones(NodoAST):
@@ -11,4 +14,12 @@ class Funciones(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        #nuevaTabla = TablaSimbolos("Funcion",table) 
+        for instruccion in self.instrucciones:
+            resp = instruccion.ejecutar(tree,table)
+            if isinstance(resp, Errores):
+                return resp
+            if isinstance(resp, Return):
+                return resp
+    def getNodo(self):
+        return super().getNodo()

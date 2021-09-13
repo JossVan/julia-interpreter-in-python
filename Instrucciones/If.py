@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 from Instrucciones.Break import Break
 from Instrucciones.Continue import Continue
 from Abstractas.NodoArbol import NodoArbol
@@ -21,9 +22,10 @@ class If(NodoAST):
             for instruccion in self.instrucciones_if:
                 resp=instruccion.ejecutar(tree,nuevaTabla)
                 if isinstance(resp, Continue):
-                    print("PASO POR CONTINUE")
                     return resp
                 elif isinstance(resp,Break):
+                    return resp
+                elif isinstance(resp, Return):
                     return resp
         else:
             if(self.instrucciones_else!=None):
@@ -34,6 +36,8 @@ class If(NodoAST):
                         break
                     elif isinstance(resp,Break):
                         return None
+                    elif isinstance(resp, Return):
+                        return resp
         if self.instrucciones_elseif != None :
             nuevaTabla = TablaSimbolos("elseif",table)
             self.instrucciones_elseif.ejecutar(tree,nuevaTabla)

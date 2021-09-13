@@ -37,6 +37,8 @@ class Aritmetica(NodoAST):
                 elif result2 == None:
                     return "El operador: "+self.operador2.id+", es indefinido"
                 else:
+                    if isinstance(result1,str) or isinstance(result2,str):
+                        return str(result1)+str(result2)
                     return result1*result2
             if self.operacion == Tipo_Aritmetico.DIVISION:
                 if result2==0:

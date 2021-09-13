@@ -83,16 +83,19 @@ class Nativas_SinTipo(NodoAST):
         elif self.funcion == Tipo_Primitivas.STRING:
             return str(self.valor)
         elif self.funcion == Tipo_Primitivas.TYPEOF:
-            if (isinstance(self.valor,int)):
+            if(isinstance(self.valor, bool)):
+                return "Bool"
+            elif (isinstance(self.valor,int)):
                 return "Int64"
             elif(isinstance(self.valor,float)):
                 return "Float64"
             elif(isinstance(self.valor,str)):
                 return "String"
-            elif(isinstance(self.valor, bool)):
-                return "Bool"
-            elif(isinstance(self.valor, chr)):
-                return "Char"
+        elif self.funcion == Tipo_Primitivas.TRUNC:   
+            if isinstance(self.valor,int) or isinstance(self.valor,float):
+                return int(self.valor)
+            else:
+                return "El primer parametro debe ser un número flotante"
         else:
             return "HAY UN ERROR"
     def getNodo(self):

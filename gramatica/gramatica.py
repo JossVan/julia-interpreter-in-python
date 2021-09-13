@@ -209,48 +209,52 @@ from Expresiones.Arreglos import Arreglos
 from Instrucciones.Break import Break
 from Instrucciones.Continue import Continue
 def p_inicio(t):
-    '''INICIO : INICIO FUNCIONES
-            |   INICIO INSTRUCCIONES'''
+    '''INICIO : INICIO INIT'''
 
     if t[2] != "":
         t[1].append(t[2])
     t[0] = t[1]
 
+def p_iniciop(t):
+    'INICIO : INIT'
+    if t[1] == "":
+        t[0] = []
+    else:    
+        t[0] = [t[1]]
+
 def p_iniciofi(t):
-    '''INICIO   : FUNCIONES
+    '''INIT     : FUNCIONES
                 | INSTRUCCIONES'''
+    
     t[0] = t[1]
 
 def p_instrucciones(t):
-    '''INSTRUCCIONES    : INSTRUCCIONES IFS
-                        | INSTRUCCIONES FORS
-                        | INSTRUCCIONES WHILES
-                        | INSTRUCCIONES ASIGNACION
-                        | INSTRUCCIONES I
-                        | INSTRUCCIONES LLAMADAS
-                        | INSTRUCCIONES NATIVAS PTCOMA
-                        | INSTRUCCIONES STRUCTS
-                        | INSTRUCCIONES BREAK
-                        | INSTRUCCIONES CONTINUE'''
+    '''INSTRUCCIONES    : INSTRUCCIONES INSTRUCCION'''
     if t[2] != "":
         t[1].append(t[2])
     t[0] = t[1]
 
+def p_instruccionesp(t):
+    'INSTRUCCIONES : INSTRUCCION'
+
+    if t[1] == "":
+        t[0] = []
+    else:    
+        t[0] = [t[1]]
+
 def p_instruccionesI(t):
-    '''INSTRUCCIONES :    IFS
+    '''INSTRUCCION :     IFS
                         | FORS
                         | WHILES
                         | ASIGNACION
                         | I
-                        | LLAMADAS
+                        | LLAMADAS PTCOMA
                         | NATIVAS PTCOMA
                         | STRUCTS
                         | BREAK
-                        | CONTINUE'''
-    if t[1] == "":
-        t[0] = []
-    else:
-        t[0] = [t[1]]
+                        | CONTINUE
+                        | RETURN'''
+    t[0] = t[1]
 
 def p_impresion(t):
 
@@ -263,21 +267,18 @@ def p_println(t):
 
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
-    #t[0] = Lista_impresion(t[1],t[3], t.lineno(0), t.lexpos(0))
-
     if t[3] != "":
         t[1].append(t[3])
     t[0] = t[1]
 
 def p_contimpresiones(t):
     'IMPRESIONES : IMPRESION'
-    t[0] = t[1]
+    t[0] = [t[1]]
 
 def p_contimpresionCont(t):
-    '''IMPRESION    : NATIVAS
-                    | ARREGLOS
+    '''IMPRESION    : ARREGLOS
                     | LLAMADAS
-                    | E'''
+                    | LO'''
     t[0] = t[1]
 
 def p_cont_impresionDolar(t):
@@ -303,7 +304,7 @@ def p_arreglos4(t):
 def p_listas(t):
     'LISTAS : LISTAS COMA LISTA'
     if t[2] != "":
-        t[1].append(t[2])
+        t[1].append(t[3])
     t[0] = t[1]
 
 def p_listasp(t):
@@ -314,10 +315,9 @@ def p_listasp(t):
         t[0] = [t[1]]
 
 def p_lista(t):
-    '''LISTA : NATIVAS
-            | ARREGLOS
+    '''LISTA : ARREGLOS
             | LLAMADAS
-            | E'''
+            | LO'''
     t[0]=t[1]    
 
 def p_asignaciones(t):
@@ -383,10 +383,10 @@ def p_tipo(t):
         t[0] == Tipo_Dato.BOOLEANO
 
 def p_llamadas(t):
-    'LLAMADAS : ID PARIZQ LISTAS PARIZQ PTCOMA'
+    'LLAMADAS : ID PARIZQ LISTAS PARDER'
     t[0] = Llamadas(t[1],t[3], t.lineno(1), t.lexpos(0))
 def p_llamadassinparametro(t):
-    'LLAMADAS : ID PARIZQ PARDER PTCOMA'
+    'LLAMADAS : ID PARIZQ PARDER'
     t[0] = Llamadas(t[1],None, t.lineno(1), t.lexpos(0))
 
 def p_expresiones(t):
@@ -470,6 +470,10 @@ def p_expresiones_id(t):
     'E : ID'
     t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
 
+def p_expresiones_nativas(t):
+    'E : NATIVAS'
+    t[0] = t[1]
+
 def p_expresiones_relacionales(t):
     ''' RE :  RE MENQUE RE
             | RE MAYQUE RE
@@ -531,7 +535,8 @@ def p_nativas(t):
 def p_nativasp(t):
     '''NATIVAS :  R_FLOAT   PARIZQ LISTA PARDER
                 | R_STRING PARIZQ LISTA PARDER
-                | R_TYPEOF  PARIZQ LISTA PARDER'''
+                | R_TYPEOF  PARIZQ LISTA PARDER
+                | R_TRUNC PARIZQ LISTA PARDER'''
 
     if(t[1]=='float'):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.FLOAT,t[3], t.lineno(1), t.lexpos(1))
@@ -539,6 +544,8 @@ def p_nativasp(t):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.STRING,t[3], t.lineno(1), t.lexpos(1))
     elif(t[1] == 'typeof'):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.TYPEOF,t[3], t.lineno(1), t.lexpos(1))
+    elif t[1] == 'trunc':
+        t[0] = Nativas_SinTipo(Tipo_Primitivas.TRUNC,t[3], t.lineno(1), t.lexpos(1))
 def p_nativaspush(t):
     ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA E PARDER'
     id = Identificador(t[4],t.lineno(1), t.lexpos(1))
@@ -554,36 +561,36 @@ def p_nativas_length(t):
     id = Identificador(t[4],t.lineno(1), t.lexpos(1))
     t[0] = Pilas(Tipo_Primitivas.LENGTH, id, None,t.lineno(1), t.lexpos(1))
 def p_returns(t):
-    'RETURN : R_RETURN LISTA'
+    'RETURN : R_RETURN LISTA PTCOMA'
     t[0] = Return(t[2],t.lineno(0), t.lexpos(0))
 def p_returnUnico(t):
-    'RETURN : R_RETURN'
+    'RETURN : R_RETURN PTCOMA'
     t[0] = Return(None,t.lineno(0), t.lexpos(0))
 def p_funciones(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES R_END PTCOMA'
+    'FUNCIONES : R_FUNCTION ID PARIZQ PARAMETROS PARDER INSTRUCCIONES R_END PTCOMA'
     t[0] =Funciones(t[2],t[4],t[6], None, t.lineno(1), t.lexpos(0))
-
-def p_funciones_return(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER INSTRUCCIONES RETURN R_END PTCOMA'
-    t[0] =Funciones(t[2],t[4],t[6],t[7], t.lineno(1), t.lexpos(0))
 def p_funciones_parametros_vacia(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER  R_END PTCOMA'
+    'FUNCIONES : R_FUNCTION ID PARIZQ PARAMETROS PARDER  R_END PTCOMA'
     t[0] =Funciones(t[2],t[4],None,None, t.lineno(1), t.lexpos(0))
-def p_funciones_vacia_return(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ LISTAS PARDER RETURN R_END PTCOMA'
-    t[0] =Funciones(t[2],t[4],None,t[6], t.lineno(1), t.lexpos(0))
 def p_funciones_proce(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER INSTRUCCIONES R_END PTCOMA'
     t[0] =Funciones(t[2],None,t[5],None, t.lineno(1), t.lexpos(0))
-def p_funciones_proc_return(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER INSTRUCCIONES RETURN R_END PTCOMA'
-    t[0] =Funciones(t[2],None,t[5],t[6], t.lineno(1), t.lexpos(0))
 def p_funciones_proc_vacia(t):
     'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER  R_END PTCOMA'
     t[0] =Funciones(t[2],None,None,None, t.lineno(1), t.lexpos(0))
-def p_funciones_proc_vacia_return(t):
-    'FUNCIONES : R_FUNCTION ID PARIZQ  PARDER RETURN R_END PTCOMA'
-    t[0] =Funciones(t[2],None,None,t[5], t.lineno(1), t.lexpos(0))
+
+def p_parametros(t):
+    'PARAMETROS : PARAMETROS COMA PARAMETRO'
+    if t[3] != "":
+        t[1].append(t[3])
+    t[0] = t[1]
+
+def p_parametros2(t):
+    'PARAMETROS : PARAMETRO'
+    t[0] = [t[1]]
+def p_parametro(t):
+    '''PARAMETRO : ID'''
+    t[0]  = Asignacion(Tipo_Acceso.LOCAL, t[1], None, None, t.lineno(1), t.lexpos(1))
 ################################ EMPIEZAN LOS IFS ######################################
 def p_if_solo(t) :
     'IFS : R_IF LO INSTRUCCIONES R_END PTCOMA'
@@ -655,34 +662,28 @@ def p_continue12(t):
     t[0] = Continue(t.lineno(1), t.lexpos(1))
 #*************************************ELSEIF TERMINAN******************************************
 def p_instrucciones_loop(t):
-    '''INSTRUCCIONES_LOOP :   INSTRUCCIONES_LOOP IFS
-                            | INSTRUCCIONES_LOOP FORS
-                            | INSTRUCCIONES_LOOP WHILES
-                            | INSTRUCCIONES_LOOP ASIGNACION
-                            | INSTRUCCIONES_LOOP I
-                            | INSTRUCCIONES_LOOP LLAMADAS
-                            | INSTRUCCIONES_LOOP NATIVAS
-                            | INSTRUCCIONES_LOOP STRUCTS
-                            | INSTRUCCIONES_LOOP BREAK
-                            | INSTRUCCIONES_LOOP CONTINUE'''
+    '''INSTRUCCIONES_LOOP :   INSTRUCCIONES_LOOP INSTRUCCION_LOOP'''
     if t[2] != "":
        t[1].append(t[2])
     t[0] = t[1]
+
+def p_instruccion_loopp(t):
+    'INSTRUCCIONES_LOOP : INSTRUCCION_LOOP'
+    t[0] = [t[1]]
+
 def p_instrucciones_loop_inst(t):
-    '''INSTRUCCIONES_LOOP :   IFS
+    '''INSTRUCCION_LOOP :   IFS
                             | FORS
                             | WHILES
                             | ASIGNACION
                             | I
-                            | LLAMADAS
+                            | LLAMADAS PTCOMA
                             | NATIVAS
                             | STRUCTS
                             | BREAK
                             | CONTINUE'''
-    if t[1] == "":
-        t[0] = []
-    else:
-        t[0] = [t[1]]
+
+    t[0] = t[1]
     
 def p_whiles(t):
     'WHILES : R_WHILE LO INSTRUCCIONES_LOOP R_END PTCOMA'
@@ -775,7 +776,8 @@ def parse(input) :
             AST.addFuncion(instruccion)
         # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
         else:
-            instruccion.ejecutar(AST,tablaGlobal)
+            for inst in instruccion:
+                inst.ejecutar(AST,tablaGlobal)
 
    # tablita = AST.getTSGlobal().tabla
 

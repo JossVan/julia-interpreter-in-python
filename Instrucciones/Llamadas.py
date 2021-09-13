@@ -1,3 +1,7 @@
+from Instrucciones.Return import Return
+from TablaSimbolos.Simbolo import Simbolo
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
+from TablaSimbolos.Errores import Errores
 from Abstractas.NodoAST import NodoAST
 
 class Llamadas(NodoAST):
@@ -9,4 +13,34 @@ class Llamadas(NodoAST):
         self.columna = columna
         
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
+        funcion = tree.getFuncion(self.id)
+        
+        if funcion == None:
+            err = Errores(self.id, "Semántico", "La función no existe", self.fila, self.columna)
+            tree.insertError(err)
+        else:
+            NuevaTabla = TablaSimbolos(self.id,table)
+            if self.parametros != None:
+                if len(funcion.parametros) == len(self.parametros):
+                    contador = 0
+                    for parametro in self.parametros:
+                        valor = parametro.ejecutar(tree,NuevaTabla)
+                        funcion.parametros[contador].ejecutar(tree,NuevaTabla)
+                        variable = funcion.parametros[contador].id
+                        simbolo = Simbolo(variable,valor,self.id,self.fila,self.columna)
+                        NuevaTabla.addSimboloLocal(simbolo)
+                        contador = contador+1
+
+                    resultado = funcion.ejecutar(tree,NuevaTabla)
+                    if isinstance(resultado,Return):
+                        return resultado.valor
+                else :
+                    err = Errores(self.id, "Semántico", "No coinciden los parámetros de llamada", self.fila,self.columna)
+                    tree.insertError(err)
+            else:
+                resultado = funcion.ejecutar(tree,NuevaTabla)
+                if isinstance(resultado,Return):
+                    return resultado.valor
+
+    def getNodo(self):
+        return super().getNodo()
