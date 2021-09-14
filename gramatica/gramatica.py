@@ -1,5 +1,7 @@
 from Instrucciones.Return import Return
 import re
+import sys
+sys.setrecursionlimit(5000)
 
 
 reservadas = {
@@ -277,7 +279,6 @@ def p_contimpresiones(t):
 
 def p_contimpresionCont(t):
     '''IMPRESION    : ARREGLOS
-                    | LLAMADAS
                     | LO'''
     t[0] = t[1]
 
@@ -316,7 +317,6 @@ def p_listasp(t):
 
 def p_lista(t):
     '''LISTA : ARREGLOS
-            | LLAMADAS
             | LO'''
     t[0]=t[1]    
 
@@ -473,7 +473,9 @@ def p_expresiones_id(t):
 def p_expresiones_nativas(t):
     'E : NATIVAS'
     t[0] = t[1]
-
+def p_expresion_llamada(t):
+    'E : LLAMADAS'
+    t[0] = t[1]
 def p_expresiones_relacionales(t):
     ''' RE :  RE MENQUE RE
             | RE MAYQUE RE
@@ -777,7 +779,7 @@ def parse(input) :
         # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
         else:
             for inst in instruccion:
-                inst.ejecutar(AST,tablaGlobal)
+                inst.ejecutar(AST,AST.getTSGlobal())
 
    # tablita = AST.getTSGlobal().tabla
 

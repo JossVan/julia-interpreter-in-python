@@ -19,7 +19,8 @@ class Print(NodoAST):
         if self.tipo == Tipo_Print.PRINTLN:
             for instrucciones in self.contenido:
                 resultado = str(instrucciones.ejecutar(tree,table))
-                tree.updateConsola(resultado+"\n")
+                tree.updateConsola(resultado)
+            tree.updateConsola("\n")
 
     def getNodo(self):
         return super().getNodo()

@@ -9,9 +9,9 @@ class Return(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        if self.valor != None:
-            self.valor = self.valor.ejecutar(tree,table)
-            return self
+        if isinstance(self.valor, NodoAST):
+            valor =  self.valor.ejecutar(tree,table)
+            return Return(valor,self.fila,self.columna)
         else:
             return self
     
