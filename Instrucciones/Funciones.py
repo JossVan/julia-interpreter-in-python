@@ -14,9 +14,9 @@ class Funciones(NodoAST):
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        #nuevaTabla = TablaSimbolos("Funcion",table) 
+        nuevaTabla = TablaSimbolos("Funcion",table) 
         for instruccion in self.instrucciones:
-            resp = instruccion.ejecutar(tree,table)
+            resp = instruccion.ejecutar(tree,nuevaTabla)
             if isinstance(resp, Errores):
                 return resp
             if isinstance(resp, Return):

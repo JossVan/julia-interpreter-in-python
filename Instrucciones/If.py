@@ -27,20 +27,27 @@ class If(NodoAST):
                     return resp
                 elif isinstance(resp, Return):
                     return resp
+        elif self.instrucciones_elseif != None :
+            nuevaTabla = TablaSimbolos("elseif",table)
+            resp = self.instrucciones_elseif.ejecutar(tree,nuevaTabla)
+            if isinstance(resp, Continue):
+                return resp
+            elif isinstance(resp,Break):
+                return resp
+            elif isinstance(resp, Return):
+                return resp
         else:
             if(self.instrucciones_else!=None):
                 nuevaTabla = TablaSimbolos("else",table)
                 for instruccion in self.instrucciones_else:
                     resp= instruccion.ejecutar(tree,nuevaTabla)
                     if isinstance(resp, Continue):
-                        break
+                        return resp
                     elif isinstance(resp,Break):
-                        return None
+                        return resp
                     elif isinstance(resp, Return):
                         return resp
-        if self.instrucciones_elseif != None :
-            nuevaTabla = TablaSimbolos("elseif",table)
-            self.instrucciones_elseif.ejecutar(tree,nuevaTabla)
+        
     
     def getNodo(self):
         NodoPadre = NodoArbol("If")

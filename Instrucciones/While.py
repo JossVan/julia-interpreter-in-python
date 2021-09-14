@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 from Instrucciones.Continue import Continue
 from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
@@ -22,8 +23,9 @@ class While(NodoAST):
                     if isinstance(resp, Break):
                         return None
                     if isinstance(resp, Continue):
-                        print("paso una vez")
                         break
+                    if isinstance(resp, Return):
+                        return resp
             else:
                 break
     def getNodo(self):
