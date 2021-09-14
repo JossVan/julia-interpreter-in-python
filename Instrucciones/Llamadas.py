@@ -24,7 +24,7 @@ class Llamadas(NodoAST):
                 if len(funcion.parametros) == len(self.parametros):
                     contador = 0
                     for parametro in self.parametros:
-                        valor = parametro.ejecutar(tree,NuevaTabla)
+                        valor = parametro.ejecutar(tree,table)
                         variable = funcion.parametros[contador].id
                         simbolo = Simbolo(variable,valor,self.id,self.fila,self.columna)
                         NuevaTabla.addSimboloLocal(simbolo)
