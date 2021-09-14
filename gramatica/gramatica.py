@@ -1,3 +1,4 @@
+from Expresiones.Array import Array
 from Instrucciones.Return import Return
 import re
 import sys
@@ -286,22 +287,21 @@ def p_cont_impresionDolar(t):
     '''IMPRESION : DOLAR PARIZQ E PARDER
                  | DOLAR PARIZQ ARREGLOS PARDER
                  | DOLAR PARIZQ NATIVAS PARDER'''
-    
-def p_arreglos(t):
-    'ARREGLOS : ID CORIZQ LISTAS CORDER'
-    t[1] = Identificador(t[1],t.lineno(1), t.lexpos(1))
-    t[0] = Arreglos(t[1],t[3],None, t.lineno(1), t.lexpos(1))
-def p_arreglos2(t):
-    'ARREGLOS : CORIZQ LISTAS CORDER'
-    t[0] = Arreglos(None,t[2],None, t.lineno(1), t.lexpos(1))
 
-def p_arreglos3(t):
-    'ARREGLOS : ID CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER'
-    t[1] = Identificador(t[1],t.lineno(1), t.lexpos(1))
-    t[0] = Arreglos(t[1],t[3],t[6], t.lineno(1), t.lexpos(1))
-def p_arreglos4(t):
-    'ARREGLOS : CORIZQ LISTAS CORDER CORIZQ LISTAS CORDER'
-    t[0] = Arreglos(None,t[2],t[5], t.lineno(1), t.lexpos(1))
+def p_arreglos(t):
+    'ARREGLOS : ARREGLOS COMA ARREGLO'    
+    if t[3] != "":
+        t[1].append(t[3])
+    t[0] = t[1]
+
+def p_arreglosp(t):
+    'ARREGLOS : ARREGLO'
+    t[0]  = [t[1]]
+
+def p_arreglito(t):
+    'ARREGLO : CORIZQ LISTAS CORDER'
+    t[0] = Arreglos(t[2], t.lineno(1), t.lexpos(1))
+
 def p_listas(t):
     'LISTAS : LISTAS COMA LISTA'
     if t[2] != "":
@@ -470,6 +470,24 @@ def p_expresiones_id(t):
     'E : ID'
     t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
 
+def p_expresiones_array(t):
+    'E : ID ARRAYS'
+    t[0] = Array(t[1], t[2],t.lineno(1), t.lexpos(1))
+    
+def p_idarrays(t):
+    'ARRAYS : ARRAYS ARRAY'
+    if t[2] != "":
+       t[1].append(t[2])
+    t[0] = t[1]
+
+def p_idarraysp(t):
+    'ARRAYS : ARRAY'
+    t[0] = [t[1]]
+
+def p_idarray(t):
+    'ARRAY : CORIZQ E CORDER'
+    t[0] = t[2]
+
 def p_expresiones_nativas(t):
     'E : NATIVAS'
     t[0] = t[1]
@@ -559,9 +577,8 @@ def p_nativaspop(t):
     t[0] = Pilas(Tipo_Primitivas.POP, id, None, t.lineno(1), t.lexpos(1))
 
 def p_nativas_length(t):
-    'NATIVAS : ID PUNTO R_LENGTH'
-    id = Identificador(t[4],t.lineno(1), t.lexpos(1))
-    t[0] = Pilas(Tipo_Primitivas.LENGTH, id, None,t.lineno(1), t.lexpos(1))
+    'NATIVAS :  R_LENGTH PARIZQ E PARDER'
+    t[0] = Pilas(Tipo_Primitivas.LENGTH, t[3], None,t.lineno(1), t.lexpos(1))
 def p_returns(t):
     'RETURN : R_RETURN LISTA PTCOMA'
     t[0] = Return(t[2],t.lineno(0), t.lexpos(0))
