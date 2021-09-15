@@ -321,8 +321,8 @@ def p_lista(t):
     t[0]=t[1]    
 
 def p_asignaciones(t):
-    '''ASIGNACION : R_GLOBAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA
-                  | R_LOCAL ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
+    '''ASIGNACION : R_GLOBAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA
+                  | R_LOCAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
 
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
@@ -330,13 +330,13 @@ def p_asignaciones(t):
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
 
 def p_asignacionesp(t):
-    'ASIGNACION : ID IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
+    'ASIGNACION : E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
 
     t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[5], t.lineno(1), t.lexpos(1))
 
 def p_asginacionesp2(t):
-    '''ASIGNACION : R_GLOBAL ID IGUAL LISTA PTCOMA
-                  | R_LOCAL ID IGUAL LISTA PTCOMA'''
+    '''ASIGNACION : R_GLOBAL E IGUAL LISTA PTCOMA
+                  | R_LOCAL E IGUAL LISTA PTCOMA'''
 
 
     if t[1] == 'global':
@@ -345,13 +345,13 @@ def p_asginacionesp2(t):
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
 
 def p_asginacionesp3(t):
-    '''ASIGNACION :  ID IGUAL LISTA PTCOMA'''
+    '''ASIGNACION :  E IGUAL LISTA PTCOMA'''
 
     t[0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], None, t.lineno(1), t.lexpos(1))
 
 def p_asignacionesp4(t):
-    '''ASIGNACION : R_GLOBAL ID PTCOMA
-                  | R_LOCAL ID PTCOMA'''
+    '''ASIGNACION : R_GLOBAL E PTCOMA
+                  | R_LOCAL E PTCOMA'''
 
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
@@ -578,7 +578,7 @@ def p_nativaspop(t):
 
 def p_nativas_length(t):
     'NATIVAS :  R_LENGTH PARIZQ E PARDER'
-    t[0] = Pilas(Tipo_Primitivas.LENGTH, t[3], None,t.lineno(1), t.lexpos(1))
+    t[0] = Pilas(Tipo_Primitivas.LENGTH, None, t[3],t.lineno(1), t.lexpos(1))
 def p_returns(t):
     'RETURN : R_RETURN LISTA PTCOMA'
     t[0] = Return(t[2],t.lineno(0), t.lexpos(0))

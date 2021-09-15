@@ -1,4 +1,5 @@
-from TablaSimbolos.Tipos import Tipo_Print
+from Abstractas.NodoArbol import NodoArbol
+from TablaSimbolos.Tipos import Tipo_Primitivas, Tipo_Print
 from Abstractas.Objeto import TipoObjeto
 from Abstractas.NodoAST import NodoAST
 
@@ -23,4 +24,15 @@ class Print(NodoAST):
             tree.updateConsola("\n")
 
     def getNodo(self):
-        return super().getNodo()
+        
+        NodoNuevo = NodoArbol("Impresión")
+
+        if self.tipo == Tipo_Print.PRINT:
+            NodoNuevo.agregarHijo("Print")
+        elif self.tipo == Tipo_Print.PRINTLN:
+            NodoNuevo.agregarHijo("Println")
+        
+        for instruccion in self.contenido:
+            NodoNuevo.agregarHijoNodo(instruccion.getNodo())
+
+        return NodoNuevo

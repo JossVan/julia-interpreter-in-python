@@ -1,9 +1,10 @@
+from Abstractas.NodoArbol import NodoArbol
+from Expresiones.Array import Array
+from Expresiones.Identificador import Identificador
 from Expresiones.Arreglos import Arreglos
 from TablaSimbolos.Tipos import Tipo_Acceso, Tipo_Dato
 from TablaSimbolos.Errores import Errores
-from os import error
 from TablaSimbolos.Simbolo import Simbolo
-from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Abstractas.NodoAST import NodoAST
 
 class Asignacion(NodoAST):
@@ -18,6 +19,14 @@ class Asignacion(NodoAST):
 
     def ejecutar(self, tree, table):
         
+        if isinstance(self.id,Identificador):
+            self.id = self.id.id
+        elif isinstance(self.id, Array):
+            self.id.actualizar(self.valor,tree,table)
+            return
+        '''else:
+            err = Errores(self.id,"Semántico", "el valor de asignación debe ser un identificador", self.fila,self.columna)
+            tree.insertError(err)'''
         if self.tipo == None:
             if self.valor == None:
                 simbolo = Simbolo(self.id, None, self.acceso,self.fila,self.columna)
@@ -128,4 +137,25 @@ class Asignacion(NodoAST):
                         error = Errores(self.valor,"Semántico","El valor de la variable debe ser de tipo Int64",self.fila,self.columna)
                         tree.insertError(error)
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("Asignación")
+        if self.tipo == Tipo_Acceso.GLOBAL:
+            NodoNuevo.agregarHijo("Global")
+        elif self.tipo == Tipo_Acceso.LOCAL:
+            NodoNuevo.agregarHijo("Local")
+
+        NodoNuevo.agregarHijoNodo(self.id.getNodo())
+        NodoNuevo.agregarHijoNodo(self.valor.getNodo())
+
+        if self.tipo == Tipo_Dato.BOOLEANO:
+            NodoNuevo.agregarHijo("Bool")
+        elif self.tipo == Tipo_Dato.CADENA:
+            NodoNuevo.agregarHijo("String")
+        elif self.tipo == Tipo_Dato.ENTERO:
+            NodoNuevo.agregarHijo("Int64")
+        elif self.tipo == Tipo_Dato.DECIMAL:
+            NodoNuevo.agregarHijo("Float64")
+        elif self.tipo == Tipo_Dato.CARACTER:
+            NodoNuevo.agregarHijo("Char")
+        
+        return NodoNuevo
+

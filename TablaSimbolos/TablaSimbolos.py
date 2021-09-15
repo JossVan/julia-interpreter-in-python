@@ -29,6 +29,19 @@ class TablaSimbolos:
         self.tabla[simbolo.getID()] = simbolo
         return None
 
+    def actualizarValorPosicion(self, valor, posicion, id):
+        tablaActual = self
+        while tablaActual != None:
+            if id in tablaActual.tabla :
+                if isinstance(tablaActual.tabla[id].valor, list):
+                    tablaActual.tabla[id].valor[posicion] = valor
+                return "ok"          
+            else:
+                tablaActual = tablaActual.anterior
+        return None
+        
+
+
     def addSimboloLocal(self, simbolo):
         self.tabla[simbolo.getID()] = simbolo
         return None

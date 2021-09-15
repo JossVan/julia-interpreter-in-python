@@ -1,4 +1,5 @@
 from Abstractas.NodoAST import NodoAST
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Errores import Errores
 class Array(NodoAST):
 
@@ -49,5 +50,24 @@ class Array(NodoAST):
                 else:
                     print("ERROR SEMÁNTICO ")
 
+    def actualizar(self, valor, tree, table):
+        id = self.id
+        self.id = self.id.lower()
+        posi = 0
+        if isinstance(self.posicion, list):
+            for pos in self.posicion:
+                posi = pos.ejecutar(tree,table)
+        resultado = table.actualizarValorPosicion(valor, posi, self.id)
+        if resultado == None:
+            tree.insertError(Errores(id,"Semántico","No definida", self.fila,self.columna))
+            return
+    
     def getNodo(self):
-        return super().getNodo()
+        nodoPadre = NodoArbol("Array")
+        nodoId = NodoArbol("Identificador")
+        nodoId.agregarHijo(self.id)
+        nodoPadre.agregarHijoNodo(nodoId)
+        nodopos = NodoArbol("Posición")
+        nodopos.agregarHijoNodo(self.posicion.getNodo())         
+        nodoPadre.agregarHijoNodo(nodopos)
+        return nodoPadre

@@ -22,4 +22,5 @@ class Identificador(NodoAST):
     def getNodo(self):
         NuevoNodo = NodoArbol("ID")
         NuevoNodo.agregarHijo(self.id)
+        return NuevoNodo
         

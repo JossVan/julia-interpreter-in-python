@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from Instrucciones.Return import Return
 from TablaSimbolos.Simbolo import Simbolo
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
@@ -42,4 +43,11 @@ class Llamadas(NodoAST):
                     return resultado.valor
 
     def getNodo(self):
-        return super().getNodo()
+        
+        NodoPadre = NodoArbol("Llamada")
+        Nodoid = NodoArbol("Identificador")
+        Nodoid.agregarHijo(self.id)
+        NodoPadre.agregarHijoNodo(Nodoid)
+        for parametro in self.parametros:
+            NodoPadre.agregarHijoNodo(parametro.getNodo())
+        return NodoPadre

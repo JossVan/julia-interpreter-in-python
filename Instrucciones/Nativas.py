@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Dato, Tipo_Primitivas
 from Abstractas.NodoAST import NodoAST
 
@@ -60,8 +61,24 @@ class Nativas_conTipo(NodoAST):
             else:
                 return "El primer parametro debe ser Int64" 
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("Funciones_Nativas")
 
+        if self.funcion == Tipo_Primitivas.PARSE:
+            NodoNuevo.agregarHijo("Parse")
+        elif self.funcion == Tipo_Primitivas.TRUNC:
+            NodoNuevo.agregarHijo("Trunc")
+        
+        if self.tipo == Tipo_Dato.CADENA:
+            NodoNuevo.agregarHijo("String")
+        elif self.tipo == Tipo_Dato.CARACTER:
+            NodoNuevo.agregarHijo("Char")
+        elif self.tipo == Tipo_Dato.ENTERO:
+            NodoNuevo.agregarHijo("Int64")
+        elif self.tipo == Tipo_Dato.DECIMAL:
+            NodoNuevo.agregarHijo("Float64")
+        elif self.tipo == Tipo_Dato.BOOLEANO:
+            NodoNuevo.agregarHijo("Bool")
+        NodoNuevo.agregarHijoNodo(self.valor.getNodo())
 
 class Nativas_SinTipo(NodoAST):
 
@@ -99,7 +116,19 @@ class Nativas_SinTipo(NodoAST):
         else:
             return "HAY UN ERROR"
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("Funciones_Nativas")
+
+        if self.funcion == Tipo_Primitivas.FLOAT:
+            NodoNuevo.agregarHijo("Float")
+        elif self.funcion == Tipo_Primitivas.STRING:
+            NodoNuevo.agregarHijo("String")
+        elif self.funcion == Tipo_Primitivas.TYPEOF:
+            NodoNuevo.agregarHijo("Typeof")
+        elif self.funcion == Tipo_Primitivas.TRUNC:
+            NodoNuevo.agregarHijo("Trunc")
+        NodoNuevo.agregarHijoNodo(self.valor.getNodo())
+
+        return NodoNuevo
 
 class Pilas(NodoAST):
     def __init__(self, funcion, id, valor, fila, columna):
@@ -110,7 +139,14 @@ class Pilas(NodoAST):
         self.columna = columna
 
     def ejecutar(self, tree, table):
-        return super().ejecutar(tree, table)
-    
+        if self.funcion == Tipo_Primitivas.LENGTH:
+            if isinstance(self.valor, NodoAST):
+                val = self.valor.ejecutar(tree,table)
+                if isinstance(val,list):
+                    return len(val)
     def getNodo(self):
-        return super().getNodo()
+        NodoNuevo = NodoArbol("Funciones_Arreglos")
+        if self.funcion == Tipo_Primitivas.LENGTH:
+            NodoNuevo.agregarHijo("Length")
+            NodoNuevo.agregarHijoNodo(self.valor.getNodo())
+        return NodoNuevo

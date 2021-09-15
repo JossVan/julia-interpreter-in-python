@@ -1,3 +1,5 @@
+from Abstractas.NodoArbol import NodoArbol
+from Expresiones.Rango import Rango
 from Instrucciones.Continue import Continue
 from TablaSimbolos.Errores import Errores
 from Abstractas.Objeto import TipoObjeto
@@ -22,10 +24,10 @@ class For(NodoAST):
         nuevaTabla= TablaSimbolos("For",table)
         self.id.ejecutar(tree,nuevaTabla)
         id = self.id.id
-        rango = self.rango.ejecutar(tree,table)
-        if isinstance(rango,list):
-            rango1 = rango[0]
-            rango2 = rango[1]
+        rango = self.rango.ejecutar(tree,nuevaTabla)
+        if isinstance(rango,Rango):
+            rango1 = rango.izquierdo
+            rango2 = rango.derecho
             if isinstance(rango1,int) and isinstance(rango2,int):
                 for i in range(rango1,rango2):
                     #if isinstance(rango1,int):                 
@@ -75,9 +77,14 @@ class For(NodoAST):
                             return None
             else:
                 for i in rango:
-                    nuevaConstante = Constante(Primitivo(TipoObjeto.CADENA, i), self.fila, self.columna)
-                    nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
-                    nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                    if isinstance(i, str):
+                        nuevaConstante = Constante(Primitivo(TipoObjeto.CADENA, i), self.fila, self.columna)
+                        nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
+                        nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                    elif isinstance(i,int): 
+                        nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
+                        nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
+                        nuevaAsignacion.ejecutar(tree,nuevaTabla)
                     if self.instrucciones != None:
                         for instruccion in self.instrucciones:
                             resp=instruccion.ejecutar(tree,nuevaTabla)
@@ -88,7 +95,13 @@ class For(NodoAST):
                 
         
     def getNodo(self):
-        return super().getNodo()
-                
+        
+        NodoNuevo = NodoArbol("For")
+        NodoNuevo.agregarHijoNodo(self.id.getNodo())
+        NodoNuevo.agregarHijoNodo(self.rango.getNodo())
+        for instruccion in self.instrucciones:
+            NodoNuevo.agregarHijoNodo(instruccion.getNodo())
+
+        return NodoNuevo                
 
         

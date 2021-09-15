@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Simbolo import Simbolo
 from Abstractas.NodoAST import NodoAST
 
@@ -17,4 +18,10 @@ class Arreglos(NodoAST):
         return self.contenido
 
     def getNodo(self):
-        return super().getNodo()
+        NodoPadre = NodoArbol("Valores")
+
+        for dimension in self.contenido:
+            if isinstance(dimension, NodoAST):
+                nodo = dimension.getNodo()
+                NodoPadre.agregarHijoNodo(nodo)
+        return NodoPadre

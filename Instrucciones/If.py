@@ -61,11 +61,13 @@ class If(NodoAST):
             for instruccion_if in self.instrucciones_if:
                 NodoIf.agregarHijoNodo(instruccion_if.getNodo())
         if self.instrucciones_else != None:
-            for instruccion_elseif in self.instrucciones_elseif:
-                NodoElse.agregarHijoNodo(instruccion_elseif.getNodo())
+            for instruccion_else in self.instrucciones_else:
+                NodoElse.agregarHijoNodo(instruccion_else.getNodo())
         NodoPadre.agregarHijoNodo(NodoCondicion)
         NodoPadre.agregarHijoNodo(NodoIf)
         if len(self.instrucciones_else)>0:
             NodoPadre.agregarHijoNodo(NodoElse)
+        if self.instrucciones_elseif!= None:
+            NodoPadre.agregarHijoNodo(self.instrucciones_elseif.getNodo())
         return NodoPadre
         

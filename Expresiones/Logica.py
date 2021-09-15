@@ -45,4 +45,6 @@ class Logica(NodoAST):
         elif self.tipooperacion == Tipo_Logico.DIFERENTE:
             NuevoNodo.agregarHijo("!")
             NuevoNodo.agregarHijoNodo(self.operador1.getNodo())
+
+        return NuevoNodo
             
