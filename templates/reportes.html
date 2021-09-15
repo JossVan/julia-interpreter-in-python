@@ -1,0 +1,29 @@
+  
+{% extends "base.html" %}
+{% block title %}Analizador{% endblock %}
+
+{% block content %}
+
+<div class="container" style="padding-top: 10%;">
+    <div class="card text-center">
+        <div class="card-header">
+          JOLC
+        </div>
+        <div class="card-body">
+          <h4 class="card-title">Reportes</h4>
+          <br>
+          <form method="POST" action="#">
+            <button class="btn btn-outline-secondary" style="width: 20rem;" onclick="/templates/AST.html">AST </button>
+            <button type="submit" class="btn btn-outline-secondary" style="width: 20rem;">Tabla de símbolos </button>
+            <button type="submit" class="btn btn-outline-secondary" style="width: 20rem;">Errores </button>
+        </form>
+          
+        </div>
+        <div class="card-footer text-muted">
+          Segundo semestre 2021
+        </div>
+      </div>
+     
+</div>
+
+{% endblock %}

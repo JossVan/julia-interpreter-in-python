@@ -99,9 +99,10 @@ class For(NodoAST):
         NodoNuevo = NodoArbol("For")
         NodoNuevo.agregarHijoNodo(self.id.getNodo())
         NodoNuevo.agregarHijoNodo(self.rango.getNodo())
+        NodoInst = NodoArbol("Instrucciones")
         for instruccion in self.instrucciones:
-            NodoNuevo.agregarHijoNodo(instruccion.getNodo())
-
+            NodoInst.agregarHijoNodo(instruccion.getNodo())
+        NodoNuevo.agregarHijoNodo(NodoInst)
         return NodoNuevo                
 
         

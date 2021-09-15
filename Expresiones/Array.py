@@ -68,6 +68,8 @@ class Array(NodoAST):
         nodoId.agregarHijo(self.id)
         nodoPadre.agregarHijoNodo(nodoId)
         nodopos = NodoArbol("Posición")
-        nodopos.agregarHijoNodo(self.posicion.getNodo())         
+        if isinstance(self.posicion,list):
+            for pos in self.posicion:
+                nodopos.agregarHijoNodo(pos.getNodo())         
         nodoPadre.agregarHijoNodo(nodopos)
         return nodoPadre

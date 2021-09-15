@@ -17,40 +17,39 @@ class Nativas_conTipo(NodoAST):
  
             if self.tipo != None:
     
-                self.valor = self.valor.ejecutar(tree,table)
+                valor = self.valor.ejecutar(tree,table)
                 if self.tipo == Tipo_Dato.BOOLEANO:
                     try:
-                        if isinstance(self.valor,str):
+                        if isinstance(valor,str):
                             return bool(self.valor)
                         return "El segundo parámetro debe ser una cadena"
                     except ValueError:
                         return "Error al castear a booleano"
                 elif self.tipo == Tipo_Dato.CADENA:
-                    print(self.valor)
                     try:
-                        if isinstance(self.valor,str):
-                            return str(self.valor)
+                        if isinstance(valor,str):
+                            return valor
                         return "El segundo parámetro debe ser una cadena"
                     except ValueError:
                         return "Error al castear a cadena"
                 elif self.tipo == Tipo_Dato.ENTERO:
                     try:
-                        if isinstance(self.valor, str):
-                            return int(self.valor)
+                        if isinstance(valor, str):
+                            return int(valor)
                         return "El segundo parámetro debe ser una cadena"
                     except ValueError:
                         return "Error al castear a Int64"
                 elif self.tipo == Tipo_Dato.DECIMAL:
                     try:
-                        if isinstance(self.valor, str):
-                            return float(self.valor)
+                        if isinstance(valor, str):
+                            return float(valor)
                         return "El segundo parámetro debe ser una cadena"
                     except ValueError:
                         return "Error al castear a Float64"
                 elif self.tipo == Tipo_Dato.CARACTER:
                     try:
-                        if isinstance(self.valor, str):
-                            return chr(self.valor)
+                        if isinstance(valor, str):
+                            return chr(valor)
                         return "El segundo parámetro debe ser una cadena"
                     except ValueError:
                         return "Error al castear a char"
@@ -79,7 +78,7 @@ class Nativas_conTipo(NodoAST):
         elif self.tipo == Tipo_Dato.BOOLEANO:
             NodoNuevo.agregarHijo("Bool")
         NodoNuevo.agregarHijoNodo(self.valor.getNodo())
-
+        return NodoNuevo
 class Nativas_SinTipo(NodoAST):
 
     def __init__(self, funcion, valor, fila, columna):
@@ -90,27 +89,26 @@ class Nativas_SinTipo(NodoAST):
 
     def ejecutar(self, tree, table):
 
-        self.valor = self.valor.ejecutar(tree,table)
-        print("ESTA EN NATIVAS SIN TIPO")
+        valor = self.valor.ejecutar(tree,table)
         if self.funcion == Tipo_Primitivas.FLOAT:
             try:
-                return float(self.valor)
+                return float(valor)
             except ValueError:
                 return "El parámetro debe ser un número entero"
         elif self.funcion == Tipo_Primitivas.STRING:
-            return str(self.valor)
+            return str(valor)
         elif self.funcion == Tipo_Primitivas.TYPEOF:
-            if(isinstance(self.valor, bool)):
+            if(isinstance(valor, bool)):
                 return "Bool"
-            elif (isinstance(self.valor,int)):
+            elif (isinstance(valor,int)):
                 return "Int64"
-            elif(isinstance(self.valor,float)):
+            elif(isinstance(valor,float)):
                 return "Float64"
-            elif(isinstance(self.valor,str)):
+            elif(isinstance(valor,str)):
                 return "String"
         elif self.funcion == Tipo_Primitivas.TRUNC:   
-            if isinstance(self.valor,int) or isinstance(self.valor,float):
-                return int(self.valor)
+            if isinstance(valor,int) or isinstance(valor,float):
+                return int(valor)
             else:
                 return "El primer parametro debe ser un número flotante"
         else:

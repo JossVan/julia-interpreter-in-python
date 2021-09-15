@@ -27,5 +27,15 @@ class Constante(NodoAST):
     
     def getNodo(self):
         NuevoNodo = NodoArbol("Constante")
-        NuevoNodo.agregarHijo(str(self.valor))
+        if self.valor.tipo == TipoObjeto.CADENA:
+            NuevoNodo.agregarHijo(self.valor.toString())
+        elif self.valor.tipo == TipoObjeto.ENTERO:
+            NuevoNodo.agregarHijo(str(self.valor.getEntero()))
+        elif self.valor.tipo == TipoObjeto.DECIMAL:
+            NuevoNodo.agregarHijo(str(self.valor.getFloat()))
+        elif self.valor.tipo == TipoObjeto.BOOLEANO:
+            NuevoNodo.agregarHijo(str(self.valor.getBoolean()))
+        elif self.valor.tipo == TipoObjeto.NEGATIVO:
+            if isinstance(self.valor, NodoAST):
+                NuevoNodo.agregarHijoNodo("-"+ self.valor.getNodo())
         return NuevoNodo

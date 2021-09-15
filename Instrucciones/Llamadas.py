@@ -46,8 +46,11 @@ class Llamadas(NodoAST):
         
         NodoPadre = NodoArbol("Llamada")
         Nodoid = NodoArbol("Identificador")
+        Nodopar = NodoArbol("Parámetros")
         Nodoid.agregarHijo(self.id)
         NodoPadre.agregarHijoNodo(Nodoid)
         for parametro in self.parametros:
-            NodoPadre.agregarHijoNodo(parametro.getNodo())
+            Nodopar.agregarHijoNodo(parametro.getNodo())
+        if self.parametros != None:
+            NodoPadre.agregarHijoNodo(Nodopar)
         return NodoPadre

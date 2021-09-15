@@ -1,5 +1,7 @@
-class Arbolito:
+from graphviz import Graph
 
+class Arbolito:
+    
     def __init__(self, instrucciones ):
         self.instrucciones = instrucciones
         self.funciones = []
@@ -8,6 +10,7 @@ class Arbolito:
         self.TSglobal = None
         self.dot = ""
         self.contador = 0
+        self.chart_data = Graph()
 
     def getInstrucciones(self):
         return self.instrucciones
@@ -52,18 +55,26 @@ class Arbolito:
         self.funciones.append(funcion)
 
     def getDot(self, raiz):
-        self.dot = ""
-        self.dot += "digraph {\n"
-        self.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n"
-        self.contador = 1
+        #self.dot = ""
+        #self.dot += "digraph {\n"
+        #self.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n"
+        self.chart_data.node("n0",raiz.getValor().replace("\"","\\\""))
+        self.contador = 2
         self.recorrerAST("n0", raiz)
-        self.dot += "}"
-        return self.dot
+        chart_output = self.chart_data.pipe(format='svg').decode('utf-8')
+        #self.dot += "}"
+        return chart_output
 
     def recorrerAST(self, idPadre, nodoPadre):
         for hijo in nodoPadre.getHijos():
             nombreHijo = "n" + str(self.contador)
-            self.dot += nombreHijo + "[label=\"" + hijo.getValor().replace("\"", "\\\"") + "\"];\n"
-            self.dot += idPadre + "->" + nombreHijo + ";\n"
+            if hijo.getValor() == "":
+                hijito = "Vacío"
+            else:
+                hijito = hijo.getValor().replace("\"", "\\\"")
+            self.chart_data.node(nombreHijo,hijito)
+            self.chart_data.edge(idPadre, nombreHijo)
+            #self.dot += nombreHijo + "[label=\"" + hijito + "\"];\n"
+            #self.dot += idPadre + "->" + nombreHijo + ";\n"
             self.contador += 1
             self.recorrerAST(nombreHijo, hijo)

@@ -26,11 +26,16 @@ class Funciones(NodoAST):
         
         NodoNuevo = NodoArbol("Función")
         NodoNuevo.agregarHijo(self.nombre)
-
+        Nodopar = NodoArbol("Parámetros")
+        Nodoinst = NodoArbol("Instrucciones")
         for parametro in self.parametros:
-            NodoNuevo.agregarHijoNodo(parametro.getNodo())
-        
+            Nodopar.agregarHijoNodo(parametro.getNodo())
         for instruccion in self.instrucciones:
-            NodoNuevo.agregarHijoNodo(instruccion.getNodo())
+            Nodoinst.agregarHijoNodo(instruccion.getNodo())
         
+        if self.parametros != None:
+            NodoNuevo.agregarHijoNodo(Nodopar)
+        if self.instrucciones != None :
+            NodoNuevo.agregarHijoNodo(Nodoinst)
+            
         return NodoNuevo

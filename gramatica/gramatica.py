@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
 from Instrucciones.Return import Return
 import re
@@ -789,15 +790,19 @@ def parse(input) :
     tablaGlobal = TablaSimbolos("Global")
     AST.setTSglobal(tablaGlobal)
 
-    retorno=""
+    retorno=[]
+    NodoRaiz = NodoArbol("Raiz")
     for instruccion in AST.getInstrucciones():
         if isinstance(instruccion, Funciones):
             AST.addFuncion(instruccion)
+            NodoRaiz.agregarHijoNodo(instruccion.getNodo())
         # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
         else:
             for inst in instruccion:
                 inst.ejecutar(AST,AST.getTSGlobal())
+                NodoRaiz.agregarHijoNodo(inst.getNodo())
 
+    retorno.append(AST.getDot(NodoRaiz))
    # tablita = AST.getTSGlobal().tabla
 
     """for simbolo in tablita.values():
@@ -807,4 +812,5 @@ def parse(input) :
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
         return err
-    return AST.getConsola()
+    retorno.append(AST.getConsola())
+    return retorno

@@ -55,9 +55,18 @@ class Rango(NodoAST):
 
     def getNodo(self):
         nodoNuevo = NodoArbol("Rango")
-        if self.izquierdo != None and self.izquierdo != None:
-            nodoNuevo.agregarHijoNodo(self.izquierdo.getNodo())
+        if self.izquierdo != None and self.derecho != None:
+            if isinstance(self.izquierdo,list):
+                for izq in self.izquierdo:
+                    nodoNuevo.agregarHijoNodo(izq.getNodo())
+            else:
+                nodoNuevo.agregarHijoNodo(self.izquierdo.getNodo())
             nodoNuevo.agregarHijo(":")
             nodoNuevo.agregarHijoNodo(self.derecho.getNodo())
-        
+        elif self.derecho == None:
+            if isinstance(self.izquierdo,list):
+                for inst in self.izquierdo:
+                    nodoNuevo.agregarHijoNodo(inst.getNodo())
+            elif isinstance(self.izquierdo,NodoAST):
+                nodoNuevo.agregarHijoNodo(self.izquierdo.getNodo())
         return nodoNuevo
