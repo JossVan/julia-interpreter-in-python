@@ -1,5 +1,6 @@
 from graphviz import Graph
-
+from Instrucciones.Funciones import Funciones
+import base64
 class Arbolito:
     
     def __init__(self, instrucciones ):
@@ -62,6 +63,8 @@ class Arbolito:
         self.contador = 2
         self.recorrerAST("n0", raiz)
         chart_output = self.chart_data.pipe(format='svg').decode('utf-8')
+        #chart_output = self.chart_data.pipe(format='png')
+        #chart_output = base64.b64encode(chart_output).decode('utf-8')
         #self.dot += "}"
         return chart_output
 
@@ -78,3 +81,44 @@ class Arbolito:
             #self.dot += idPadre + "->" + nombreHijo + ";\n"
             self.contador += 1
             self.recorrerAST(nombreHijo, hijo)
+    
+    def htmlTablaSimbolos(self):
+
+        cadena = "<table class=\"table\">\n"
+        cadena += "<thead>"
+        cadena +="<tr>"
+        cadena +="<th scope=\"col\">Nombre</th>"
+        cadena +="<th scope=\"col\">Tipo</th>"
+        cadena +="<th scope=\"col\">Ámbito</th>"
+        cadena +="<th scope=\"col\">Fila</th>"
+        cadena +="<th scope=\"col\">Columna</th>"
+        cadena +="</tr>"
+        cadena +="</thead>"
+        cadena +="<tbody>"
+        
+        for funcion in self.getFunciones():
+            if isinstance(funcion, Funciones):
+                cadena+="<tr>"
+                cadena+="<td>"
+                cadena+= funcion.nombre
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= "Función"
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= "Global"
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(funcion.fila)
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(funcion.columna)
+                cadena+="</td>"
+                cadena+="</tr>"
+        
+
+
+
+        cadena+="</tbody>"
+        cadena+="</table>"
+        return cadena

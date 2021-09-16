@@ -813,4 +813,5 @@ def parse(input) :
             err+=">>" +error.getCadena()+"\n"
         return err
     retorno.append(AST.getConsola())
+    retorno.append(AST.htmlTablaSimbolos())
     return retorno

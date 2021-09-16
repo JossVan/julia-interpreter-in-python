@@ -1,6 +1,7 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
 import requests
+import base64
 app = Flask(__name__)
 
 #por default
@@ -24,12 +25,21 @@ def principal():
 #reportes
 @app.route('/reportes', methods=["GET", "POST"])
 def reportes():
+    if request.method =="POST":
+        
+        valor = request.form['btn']
+        if valor == "ast":
+            return render_template('AST.html')
+  
     return render_template('reportes.html')
 
 @app.route('/AST')
 def AST():
     return render_template('AST.html', img = result[0])
 
+@app.route('/TablaSimbolos')
+def tabla():
+    return render_template('tabla.html', tabla = result[2])
 
 if __name__ == '__main__':
     app.run(port = 3000, debug = True)
