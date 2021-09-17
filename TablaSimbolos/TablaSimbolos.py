@@ -17,6 +17,16 @@ class TablaSimbolos:
                 tablaActual = tablaActual.anterior
         return None
 
+    def actualizarValor(self, id, valor):
+        tablaActual = self
+        while tablaActual != None:
+            if id in tablaActual.tabla :
+                tablaActual.tabla[id].setValor(valor)
+                return None          
+            else:
+                tablaActual = tablaActual.anterior
+        return None
+
     def actualizarSimbolo(self, simbolo):
         tablaActual = self
         while tablaActual != None:
@@ -34,7 +44,8 @@ class TablaSimbolos:
         while tablaActual != None:
             if id in tablaActual.tabla :
                 if isinstance(tablaActual.tabla[id].valor, list):
-                    tablaActual.tabla[id].valor[posicion] = valor
+                    tablaActual.tabla[id].valor[posicion-1] = valor
+                    
                 return "ok"          
             else:
                 tablaActual = tablaActual.anterior

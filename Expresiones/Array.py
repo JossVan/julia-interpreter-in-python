@@ -57,7 +57,9 @@ class Array(NodoAST):
         if isinstance(self.posicion, list):
             for pos in self.posicion:
                 posi = pos.ejecutar(tree,table)
-        resultado = table.actualizarValorPosicion(valor, posi, self.id)
+        val = valor.ejecutar(tree,table)
+        resultado = table.actualizarValorPosicion(val, posi, self.id)
+
         if resultado == None:
             tree.insertError(Errores(id,"Semántico","No definida", self.fila,self.columna))
             return

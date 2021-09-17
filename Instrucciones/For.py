@@ -1,3 +1,4 @@
+from Expresiones.Arreglos import Arreglos
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Rango import Rango
 from Instrucciones.Continue import Continue
@@ -31,6 +32,7 @@ class For(NodoAST):
             if isinstance(rango1,int) and isinstance(rango2,int):
                 for i in range(rango1,rango2):
                     #if isinstance(rango1,int):                 
+                    nuevaTabla.actualizarValor(id,i)
                     nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
                     '''elif isinstance(rango1,float):
                         nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, i), self.fila, self.columna)
@@ -48,6 +50,7 @@ class For(NodoAST):
                 total = int(rango2-rango1)+1
                 if total >0:
                     for i in range(0,total):
+                        nuevaTabla.actualizarValor(id,i)
                         variable = rango1
                         nuevaConstante = Constante(Primitivo(TipoObjeto.DECIMAL, variable), self.fila, self.columna)
                         rango1 = rango1+1
@@ -85,6 +88,9 @@ class For(NodoAST):
                         nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
                         nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
                         nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                    elif isinstance(i, NodoAST):
+                        #val = i.ejecutar(tree,nuevaTabla)
+                        nuevaTabla.actualizarValor(id,i)
                     if self.instrucciones != None:
                         for instruccion in self.instrucciones:
                             resp=instruccion.ejecutar(tree,nuevaTabla)

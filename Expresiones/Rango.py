@@ -30,6 +30,12 @@ class Rango(NodoAST):
                             return arreglo
                     elif isinstance(self.izquierdo, NodoAST):
                         izquierdo = self.izquierdo.ejecutar(tree,table)
+                        if isinstance(izquierdo, list):
+                            for izq in izquierdo:
+                                return izq
+                        elif isinstance(izquierdo, NodoAST):
+                            izq = izquierdo.ejecutar(tree,table)
+                            return izq
                         return izquierdo
                 except:
                     err= Errores(izquierdo,"Semántico", "Error en el rango", self.fila,self.columna)
