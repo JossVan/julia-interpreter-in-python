@@ -7,16 +7,18 @@
 <div class="container">
     <div style="padding-top: 5%;">
         <h3 for="exampleFormControlTextarea1">Entrada</h3>
-        <div id="codeeditor">
-        </div>
-        <div class="" style="text-align: center; padding-top: 2%;">
-            <button type="button" class="btn btn-secondary btn-lg btn-block">Analizar</button>
-        </div>
+       
+        <form method="POST" action="#">
+            <textarea class="codemirror-textarea form-control" name="codigo" id="entrada" cols="30" rows="10">{{entrada}}</textarea>
+            <div class="" style="text-align: center; padding-top: 2%;">
+                <button type="submit" class="btn btn-outline-secondary" style="width: 50rem;">Analizar </button>
+            </div>
+        </form>
     </div>
     <div style="padding-top: 5%; padding-bottom: 5%;">
         <div class="form-group">
             <h3 for="exampleFormControlTextarea1">Salida</h3>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="10" style="background-color:#14011D; color:#FFFF"></textarea>
+            <textarea class="form-control" name="salida" id="exampleFormControlTextarea1" rows="10" style="background-color:#14011D; color:#FFFF">{{resultado}}</textarea>
           </div>
     </div>
 </div>
