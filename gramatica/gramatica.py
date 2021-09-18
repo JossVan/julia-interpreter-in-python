@@ -269,6 +269,12 @@ def p_println(t):
     'I : R_PRINTLN PARIZQ IMPRESIONES PARDER PTCOMA'
     t[0] = Print(Tipo_Print.PRINTLN, t[3], t.lineno(1), t.lexpos(0))
 
+def p_printlmVacio(t):
+    'I : R_PRINTLN PARIZQ PARDER PTCOMA'
+    t[0] = Print(Tipo_Print.PRINTLN, "", t.lineno(1), t.lexpos(0))
+def p_printVacio(t):
+    'I : R_PRINT PARIZQ PARDER PTCOMA'
+    t[0] = Print(Tipo_Print.PRINT, "", t.lineno(1), t.lexpos(0))
 def p_contImpresion(t):
     'IMPRESIONES : IMPRESIONES COMA IMPRESION'
     if t[3] != "":
@@ -567,14 +573,15 @@ def p_nativasp(t):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.TYPEOF,t[3], t.lineno(1), t.lexpos(1))
     elif t[1] == 'trunc':
         t[0] = Nativas_SinTipo(Tipo_Primitivas.TRUNC,t[3], t.lineno(1), t.lexpos(1))
+
 def p_nativaspush(t):
-    ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA E PARDER'
+    ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA LISTA PARDER'
     id = Identificador(t[4],t.lineno(1), t.lexpos(1))
     t[0] = Pilas(Tipo_Primitivas.PUSH, id, t[6], t.lineno(1), t.lexpos(1))
 
 def p_nativaspop(t):
     'NATIVAS : R_POP DIFERENTE PARIZQ ID PARDER'
-    id = Identificador(t[4],t.lineno(2), find_column(input, t.slice[2]))
+    id = Identificador(t[4],t.lineno(2), t.lexpos(2))
     t[0] = Pilas(Tipo_Primitivas.POP, id, None, t.lineno(1), t.lexpos(1))
 
 def p_nativas_length(t):

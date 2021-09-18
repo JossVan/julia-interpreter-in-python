@@ -1,7 +1,9 @@
+from Expresiones.Arreglos import Arreglos
+from Expresiones.Array import Array
 from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Dato, Tipo_Primitivas
 from Abstractas.NodoAST import NodoAST
-
+import numpy as np
 class Nativas_conTipo(NodoAST):
 
     def __init__(self, funcion, tipo, valor,  fila, columna):
@@ -140,11 +142,59 @@ class Pilas(NodoAST):
         if self.funcion == Tipo_Primitivas.LENGTH:
             if isinstance(self.valor, NodoAST):
                 val = self.valor.ejecutar(tree,table)
-                if isinstance(val,list):
-                    return len(val)
+                if isinstance(val,list):   
+                    tam = self.getLen(val)
+                    if tam != None:
+                        return tam       
+                    array = np.array(val)
+                    return array.size
+        elif self.funcion == Tipo_Primitivas.PUSH:
+            val = self.id.ejecutar(tree,table)
+            if isinstance(val,list):
+                if isinstance(val[0],list):
+                    if isinstance(self.valor,list):
+                        val[0].append(self.valor[0])
+                    else:
+                        val.append(self.valor)
+                    table.actualizarValor(self.id.id,val)  
+                else:                
+                    val.append(self.valor)
+                    table.actualizarValor(self.id.id,val)
+            return val
+        elif self.funcion == Tipo_Primitivas.POP:
+            result = self.id.ejecutar(tree,table)
+            retorno = []
+            if result != None:
+                if isinstance(result,list):
+                    if isinstance(result[0],list):
+                        tam = int(len(result[0])-1)
+                        retorno = result[0][tam]
+                        result[0].pop(tam)
+                        table.actualizarValor(self.id.id,result)
+                    else:
+                        tam = int(len(result)-1)
+                        retorno = result[tam]
+                        result.pop(tam)
+                        table.actualizarValor(self.id.id,result)
+
+                return retorno
+                
     def getNodo(self):
         NodoNuevo = NodoArbol("Funciones_Arreglos")
         if self.funcion == Tipo_Primitivas.LENGTH:
             NodoNuevo.agregarHijo("Length")
             NodoNuevo.agregarHijoNodo(self.valor.getNodo())
         return NodoNuevo
+    
+    def getLen(self,array):
+
+        if isinstance(array,list):
+            for i in array:
+                if isinstance(i, Arreglos):
+                    return i.getLength()
+                elif isinstance(i,list):
+                    self.getLen(i)
+        elif isinstance(array, Arreglos):
+            return array.getLength()
+        else :
+            None

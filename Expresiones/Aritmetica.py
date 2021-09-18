@@ -22,6 +22,14 @@ class Aritmetica(NodoAST):
                     return "el operador: "+self.operador1.id+", es indefinido"
                 elif result2 == None:
                     return "El operador: "+self.operador2.id+", es indefinido"
+                elif isinstance(result1,list) and isinstance(result2, list):
+                    contador = 0
+                    for i in result1:
+                        val = i.ejecutar(tree,table)
+                        val2 = result2[contador].ejecutar(tree,table)
+                        contador = contador+1
+                    print("paso por suma de matrices o arreglos")
+
                 else:
                     return result1+result2
             if self.operacion == Tipo_Aritmetico.RESTA:
@@ -83,3 +91,10 @@ class Aritmetica(NodoAST):
             NuevoNodo.agregarHijo("^")
         NuevoNodo.agregarHijoNodo(self.operador2.getNodo())
         return NuevoNodo
+
+    def getValor(self,tree, table, array):
+
+        for i in array:
+            if isinstance(i,NodoAST):
+                val = i.ejecutar(tree,table)
+            

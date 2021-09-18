@@ -12,7 +12,13 @@ class Arbolito:
         self.dot = ""
         self.contador = 0
         self.chart_data = Graph()
+        self.cont = 0 
 
+    def aumentar(self):
+        self.cont = self.cont+1
+    
+    def getCont(self):
+        return self.cont
     def getInstrucciones(self):
         return self.instrucciones
 

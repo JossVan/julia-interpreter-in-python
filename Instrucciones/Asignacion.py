@@ -31,11 +31,18 @@ class Asignacion(NodoAST):
             tree.insertError(err)'''
         if self.tipo == None:
             if self.valor == None:
-                simbolo = Simbolo(id, None, self.acceso,self.fila,self.columna)
-                if self.acceso == Tipo_Acceso.GLOBAL:
-                    table.actualizarSimboloGlobal(simbolo)
-                else:
-                    table.actualizarSimbolo(simbolo)
+                simbolo = table.BuscarIdentificador(id)
+                if simbolo != None:
+                    if self.acceso == Tipo_Acceso.GLOBAL:
+                        table.actualizarSimboloGlobal(simbolo)
+                    else:
+                        table.actualizarSimbolo(simbolo)
+                else:   
+                    simbolo = Simbolo(id, None, self.acceso,self.fila,self.columna)
+                    if self.acceso == Tipo_Acceso.GLOBAL:
+                        table.actualizarSimboloGlobal(simbolo)
+                    else:
+                        table.actualizarSimbolo(simbolo)
             else:
                 if isinstance(self.valor,list):
                     for val in self.valor :

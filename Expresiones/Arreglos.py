@@ -1,7 +1,5 @@
 from Abstractas.NodoArbol import NodoArbol
-from TablaSimbolos.Simbolo import Simbolo
 from Abstractas.NodoAST import NodoAST
-
 class Arreglos(NodoAST):
 
     def __init__(self, contenido, fila, columna):
@@ -16,6 +14,9 @@ class Arreglos(NodoAST):
                 break
 
         return self.contenido
+
+    def getLength(self):
+        return len(self.contenido)
 
     def getNodo(self):
         NodoPadre = NodoArbol("Valores")
