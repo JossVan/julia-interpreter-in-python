@@ -14,7 +14,7 @@ class Identificador(NodoAST):
         self.id = self.id.lower()
         resultado = table.BuscarIdentificador(self.id)
         if resultado == None:
-            tree.insertError(Errores(id,"Semántico","No definida", self.fila,self.columna))
+            tree.insertError(Errores(id,"Semántico","Variable no definida", self.fila,self.columna))
             return
         b = resultado.getValor()
         return b
@@ -22,4 +22,5 @@ class Identificador(NodoAST):
     def getNodo(self):
         NuevoNodo = NodoArbol("ID")
         NuevoNodo.agregarHijo(self.id)
+        return NuevoNodo
         

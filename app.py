@@ -1,6 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
-from Instrucciones.Print import Print
 app = Flask(__name__)
 
 #por default
@@ -13,20 +12,38 @@ def principal():
     if request.method == "POST":
         inpt = request.form['codigo']
         global tmp_val
-        tmp_val=inpt
-        result = g(tmp_val+"\n")
-
-       # valor= result.ejecutar("tree", "table")
-        return render_template('principal.html', resultado=result)
+        tmp_val=inpt  
+        global result
+        result =  g(tmp_val+"\n")
+        return render_template('principal.html', resultado=result[1], entrada = inpt)
 
     else:
         return render_template('principal.html')
 
 #reportes
-@app.route('/reportes')
+@app.route('/reportes', methods=["GET", "POST"])
 def reportes():
-    return 'reportes'
+    if request.method =="POST":
+        
+        valor = request.form['btn']
+        if valor == "ast":
+            return render_template('AST.html')
+  
+    return render_template('reportes.html')
 
+@app.route('/AST')
+def AST():
+    if result[0] != None:
+        return render_template('AST.html', img = result[0])
+    else:
+        return render_template('AST.html', img ="")
 
+@app.route('/TablaSimbolos')
+def tabla():
+    return render_template('tabla.html', tabla = result[2])
+
+@app.route('/Errores')
+def errores():
+    return render_template('errores.html', tabla = result[2])
 if __name__ == '__main__':
     app.run(port = 3000, debug = True)

@@ -18,5 +18,5 @@ class Return(NodoAST):
     def getNodo(self):
         NodoNuevo = NodoArbol("Return")
         if self.valor != None:
-            return NodoNuevo.agregarHijoNodo(self.valor.getNodo())
+            NodoNuevo.agregarHijoNodo(self.valor.getNodo())
         return NodoNuevo

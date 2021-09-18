@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from Instrucciones.Return import Return
 from TablaSimbolos.Simbolo import Simbolo
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
@@ -26,13 +27,16 @@ class Llamadas(NodoAST):
                     for parametro in self.parametros:
                         valor = parametro.ejecutar(tree,table)
                         variable = funcion.parametros[contador].id
-                        simbolo = Simbolo(variable,valor,self.id,self.fila,self.columna)
+                        simbolo = Simbolo(variable,valor,self.id,self.fila,self.columna,"No definido")
                         NuevaTabla.addSimboloLocal(simbolo)
+                        tree.agregarTS(self.id,simbolo)
                         contador = contador+1
 
                     resultado = funcion.ejecutar(tree,NuevaTabla)
                     if isinstance(resultado,Return):
                         return resultado.valor
+                    elif isinstance(resultado, Errores):
+                        return resultado
                 else :
                     err = Errores(self.id, "Semántico", "No coinciden los parámetros de llamada", self.fila,self.columna)
                     tree.insertError(err)
@@ -42,4 +46,14 @@ class Llamadas(NodoAST):
                     return resultado.valor
 
     def getNodo(self):
-        return super().getNodo()
+        
+        NodoPadre = NodoArbol("Llamada")
+        Nodoid = NodoArbol("Identificador")
+        Nodopar = NodoArbol("Parámetros")
+        Nodoid.agregarHijo(self.id)
+        NodoPadre.agregarHijoNodo(Nodoid)
+        for parametro in self.parametros:
+            Nodopar.agregarHijoNodo(parametro.getNodo())
+        if self.parametros != None:
+            NodoPadre.agregarHijoNodo(Nodopar)
+        return NodoPadre

@@ -1,16 +1,28 @@
+from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
-
 class Arreglos(NodoAST):
 
-    def __init__(self,id, dim1,dim2, fila, columna):
-        self.id = id
-        self.dim1 = dim1
-        self.dim2 = dim2
+    def __init__(self, contenido, fila, columna):
+        self.contenido = contenido
         self.fila = fila 
         self.columna = columna
     
     def ejecutar(self, tree, table):
-        return "soy un arreglo"
+        
+        for dimension in self.contenido:
+            if not isinstance(dimension,list):
+                break
+
+        return self.contenido
+
+    def getLength(self):
+        return len(self.contenido)
 
     def getNodo(self):
-        return super().getNodo()
+        NodoPadre = NodoArbol("Valores")
+
+        for dimension in self.contenido:
+            if isinstance(dimension, NodoAST):
+                nodo = dimension.getNodo()
+                NodoPadre.agregarHijoNodo(nodo)
+        return NodoPadre

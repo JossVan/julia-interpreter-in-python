@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from Instrucciones.Return import Return
 from Instrucciones.Break import Break
 from Instrucciones.Continue import Continue
@@ -27,6 +28,8 @@ class If(NodoAST):
                     return resp
                 elif isinstance(resp, Return):
                     return resp
+                elif isinstance(resp, Errores):
+                    return resp
         elif self.instrucciones_elseif != None :
             nuevaTabla = TablaSimbolos("elseif",table)
             resp = self.instrucciones_elseif.ejecutar(tree,nuevaTabla)
@@ -35,6 +38,8 @@ class If(NodoAST):
             elif isinstance(resp,Break):
                 return resp
             elif isinstance(resp, Return):
+                return resp
+            elif isinstance(resp,Errores):
                 return resp
         else:
             if(self.instrucciones_else!=None):
@@ -46,6 +51,8 @@ class If(NodoAST):
                     elif isinstance(resp,Break):
                         return resp
                     elif isinstance(resp, Return):
+                        return resp
+                    elif isinstance(resp, Errores):
                         return resp
         
     
@@ -61,11 +68,13 @@ class If(NodoAST):
             for instruccion_if in self.instrucciones_if:
                 NodoIf.agregarHijoNodo(instruccion_if.getNodo())
         if self.instrucciones_else != None:
-            for instruccion_elseif in self.instrucciones_elseif:
-                NodoElse.agregarHijoNodo(instruccion_elseif.getNodo())
+            for instruccion_else in self.instrucciones_else:
+                NodoElse.agregarHijoNodo(instruccion_else.getNodo())
         NodoPadre.agregarHijoNodo(NodoCondicion)
         NodoPadre.agregarHijoNodo(NodoIf)
-        if len(self.instrucciones_else)>0:
+        if self.instrucciones_else != None:
             NodoPadre.agregarHijoNodo(NodoElse)
+        if self.instrucciones_elseif!= None:
+            NodoPadre.agregarHijoNodo(self.instrucciones_elseif.getNodo())
         return NodoPadre
         

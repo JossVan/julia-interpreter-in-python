@@ -1,3 +1,4 @@
+from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Instrucciones.Return import Return
 from TablaSimbolos.Errores import Errores
@@ -22,4 +23,19 @@ class Funciones(NodoAST):
             if isinstance(resp, Return):
                 return resp
     def getNodo(self):
-        return super().getNodo()
+        
+        NodoNuevo = NodoArbol("Función")
+        NodoNuevo.agregarHijo(self.nombre)
+        Nodopar = NodoArbol("Parámetros")
+        Nodoinst = NodoArbol("Instrucciones")
+        for parametro in self.parametros:
+            Nodopar.agregarHijoNodo(parametro.getNodo())
+        for instruccion in self.instrucciones:
+            Nodoinst.agregarHijoNodo(instruccion.getNodo())
+        
+        if self.parametros != None:
+            NodoNuevo.agregarHijoNodo(Nodopar)
+        if self.instrucciones != None :
+            NodoNuevo.agregarHijoNodo(Nodoinst)
+            
+        return NodoNuevo
