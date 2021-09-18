@@ -83,8 +83,10 @@ class Asignacion(NodoAST):
                             else:
                                 table.actualizarSimbolo(simbolo)
                             tree.agregarTS(id,simbolo)
-                        elif isinstance(valor,Errores):
-                            return valor
+                        else:
+                            err = Errores(str(valor),"Semántico","Los tipos no coinciden", self.fila,self.columna)
+                            tree.insertError(err)
+                            return err
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -102,8 +104,10 @@ class Asignacion(NodoAST):
                             else:
                                 table.actualizarSimbolo(simbolo)
                             tree.agregarTS(id,simbolo)
-                        elif isinstance(valor,Errores):
-                            return valor
+                        else:
+                            err = Errores(str(valor),"Semántico","Los tipos no coinciden", self.fila,self.columna)
+                            tree.insertError(err)
+                            return err
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -121,8 +125,10 @@ class Asignacion(NodoAST):
                             else:
                                 table.actualizarSimbolo(simbolo)
                             tree.agregarTS(id,simbolo)
-                        elif isinstance(valor, Errores):
-                            return valor
+                        else:
+                            err = Errores(str(valor),"Semántico","Los tipos no coinciden", self.fila,self.columna)
+                            tree.insertError(err)
+                            return err
                      elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -140,8 +146,10 @@ class Asignacion(NodoAST):
                             else:
                                 table.actualizarSimbolo(simbolo)
                             tree.agregarTS(id,simbolo)
-                        elif isinstance(valor,Errores):
-                            return valor
+                        else:
+                            err = Errores(str(valor),"Semántico","Los tipos no coinciden", self.fila,self.columna)
+                            tree.insertError(err)
+                            return err
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -159,8 +167,10 @@ class Asignacion(NodoAST):
                             else:
                                 table.actualizarSimbolo(simbolo)
                             tree.agregarTS(id,simbolo)
-                        elif isinstance(valor, Errores):
-                            return valor
+                        else:
+                            err = Errores(str(valor),"Semántico","Los tipos no coinciden", self.fila,self.columna)
+                            tree.insertError(err)
+                            return err
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):

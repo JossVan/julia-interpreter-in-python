@@ -1,7 +1,5 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
-import requests
-import base64
 app = Flask(__name__)
 
 #por default
