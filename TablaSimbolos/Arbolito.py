@@ -1,6 +1,9 @@
+from TablaSimbolos.Errores import Errores
+from TablaSimbolos.Tipos import Tipo_Acceso
+from TablaSimbolos.Simbolo import Simbolo
 from graphviz import Graph
 from Instrucciones.Funciones import Funciones
-import base64
+from datetime import datetime
 class Arbolito:
     
     def __init__(self, instrucciones ):
@@ -10,9 +13,19 @@ class Arbolito:
         self.consola = ""
         self.TSglobal = None
         self.dot = ""
+        self.general = []
         self.contador = 0
         self.chart_data = Graph()
         self.cont = 0 
+
+    def agregarTS(self, id, simbolo):
+
+        for i in self.general:
+            if isinstance(i,Simbolo):
+                if i.identificador== simbolo.identificador:
+                    return i
+        self.general.append(simbolo)
+    
 
     def aumentar(self):
         self.cont = self.cont+1
@@ -102,6 +115,34 @@ class Arbolito:
         cadena +="</thead>"
         cadena +="<tbody>"
         
+        for simbolo in self.general:
+            if isinstance(simbolo,Simbolo):
+                cadena+="<tr>"
+                cadena+="<td>"
+                cadena+= simbolo.getID()
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= simbolo.getTipo()
+                cadena+="</td>"
+                cadena+="<td>"
+                if simbolo.getAmbito() == Tipo_Acceso.GLOBAL:
+                    cadena+= "Global"
+                elif simbolo.getAmbito() == Tipo_Acceso.LOCAL:
+                    cadena+="Local"
+                elif simbolo.getAmbito() == Tipo_Acceso.NONE:
+                    cadena+= "Global"
+                else:
+                    cadena+= simbolo.getAmbito()
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(simbolo.getFila())
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(simbolo.getColumna())
+                cadena+="</td>"
+                cadena+="</tr>"
+
+
         for funcion in self.getFunciones():
             if isinstance(funcion, Funciones):
                 cadena+="<tr>"
@@ -123,6 +164,51 @@ class Arbolito:
                 cadena+="</tr>"
         
 
+
+
+        cadena+="</tbody>"
+        cadena+="</table>"
+        return cadena
+
+
+    def htmlErrores(self):
+        now = datetime.now()
+        cadena = "<table class=\"table\">\n"
+        cadena += "<thead>"
+        cadena +="<tr>"
+        cadena +="<th scope=\"col\">Error</th>"
+        cadena +="<th scope=\"col\">Tipo</th>"
+        cadena +="<th scope=\"col\">Descripción</th>"
+        cadena +="<th scope=\"col\">Fila</th>"
+        cadena +="<th scope=\"col\">Columna</th>"
+        cadena +="<th scope=\"col\">Fecha y hora</th>"
+        cadena +="</tr>"
+        cadena +="</thead>"
+        cadena +="<tbody>"
+        
+        for err in self.getErrores():
+            if isinstance(err,Errores):
+                cadena+="<tr>"
+                cadena+="<td>"
+                cadena+= str(err.error)
+                cadena+="</td>"
+                cadena+="<td>"
+                print(err.tipo)
+                cadena+= err.tipo
+                cadena+="</td>"
+                cadena+="<td>"        
+                cadena+= err.descripcion
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(err.fila)
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(err.columna)
+                cadena+="</td>"
+                cadena+="<td>"
+                cadena+= str(now.day)+"-"+str(now.month)+"-"+ str(now.year)+", "+str(now.hour)+":"+str(now.minute)+":"+str(now.second)
+                cadena+="</td>"
+                cadena+="</tr>"
 
 
         cadena+="</tbody>"

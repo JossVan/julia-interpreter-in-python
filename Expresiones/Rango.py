@@ -26,7 +26,7 @@ class Rango(NodoAST):
                                     valor = cont.ejecutar(tree,table)
                                     arreglo.append(valor)
                                 else:
-                                    print("No debería pasar por aqui we")
+                                    return Errores("Operación desconocida", "Semántico","F",self.fila,self.columna)
                             return arreglo
                     elif isinstance(self.izquierdo, NodoAST):
                         izquierdo = self.izquierdo.ejecutar(tree,table)

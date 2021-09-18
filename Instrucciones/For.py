@@ -1,3 +1,4 @@
+from Instrucciones.Return import Return
 from Expresiones.Arreglos import Arreglos
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Rango import Rango
@@ -46,6 +47,8 @@ class For(NodoAST):
                             return None
                         elif isinstance(resp,Continue):
                             return None
+                        elif isinstance(resp, Return):
+                            return resp
             elif isinstance(rango1,float) and isinstance(rango2,float):
                 total = int(rango2-rango1)+1
                 if total >0:
@@ -62,6 +65,10 @@ class For(NodoAST):
                                 return None
                             elif isinstance(resp,Continue):
                                 return None
+                            elif isinstance(resp, Return):
+                                return resp
+                            elif isinstance(resp, Errores):
+                                return resp
         else:
             if isinstance(rango,int) or isinstance(rango,float):
                 if isinstance(rango, int):
@@ -78,27 +85,39 @@ class For(NodoAST):
                             return None
                         elif isinstance(resp,Continue):
                             return None
+                        elif isinstance(resp, Return):
+                            return resp
+                        elif isinstance(resp,Errores):
+                            return resp
             else:
-                for i in rango:
-                    if isinstance(i, str):
-                        nuevaConstante = Constante(Primitivo(TipoObjeto.CADENA, i), self.fila, self.columna)
-                        nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
-                        nuevaAsignacion.ejecutar(tree,nuevaTabla)
-                    elif isinstance(i,int): 
-                        nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
-                        nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
-                        nuevaAsignacion.ejecutar(tree,nuevaTabla)
-                    elif isinstance(i, NodoAST):
-                        #val = i.ejecutar(tree,nuevaTabla)
-                        nuevaTabla.actualizarValor(id,i)
-                    if self.instrucciones != None:
-                        for instruccion in self.instrucciones:
-                            resp=instruccion.ejecutar(tree,nuevaTabla)
-                            if isinstance(resp,Break):
-                                return None
-                            elif isinstance(resp, Continue):
-                                return None
-                
+                try:
+                    for i in rango:
+                        if isinstance(i, str):
+                            nuevaConstante = Constante(Primitivo(TipoObjeto.CADENA, i), self.fila, self.columna)
+                            nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
+                            nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                        elif isinstance(i,int): 
+                            nuevaConstante = Constante(Primitivo(TipoObjeto.ENTERO, i), self.fila, self.columna)
+                            nuevaAsignacion = Asignacion(Tipo_Acceso.NONE,id,nuevaConstante,None,self.fila,self.columna)
+                            nuevaAsignacion.ejecutar(tree,nuevaTabla)
+                        elif isinstance(i, NodoAST):
+                            #val = i.ejecutar(tree,nuevaTabla)
+                            nuevaTabla.actualizarValor(id,i)
+                        if self.instrucciones != None:
+                            for instruccion in self.instrucciones:
+                                resp=instruccion.ejecutar(tree,nuevaTabla)
+                                if isinstance(resp,Break):
+                                    return None
+                                elif isinstance(resp, Continue):
+                                    return None
+                                elif isinstance(resp, Return):
+                                    return resp
+                                elif isinstance(resp, Errores):
+                                    return resp
+                except:
+                    err = Errores("For","Semántico","Valor no permitido, debe ser una cadena", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
         
     def getNodo(self):
         

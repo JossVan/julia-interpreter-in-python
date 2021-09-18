@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from Expresiones.Arreglos import Arreglos
 from Expresiones.Array import Array
 from Abstractas.NodoArbol import NodoArbol
@@ -24,43 +25,65 @@ class Nativas_conTipo(NodoAST):
                     try:
                         if isinstance(valor,str):
                             return bool(self.valor)
-                        return "El segundo parámetro debe ser una cadena"
+                        err = Errores(str(valor),"Semántico","El parámetro debe ser una cadena", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                     except ValueError:
-                        return "Error al castear a booleano"
+                        err = Errores(str(valor),"Semántico","Se ha producido un error al castear a booleano", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                 elif self.tipo == Tipo_Dato.CADENA:
                     try:
                         if isinstance(valor,str):
                             return valor
-                        return "El segundo parámetro debe ser una cadena"
+                        err = Errores(str(valor),"Semántico","El parámetro debe ser una cadena de texto", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                     except ValueError:
-                        return "Error al castear a cadena"
+                        err = Errores(str(valor),"Semántico","Se ha producido un error al castear a cadena", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                 elif self.tipo == Tipo_Dato.ENTERO:
                     try:
                         if isinstance(valor, str):
                             return int(valor)
-                        return "El segundo parámetro debe ser una cadena"
+                        err = Errores(str(valor),"Semántico","El segundo parámetro debe ser una cadena", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                     except ValueError:
-                        return "Error al castear a Int64"
+                        err = Errores(str(valor),"Semántico","Error al castear a Int64", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                 elif self.tipo == Tipo_Dato.DECIMAL:
                     try:
                         if isinstance(valor, str):
                             return float(valor)
-                        return "El segundo parámetro debe ser una cadena"
+                        err = Errores(str(valor),"Semántico","Se ha producido un error al castear a cadena", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                     except ValueError:
-                        return "Error al castear a Float64"
+                        err = Errores(str(valor),"Semántico","Error al intentar convertir a Float64", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                 elif self.tipo == Tipo_Dato.CARACTER:
                     try:
                         if isinstance(valor, str):
                             return chr(valor)
-                        return "El segundo parámetro debe ser una cadena"
+                        err = Errores(str(valor),"Semántico","El segundo parámetro debe ser una cadena", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
                     except ValueError:
-                        return "Error al castear a char"
+                        err = Errores(str(valor),"Semántico","Se ha producido un error al castear a Char", self.fila,self.columna)
+                        tree.insertError(err)
+                        return err
         elif self.funcion == Tipo_Primitivas.TRUNC:
             if self.tipo == Tipo_Dato.ENTERO:
                 self.valor = self.valor.ejecutar(tree,table)
                 return int(self.valor)
             else:
-                return "El primer parametro debe ser Int64" 
+                err = Errores(str(self.tipo),"Semántico","Solo valores tipo Int64", self.fila,self.columna)
+                tree.insertError(err)
+                return err
     def getNodo(self):
         NodoNuevo = NodoArbol("Funciones_Nativas")
 
@@ -96,7 +119,9 @@ class Nativas_SinTipo(NodoAST):
             try:
                 return float(valor)
             except ValueError:
-                return "El parámetro debe ser un número entero"
+                err = Errores(valor,"Semántico","Valor no permitido", self.fila,self.columna)
+                tree.insertError(err)
+                return err
         elif self.funcion == Tipo_Primitivas.STRING:
             return str(valor)
         elif self.funcion == Tipo_Primitivas.TYPEOF:
@@ -112,9 +137,10 @@ class Nativas_SinTipo(NodoAST):
             if isinstance(valor,int) or isinstance(valor,float):
                 return int(valor)
             else:
-                return "El primer parametro debe ser un número flotante"
-        else:
-            return "HAY UN ERROR"
+                err = Errores(valor,"Semántico","Valor no permitido, debe ser un número flotante", self.fila,self.columna)
+                tree.insertError(err)
+                return err
+
     def getNodo(self):
         NodoNuevo = NodoArbol("Funciones_Nativas")
 
@@ -149,7 +175,11 @@ class Pilas(NodoAST):
                     array = np.array(val)
                     return array.size
         elif self.funcion == Tipo_Primitivas.PUSH:
-            val = self.id.ejecutar(tree,table)
+            if not isinstance(self.id, Array):
+                val = self.id.ejecutar(tree,table)
+            else:
+                val = self.id.insertar(self.valor,tree,table)
+                return val
             if isinstance(val,list):
                 if isinstance(val[0],list):
                     if isinstance(self.valor,list):
@@ -157,8 +187,11 @@ class Pilas(NodoAST):
                     else:
                         val.append(self.valor)
                     table.actualizarValor(self.id.id,val)  
-                else:                
-                    val.append(self.valor)
+                else:    
+                    if isinstance(self.valor,list):
+                        val.append(self.valor[0])
+                    else:            
+                        val.append(self.valor)
                     table.actualizarValor(self.id.id,val)
             return val
         elif self.funcion == Tipo_Primitivas.POP:

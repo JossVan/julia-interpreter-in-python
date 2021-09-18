@@ -8,7 +8,6 @@ class Errores:
         self.descripcion = descripcion
         self.fila = fila 
         self.columna = columna 
-        self.tipo = TipoObjeto.ERROR
     
     def getCadena(self):
         cadena ="Error en "+ str(self.error) + ", "+ str(self.descripcion)+", fila "+ str(self.fila)+ ", columna "+str(self.columna)

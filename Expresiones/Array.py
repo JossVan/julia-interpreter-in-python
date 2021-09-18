@@ -28,7 +28,9 @@ class Array(NodoAST):
                 elif isinstance(posi, int):
                     array.append(valor)
                 else:
-                    print("ERROR SEMÁNTICO ")
+                    err = Errores(posi,"Semántico","Valor no reconocido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
         if len(array) == 1:
             if isinstance(b, list):
                 if array[0] -1 >= 0:
@@ -39,10 +41,13 @@ class Array(NodoAST):
                     return nodito
                     
                 else : 
-                    print("ERROR, DESBORDAMIENTO")
+                    err = Errores(str(array[0]-1),"Semántico","Desbordamiento de arreglo", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             else:
-                print (" ERROR SEMÁNTICO ")
-
+                err = Errores(b,"Semántico","Valor no reconocido", self.fila,self.columna)
+                tree.insertError(err)
+                return err
         elif len(array) == 2:
             if isinstance(b, list):
                 pos1 = array[0]-1
@@ -54,13 +59,37 @@ class Array(NodoAST):
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
-                    return nodito
-                    
+                    return nodito  
                 else : 
-                    print("ERROR, DESBORDAMIENTO")
+                    err = Errores(str(array[0]-1),"Semántico","Desbordamiento de arreglo", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             else:
-                print (" ERROR SEMÁNTICO ")
+                err = Errores(b,"Semántico","Valor no reconocido", self.fila,self.columna)
+                tree.insertError(err)
+                return err
 
+        elif len(array) == 3:
+            if isinstance(b, list):
+                pos1 = array[0]-1
+                pos2 = array[1]-1
+                pos3 = array[2]-1
+                nuevo = []
+                if pos1 >= 0 and pos2 >=0 and pos3 >=0:
+                    nuevo = self.retornarResultado(tree,table,b,nuevo)
+                    nodito = nuevo[pos1][pos2][pos3]
+                    if isinstance(nodito, NodoAST):
+                        nodito = nodito.ejecutar(tree,table)
+                        return nodito
+                    return nodito  
+                else : 
+                    err = Errores(str(array[0]-1),"Semántico","Desbordamiento de arreglo", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
+            else:
+                err = Errores(b,"Semántico","Valor no reconocido", self.fila,self.columna)
+                tree.insertError(err)
+                return err
 
     def actualizar(self, valor, tree, table):
         id = self.id
@@ -74,13 +103,42 @@ class Array(NodoAST):
         if len(array) == 2:
             val = valor.ejecutar(tree,table)
             resultado = table.actualiarValorPosicionMatriz(val,array[0],array[1],self.id,tree)
+        elif len(array) == 3:
+            val = valor.ejecutar(tree,table)
+            resultado = table.actualiarValorPosicionDimension3(val,array[0],array[1],array[2],self.id,tree)
         else:
             val = valor.ejecutar(tree,table)
             resultado = table.actualizarValorPosicion(val, posi, self.id)
             
         if resultado == None:
-            print("El array no está declarado")
-    
+                err = Errores(id,"Semántico","Variable indefinida", self.fila,self.columna)
+                tree.insertError(err)
+                return err
+
+    def insertar(self,valor,tree,table):
+        #id = self.id
+        self.id = self.id.lower()
+        posi = 0
+        if isinstance(self.posicion, list):
+            array = []
+            for pos in self.posicion:
+                posi = pos.ejecutar(tree,table)
+                array.append(posi)
+        
+        traerValor = table.BuscarIdentificador(self.id)
+        if isinstance(traerValor.valor, list):
+            if len(array) == 1:
+                if isinstance(traerValor.valor[0],list):
+                    if isinstance(valor,list):
+                        traerValor.valor[0].append(valor[0])
+                    else:
+                        traerValor.valor[0].append(valor)
+                    table.actualizarValor(self.id,traerValor.valor)
+            return traerValor.valor
+        
+
+
+        
     def getNodo(self):
         nodoPadre = NodoArbol("Array")
         nodoId = NodoArbol("Identificador")

@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Primitivas, Tipo_Print
 from Abstractas.Objeto import TipoObjeto
@@ -34,6 +35,8 @@ class Print(NodoAST):
                                     tree.updateConsola(str(array[0])+" ")
                             else:
                                 tree.updateConsola(str(array))
+                    elif isinstance(resultado, Errores):
+                        return resultado
                     else:
                         tree.updateConsola(str(resultado))
         if self.tipo == Tipo_Print.PRINTLN:
@@ -43,23 +46,24 @@ class Print(NodoAST):
                     if isinstance(resultado,list):
                         array = self.imprime(tree,table,resultado,[])
                         if len(array) == 0:
-                            tree.updateConsola(str(resultado)+"\n")
+                            tree.updateConsola(str(resultado))
                         else:
-                            tree.updateConsola(str(array)+"\n")
+                            tree.updateConsola(str(array))
                     elif isinstance(resultado, NodoAST):
                         val = resultado.ejecutar(tree,table)
                         if not isinstance(val,list):
-                            tree.updateConsola(str(val)+"\n")
+                            tree.updateConsola(str(val))
                         else:
                             array = self.imprime(tree,table,resultado,[])
                             if array !=None:
-                                tree.updateConsola(str(array)+"\n")
+                                tree.updateConsola(str(array))
                             else:
-                                tree.updateConsola(str(array)+"\n")
+                                tree.updateConsola(str(array))
+                    elif isinstance(resultado, Errores):
+                        return resultado
                     else:
-                        tree.updateConsola(str(resultado)+"\n")
-            else:
-                tree.updateConsola("\n")
+                        tree.updateConsola(str(resultado))
+            tree.updateConsola("\n")
 
     def getNodo(self):
         

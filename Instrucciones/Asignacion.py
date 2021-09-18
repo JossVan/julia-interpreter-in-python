@@ -37,31 +37,39 @@ class Asignacion(NodoAST):
                         table.actualizarSimboloGlobal(simbolo)
                     else:
                         table.actualizarSimbolo(simbolo)
+                    tree.agregarTS(id,simbolo)
                 else:   
-                    simbolo = Simbolo(id, None, self.acceso,self.fila,self.columna)
+                    simbolo = Simbolo(id, None, self.acceso,self.fila,self.columna, "Ninguno")
                     if self.acceso == Tipo_Acceso.GLOBAL:
                         table.actualizarSimboloGlobal(simbolo)
                     else:
                         table.actualizarSimbolo(simbolo)
+                    tree.agregarTS(id,simbolo)
             else:
                 if isinstance(self.valor,list):
                     for val in self.valor :
                         if isinstance(val, Arreglos):
                             valor = val.ejecutar(tree,table)
-                            simbolo = Simbolo(id, valor, self.acceso,self.fila,self.columna)
+                            if isinstance(valor,Errores):
+                                return valor
+                            simbolo = Simbolo(id, valor, self.acceso,self.fila,self.columna,"Arreglo")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
                         else:
                             print("ERROR")
                 else:
                     valor = self.valor.ejecutar(tree,table)
-                    simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                    if isinstance(valor,Errores):
+                        return valor
+                    simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Primitivo")
                     if self.acceso == Tipo_Acceso.GLOBAL:           
                         table.actualizarSimboloGlobal(simbolo)
                     else:
                         table.actualizarSimbolo(simbolo)
+                    tree.agregarTS(id,simbolo)
         else:
             
             if self.valor != None:
@@ -69,11 +77,14 @@ class Asignacion(NodoAST):
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, str):
-                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "String")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
+                        elif isinstance(valor,Errores):
+                            return valor
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -85,11 +96,14 @@ class Asignacion(NodoAST):
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, bool):
-                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna,"Bool")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
+                        elif isinstance(valor,Errores):
+                            return valor
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -101,11 +115,14 @@ class Asignacion(NodoAST):
                      if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, chr):
-                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna,"Char")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
+                        elif isinstance(valor, Errores):
+                            return valor
                      elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -117,11 +134,14 @@ class Asignacion(NodoAST):
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, float):
-                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Float64")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
+                        elif isinstance(valor,Errores):
+                            return valor
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):
@@ -133,11 +153,14 @@ class Asignacion(NodoAST):
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, int):
-                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna)
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Int64")
                             if self.acceso == Tipo_Acceso.GLOBAL:
                                 table.actualizarSimboloGlobal(simbolo)
                             else:
                                 table.actualizarSimbolo(simbolo)
+                            tree.agregarTS(id,simbolo)
+                        elif isinstance(valor, Errores):
+                            return valor
                     elif isinstance(self.valor, list):
                         for val in self.valor :
                             if isinstance(val, Arreglos):

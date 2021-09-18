@@ -17,7 +17,7 @@ def principal():
         tmp_val=inpt  
         global result
         result =  g(tmp_val+"\n")
-        return render_template('principal.html', resultado=result[1])
+        return render_template('principal.html', resultado=result[1], entrada = inpt)
 
     else:
         return render_template('principal.html')
@@ -35,11 +35,17 @@ def reportes():
 
 @app.route('/AST')
 def AST():
-    return render_template('AST.html', img = result[0])
+    if result[0] != None:
+        return render_template('AST.html', img = result[0])
+    else:
+        return render_template('AST.html', img ="")
 
 @app.route('/TablaSimbolos')
 def tabla():
     return render_template('tabla.html', tabla = result[2])
 
+@app.route('/Errores')
+def errores():
+    return render_template('errores.html', tabla = result[2])
 if __name__ == '__main__':
     app.run(port = 3000, debug = True)

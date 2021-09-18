@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from TablaSimbolos.Tipos import Tipo_FuncionAritmetica
 from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
@@ -20,36 +21,50 @@ class Funciones_matematicas(NodoAST):
             if self.funcion == Tipo_FuncionAritmetica.lowercase:
                 if isinstance(valor1,str):
                     return valor1.lower()
-                return "El parámetro debe ser una cadena lower"
+                err = Errores(valor1,"Semántico","Valor no permitido, debe ser una cadena", self.fila,self.columna)
+                tree.insertError(err)
+                return err
             elif self.funcion == Tipo_FuncionAritmetica.uppercase:
                 if isinstance(valor1,str):
                     return valor1.upper()
-                return "El parámetro debe ser una cadena upper"
+                err = Errores(valor1,"Semántico","Valor no permitido, debe ser una cadena", self.fila,self.columna)
+                tree.insertError(err)
+                return err
             elif self.funcion == Tipo_FuncionAritmetica.log10:
                 try:
                     return round(math.log(valor1,10))
                 except:
-                    return "El parámetro debe ser un número"
+                    err = Errores(valor1,"Semántico","Valor no permitido, debe ser un número", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             elif self.funcion == Tipo_FuncionAritmetica.seno:
                 try:
                     return math.sin(valor1)
                 except:
-                    return "El parámetro debe ser un número"
+                    err = Errores(valor1,"Semántico","Valor no permitido, debe ser un número", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             elif self.funcion == Tipo_FuncionAritmetica.coseno:
                 try:
                     return math.cos(valor1)
                 except:
-                    return "El parámetro debe ser un número"
+                    err = Errores(valor1,"Semántico","Valor no permitido, debe ser un número", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             elif self.funcion == Tipo_FuncionAritmetica.tangente:
                 try:
                     return math.tan(valor1)
                 except:
-                    return "El parámetro debe ser un número"
+                    err = Errores(valor1,"Semántico","Valor no permitido, debe ser un número", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
             elif self.funcion == Tipo_FuncionAritmetica.sqrt:
                 try:
                     return math.sqrt(valor1)
                 except:
-                    return "El parámetro debe ser un número"
+                    err = Errores(valor1,"Semántico","Valor no permitido, debe ser un número", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
         elif self.valor2!=None and self.valor1 !=None:
             valor1 = self.valor1.ejecutar(tree,table)
             valor2 = self.valor2.ejecutar(tree,table)

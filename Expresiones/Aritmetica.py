@@ -1,69 +1,89 @@
+from TablaSimbolos.Errores import Errores
 from TablaSimbolos.Tipos import Tipo_Aritmetico
 from Abstractas.NodoArbol import NodoArbol
 from Abstractas.NodoAST import NodoAST
 
 class Aritmetica(NodoAST):
 
-    def __init__(self, operador1,operacion,operador2, linea,columna):
+    def __init__(self, operador1,operacion,operador2, fila,columna):
         self.operador1 = operador1
         self.operador2 = operador2
         self.operacion = operacion
-        self.linea = linea
+        self.fila = fila
         self.columna = columna
     
     def ejecutar(self, tree, table):
         if self.operador1!=None and self.operador2!= None:
             result1 = self.operador1.ejecutar(tree,table)
             result2 = self.operador2.ejecutar(tree,table)
+            if isinstance(result1,Errores) or isinstance(result2,Errores):
+                return Errores("operación no permitida","Semántico","F", self.fila,self.columna)
+                
             if self.operacion == Tipo_Aritmetico.SUMA:
                 if isinstance(result1, str) or isinstance(result2,str) and result1!=None and result2 !=None:
                     return str(result1)+str(result2)  
                 elif result1 == None:
-                    return "el operador: "+self.operador1.id+", es indefinido"
+                    err = Errores(result1,"Semántico","El valor es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 elif result2 == None:
-                    return "El operador: "+self.operador2.id+", es indefinido"
-                elif isinstance(result1,list) and isinstance(result2, list):
-                    contador = 0
-                    for i in result1:
-                        val = i.ejecutar(tree,table)
-                        val2 = result2[contador].ejecutar(tree,table)
-                        contador = contador+1
-                    print("paso por suma de matrices o arreglos")
-
+                    err = Errores(result2,"Semántico","El valor es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 else:
                     return result1+result2
             if self.operacion == Tipo_Aritmetico.RESTA:
                 if result1 == None:
-                    return "el operador: "+self.operador1.id+", es indefinido"
+                    err = Errores(result1,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 elif result2 == None:
-                    return "El operador: "+self.operador2.id+", es indefinido"
+                    err = Errores(result2,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 else:
                     return result1-result2
             if self.operacion == Tipo_Aritmetico.MULTIPLICACION:
                 if result1 == None:
-                    return "el operador: "+self.operador1.id+", es indefinido"
+                    err = Errores(result1,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 elif result2 == None:
-                    return "El operador: "+self.operador2.id+", es indefinido"
+                    err = Errores(result2,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 else:
                     if isinstance(result1,str) or isinstance(result2,str):
                         return str(result1)+str(result2)
                     return result1*result2
             if self.operacion == Tipo_Aritmetico.DIVISION:
                 if result2==0:
-                    return "No se puede dividir entre 0"
+                    err = Errores(str(result2),"Semántico","No se puede dividir entre 0 duuh", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 if result1 == None:
-                    return "el operador: "+self.operador1.id+", es indefinido"
+                    err = Errores(result1,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 elif result2 == None:
-                    return "El operador: "+self.operador2.id+", es indefinido"
+                    err = Errores(result2,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 else:
                     return result1/result2
             if self.operacion == Tipo_Aritmetico.MODAL:
                 if result2==0:
-                    return "No se puede dividir entre 0"
+                    err = Errores(result2,"Semántico","División por 0", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 if result1 == None:
-                    return "el operador: "+self.operador1.id+", es indefinido"
+                    err = Errores(result1,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 elif result2 == None:
-                    return "El operador: "+self.operador2.id+", es indefinido"
+                    err = Errores(result2,"Semántico","El operador es indefinido", self.fila,self.columna)
+                    tree.insertError(err)
+                    return err
                 else:
                     return result1%result2
             if self.operacion == Tipo_Aritmetico.POTENCIA:

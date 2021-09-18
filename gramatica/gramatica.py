@@ -1,3 +1,4 @@
+from TablaSimbolos.Errores import Errores
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
 from Instrucciones.Return import Return
@@ -332,14 +333,14 @@ def p_asignaciones(t):
                   | R_LOCAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
 
     if t[1] == 'global':
-        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[6], t.lineno(0), t.lexpos(0))
     elif t[1] == 'local':
-        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[6], t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[6], t.lineno(0), t.lexpos(0))
 
 def p_asignacionesp(t):
     'ASIGNACION : E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
 
-    t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[5], t.lineno(1), t.lexpos(1))
+    t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[5], t.lineno(2), t.lexpos(2))
 
 def p_asginacionesp2(t):
     '''ASIGNACION : R_GLOBAL E IGUAL LISTA PTCOMA
@@ -347,23 +348,23 @@ def p_asginacionesp2(t):
 
 
     if t[1] == 'global':
-        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], None, t.lineno(0), t.lexpos(0))
     elif t[1] == 'local':
-        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], None, t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], None, t.lineno(0), t.lexpos(0))
 
 def p_asginacionesp3(t):
     '''ASIGNACION :  E IGUAL LISTA PTCOMA'''
 
-    t[0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], None, t.lineno(1), t.lexpos(1))
+    t[0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], None, t.lineno(2), t.lexpos(2))
 
 def p_asignacionesp4(t):
     '''ASIGNACION : R_GLOBAL E PTCOMA
                   | R_LOCAL E PTCOMA'''
 
     if t[1] == 'global':
-        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], None, None, t.lineno(0), t.lexpos(0))
     elif t[1] == 'local':
-        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(1), t.lexpos(1))
+        t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], None, None, t.lineno(0), t.lexpos(0))
 
 def p_break(t):
     'BREAK : R_BREAK PTCOMA'
@@ -404,22 +405,22 @@ def p_expresiones(t):
             | E MODAL E
             | E POTENCIA E'''
     if( t[2] == '+'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.SUMA, t[3], t.lineno(2), t.lexpos(2))
     elif( t[2] == '-' ):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.RESTA, t[3], t.lineno(2), t.lexpos(2))
         t[0].operacion
     elif(t[2] == '*'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MULTIPLICACION, t[3], t.lineno(2), t.lexpos(2))
     elif(t[2] == '/'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.DIVISION, t[3], t.lineno(2), t.lexpos(2))
     elif(t[2] == '^'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.POTENCIA, t[3], t.lineno(2), t.lexpos(2))
     elif(t[2] == '%'):
-        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[3], t.lineno(1), t.lexpos(0))
+        t[0] =Aritmetica(t[1], Tipo_Aritmetico.MODAL, t[3], t.lineno(2), t.lexpos(2))
     
 def p_expresion_unaria(t):
     'E : MENOS E %prec UMENOS'
-    t[0] = Constante(Primitivo(TipoObjeto.NEGATIVO, t[2]), t.lineno(1), t.lexpos(0))
+    t[0] = Constante(Primitivo(TipoObjeto.NEGATIVO, t[2]), t.lineno(1), t.lexpos(1))
 
 def p_expresionespar(t):
     'E : PARIZQ E PARDER'
@@ -575,14 +576,12 @@ def p_nativasp(t):
         t[0] = Nativas_SinTipo(Tipo_Primitivas.TRUNC,t[3], t.lineno(1), t.lexpos(1))
 
 def p_nativaspush(t):
-    ' NATIVAS : R_PUSH  DIFERENTE PARIZQ ID COMA LISTA PARDER'
-    id = Identificador(t[4],t.lineno(1), t.lexpos(1))
-    t[0] = Pilas(Tipo_Primitivas.PUSH, id, t[6], t.lineno(1), t.lexpos(1))
+    ' NATIVAS : R_PUSH  DIFERENTE PARIZQ E COMA LISTA PARDER'
+    t[0] = Pilas(Tipo_Primitivas.PUSH, t[4], t[6], t.lineno(1), t.lexpos(1))
 
 def p_nativaspop(t):
-    'NATIVAS : R_POP DIFERENTE PARIZQ ID PARDER'
-    id = Identificador(t[4],t.lineno(2), t.lexpos(2))
-    t[0] = Pilas(Tipo_Primitivas.POP, id, None, t.lineno(1), t.lexpos(1))
+    'NATIVAS : R_POP DIFERENTE PARIZQ E PARDER'
+    t[0] = Pilas(Tipo_Primitivas.POP, t[4], None, t.lineno(1), t.lexpos(1))
 
 def p_nativas_length(t):
     'NATIVAS :  R_LENGTH PARIZQ E PARDER'
@@ -705,7 +704,7 @@ def p_instrucciones_loop_inst(t):
                             | ASIGNACION
                             | I
                             | LLAMADAS PTCOMA
-                            | NATIVAS
+                            | NATIVAS PTCOMA
                             | STRUCTS
                             | BREAK
                             | CONTINUE'''
@@ -806,8 +805,19 @@ def parse(input) :
         # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
         else:
             for inst in instruccion:
-                inst.ejecutar(AST,AST.getTSGlobal())
-                NodoRaiz.agregarHijoNodo(inst.getNodo())
+                instr= inst.ejecutar(AST,AST.getTSGlobal())
+                if isinstance(instr,Errores):
+                    if len(AST.getErrores()) > 0:
+                        err=""
+                        for error in AST.getErrores():
+                            err+=">>" +error.getCadena()+"\n"
+                        retorno.append(None)
+                        retorno.append(err)
+                        retorno.append(AST.htmlErrores())
+                        return retorno
+                    break
+                else:
+                    NodoRaiz.agregarHijoNodo(inst.getNodo())
 
     retorno.append(AST.getDot(NodoRaiz))
    # tablita = AST.getTSGlobal().tabla
