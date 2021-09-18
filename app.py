@@ -46,4 +46,4 @@ def tabla():
 def errores():
     return render_template('errores.html', tabla = result[2])
 if __name__ == '__main__':
-    app.run(port = 3000, debug = True)
+    app.run(debug = True)
