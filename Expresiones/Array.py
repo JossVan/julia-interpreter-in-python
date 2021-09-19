@@ -1,6 +1,7 @@
 from Abstractas.NodoAST import NodoAST
 from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Errores import Errores
+from Expresiones.Arreglos import Arreglos
 class Array(NodoAST):
 
     def __init__(self, id, posicion, fila, columna):
@@ -76,7 +77,7 @@ class Array(NodoAST):
                 pos3 = array[2]-1
                 nuevo = []
                 if pos1 >= 0 and pos2 >=0 and pos3 >=0:
-                    nuevo = self.retornarResultado(tree,table,b,nuevo)
+                    nuevo = self.ejecutarMatriz(tree,table,b,nuevo)
                     nodito = nuevo[pos1][pos2][pos3]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
@@ -162,4 +163,19 @@ class Array(NodoAST):
         if isinstance(array, NodoAST):
             val= array.ejecutar(tree,table)
             nuevo.append(val)
+        return nuevo
+    
+    def ejecutarMatriz(self,tree,table,array,nuevo):
+
+        if isinstance(array,list):
+            for arreglo in array:
+                if isinstance(arreglo,Arreglos):
+                    contenido = arreglo.ejecutar(tree,table)
+                    nuevo.append(contenido)
+                elif isinstance(arreglo,list):
+                    self.ejecutarMatriz(tree,table,arreglo,nuevo)
+        elif isinstance(array, Arreglos):
+            contenido = array.ejecutar(tree,table)
+            nuevo.append(contenido)
+
         return nuevo

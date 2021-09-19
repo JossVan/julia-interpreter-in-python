@@ -1,3 +1,4 @@
+from Expresiones.Identificador import Identificador
 from TablaSimbolos.Errores import Errores
 from Expresiones.Arreglos import Arreglos
 from Expresiones.Array import Array
@@ -231,3 +232,14 @@ class Pilas(NodoAST):
             return array.getLength()
         else :
             None
+    
+    def convertir(self,tree,table,item,lista):
+
+        if isinstance(item, list):
+            for i in item:
+                self.convertir(tree,table,i,lista)
+        elif isinstance(item, Arreglos):
+            valor = item.ejecutar(tree,table)
+            lista.append(valor)
+            return lista
+        return lista

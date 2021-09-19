@@ -1,7 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
 app = Flask(__name__)
-
+import logging
+import sys
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 #por default
 @app.route('/')
 def index():
@@ -46,4 +49,4 @@ def tabla():
 def errores():
     return render_template('errores.html', tabla = result[2])
 if __name__ == '__main__':
-    app.run(port = 3000, debug = True)
+    app.run(debug = True)
