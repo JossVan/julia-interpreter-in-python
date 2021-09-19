@@ -1,7 +1,10 @@
 from flask import Flask, redirect, url_for, render_template, request
 from gramatica.gramatica import parse as g
 app = Flask(__name__)
-
+import logging
+import sys
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 #por default
 @app.route('/')
 def index():

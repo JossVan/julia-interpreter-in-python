@@ -169,7 +169,10 @@ class Pilas(NodoAST):
         if self.funcion == Tipo_Primitivas.LENGTH:
             if isinstance(self.valor, NodoAST):
                 val = self.valor.ejecutar(tree,table)
-                if isinstance(val,list):        
+                if isinstance(val,list):   
+                    tam = self.getLen(val)
+                    if tam != None:
+                        return tam       
                     array = np.array(val)
                     return array.size
         elif self.funcion == Tipo_Primitivas.PUSH:
