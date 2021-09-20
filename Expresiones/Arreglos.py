@@ -6,15 +6,31 @@ class Arreglos(NodoAST):
         self.contenido = contenido
         self.fila = fila 
         self.columna = columna
+        self.contador = 0
     
     def ejecutar(self, tree, table):
         
         for dimension in self.contenido:
             if not isinstance(dimension,list):
                 break
+        
+        return self.convertir(tree,table,self.contenido,[])
 
-        return self.contenido
+    def convertir(self,tree,table,item,lista):
 
+        if isinstance(item, list):
+            for i in item:
+                self.convertir(tree,table,i,lista)
+        elif isinstance(item, Arreglos):
+            valor = item.ejecutar(tree,table)
+            lista.append(valor)
+        else:
+            lista.append(item)
+        return lista
+
+    def aumentar(self):
+        self.contador+1
+        
     def getLength(self):
         return len(self.contenido)
 

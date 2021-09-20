@@ -53,10 +53,8 @@ class Array(NodoAST):
             if isinstance(b, list):
                 pos1 = array[0]-1
                 pos2 = array[1]-1
-                nuevo = []
                 if pos1 >= 0 and pos2 >=0:
-                    nuevo = self.retornarResultado(tree,table,b,nuevo)
-                    nodito = nuevo[pos1][pos2]
+                    nodito = b[pos1][pos2]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
@@ -75,10 +73,8 @@ class Array(NodoAST):
                 pos1 = array[0]-1
                 pos2 = array[1]-1
                 pos3 = array[2]-1
-                nuevo = []
                 if pos1 >= 0 and pos2 >=0 and pos3 >=0:
-                    nuevo = self.ejecutarMatriz(tree,table,b,nuevo)
-                    nodito = nuevo[pos1][pos2][pos3]
+                    nodito = b[pos1][pos2][pos3]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
@@ -154,7 +150,7 @@ class Array(NodoAST):
         nodoPadre.agregarHijoNodo(nodopos)
         return nodoPadre
     
-    def retornarResultado(self,tree,table, array,nuevo):
+    '''def retornarResultado(self,tree,table, array,nuevo):
         for i in array:
             if isinstance(i, list):
                 self.retornarResultado(tree,table,i,nuevo)
@@ -165,7 +161,8 @@ class Array(NodoAST):
         if isinstance(array, NodoAST):
             val= array.ejecutar(tree,table)
             nuevo.append(val)
-        return nuevo
+        return nuevo'''
+    
     
     def ejecutarMatriz(self,tree,table,array,nuevo):
 

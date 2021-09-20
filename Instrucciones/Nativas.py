@@ -178,8 +178,8 @@ class Pilas(NodoAST):
                         return tam       
                     array = np.array(val)
                     return array.size'''
-                    tab = self.convertir(tree,table,val,[])
-                    return len(tab)
+                    #tab = self.convertir(tree,table,val,[])
+                    return len(val)
         elif self.funcion == Tipo_Primitivas.PUSH:
             if not isinstance(self.id, Array):
                 val = self.id.ejecutar(tree,table)
@@ -187,34 +187,19 @@ class Pilas(NodoAST):
                 val = self.id.insertar(self.valor,tree,table)
                 return val
             if isinstance(val,list):
-                if isinstance(val[0],list):
-                    if isinstance(self.valor,list):
-                        val[0].append(self.valor[0])
-                    else:
-                        val.append(self.valor)
-                    table.actualizarValor(self.id.id,val)  
-                else:    
-                    if isinstance(self.valor,list):
-                        val.append(self.valor[0])
-                    else:            
-                        val.append(self.valor)
-                    table.actualizarValor(self.id.id,val)
+                val.append(self.valor)
+
             return val
         elif self.funcion == Tipo_Primitivas.POP:
             result = self.id.ejecutar(tree,table)
             retorno = []
             if result != None:
                 if isinstance(result,list):
-                    if isinstance(result[0],list):
-                        tam = int(len(result[0])-1)
-                        retorno = result[0][tam]
-                        result[0].pop(tam)
-                        table.actualizarValor(self.id.id,result)
-                    else:
-                        tam = int(len(result)-1)
-                        retorno = result[tam]
-                        result.pop(tam)
-                        table.actualizarValor(self.id.id,result)
+
+                    tam = int(len(result)-1)
+                    retorno = result[tam]
+                    result.pop(tam)
+                    table.actualizarValor(self.id.id,result)
 
                 return retorno
                 

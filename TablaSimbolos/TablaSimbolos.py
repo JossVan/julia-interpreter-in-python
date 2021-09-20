@@ -57,15 +57,15 @@ class TablaSimbolos:
         while tablaActual != None:
             if id in tablaActual.tabla :
                 if isinstance(tablaActual.tabla[id].valor, list):
-                    tab = tablaActual.tabla[id].valor
-                    nuevo = []
-                    if tree.getCont() > 0:
-                     tablaActual.tabla[id].valor[pos1-1][pos2-1] = valor
-                    else:
+                    #tab = tablaActual.tabla[id].valor
+                    #nuevo = []
+                    #if tree.getCont() > 0:
+                    tablaActual.tabla[id].valor[pos1-1][pos2-1] = valor
+                    '''else:
                         nuevo = self.retornarResultado(None,tablaActual,tab,nuevo)
                         nuevo[pos1-1][pos2-1] = valor  
                         tablaActual.tabla[id].valor = nuevo     
-                        tree.aumentar()
+                        tree.aumentar()'''
                     return "ok"          
             else:
                 tablaActual = tablaActual.anterior

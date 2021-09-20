@@ -1,7 +1,7 @@
 from TablaSimbolos.Errores import Errores
 from TablaSimbolos.Tipos import Tipo_Acceso
 from TablaSimbolos.Simbolo import Simbolo
-from graphviz import Graph
+#from graphviz import Graph
 from Instrucciones.Funciones import Funciones
 from datetime import datetime
 class Arbolito:
@@ -15,7 +15,7 @@ class Arbolito:
         self.dot = ""
         self.general = []
         self.contador = 0
-        self.chart_data = Graph()
+        #self.chart_data = Graph()
         self.cont = 0 
 
     def agregarTS(self, id, simbolo):

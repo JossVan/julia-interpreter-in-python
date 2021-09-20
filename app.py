@@ -43,10 +43,10 @@ def AST():
 
 @app.route('/TablaSimbolos')
 def tabla():
-    return render_template('tabla.html', dot = result[2])
+    return render_template('tabla.html', tabla = result[2])
 
 @app.route('/Errores')
 def errores():
-    return render_template('errores.html', tabla = result[2])
+    return render_template('errores.html', tabla = result[3])
 if __name__ == '__main__':
     app.run(debug = True)
