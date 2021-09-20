@@ -10,5 +10,7 @@ class Continue(NodoAST):
         return self
     
     def getNodo(self):
-        NuevoNodo = NodoArbol("Continue")
+        NuevoNodo = NodoArbol("CONTINUE")
+        NuevoNodo.agregarHijo("continue")
+        NuevoNodo.agregarHijo(";")
         return NuevoNodo

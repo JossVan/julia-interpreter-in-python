@@ -128,6 +128,8 @@ class For(NodoAST):
         for instruccion in self.instrucciones:
             NodoInst.agregarHijoNodo(instruccion.getNodo())
         NodoNuevo.agregarHijoNodo(NodoInst)
+        NodoNuevo.agregarHijo("end")
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo                
 
         

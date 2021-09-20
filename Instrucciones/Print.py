@@ -74,9 +74,15 @@ class Print(NodoAST):
         elif self.tipo == Tipo_Print.PRINTLN:
             NodoNuevo.agregarHijo("Println")
         
+        NodoNuevo.agregarHijo("(")
+        cont = 0
         for instruccion in self.contenido:
             NodoNuevo.agregarHijoNodo(instruccion.getNodo())
-
+            if cont < (len(self.contenido)-1):
+                NodoNuevo.agregarHijo(",")
+                cont = cont +1
+        NodoNuevo.agregarHijo(")")
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo
     
     

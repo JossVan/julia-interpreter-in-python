@@ -19,10 +19,15 @@ class Arreglos(NodoAST):
         return len(self.contenido)
 
     def getNodo(self):
-        NodoPadre = NodoArbol("Valores")
-
+        NodoPadre = NodoArbol("Arreglo")
+        NodoPadre.agregarHijo("[")
+        cont = 1
         for dimension in self.contenido:
             if isinstance(dimension, NodoAST):
                 nodo = dimension.getNodo()
                 NodoPadre.agregarHijoNodo(nodo)
+                if cont< len(self.contenido):
+                    NodoPadre.agregarHijo(",")
+                    cont = cont+1
+        NodoPadre.agregarHijo("]")
         return NodoPadre

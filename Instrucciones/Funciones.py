@@ -37,5 +37,7 @@ class Funciones(NodoAST):
             NodoNuevo.agregarHijoNodo(Nodopar)
         if self.instrucciones != None :
             NodoNuevo.agregarHijoNodo(Nodoinst)
-            
+        
+        NodoNuevo.agregarHijo("end")
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo
