@@ -1,3 +1,4 @@
+from Expresiones.Arreglos import Arreglos
 from Abstractas.NodoArbol import NodoArbol
 from Instrucciones.Return import Return
 from TablaSimbolos.Simbolo import Simbolo

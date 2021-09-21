@@ -179,6 +179,7 @@ class Pilas(NodoAST):
                     array = np.array(val)
                     return array.size'''
                     #tab = self.convertir(tree,table,val,[])
+                    print(len(val))
                     return len(val)
         elif self.funcion == Tipo_Primitivas.PUSH:
             if not isinstance(self.id, Array):

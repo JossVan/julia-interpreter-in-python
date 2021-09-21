@@ -43,6 +43,7 @@ class Rango(NodoAST):
                     tree.insertError(err)
                     return err
             elif self.derecho != None and self.izquierdo != None:
+                
                 try:
                     izquierdo = self.izquierdo.ejecutar(tree,table)
                     derecho = self.derecho.ejecutar(tree,table)
@@ -56,7 +57,7 @@ class Rango(NodoAST):
                         tree.insertError(err)
                         return err
                 except:
-                    err= Errores(str(izquierdo)+":"+str(derecho),"Semántico", "Error en el rango", self.fila,self.columna)
+                    err= Errores("rango","Semántico", "Error en el rango", self.fila,self.columna)
                     tree.insertError(err)
                     return err
 

@@ -13,8 +13,8 @@ class Arreglos(NodoAST):
         for dimension in self.contenido:
             if not isinstance(dimension,list):
                 break
-        
-        return self.convertir(tree,table,self.contenido,[])
+        arreglo = self.convertir(tree,table,self.contenido,[])
+        return arreglo
 
     def convertir(self,tree,table,item,lista):
 
