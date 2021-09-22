@@ -825,7 +825,8 @@ def parse(input) :
         retorno.append(err)
     else: 
         retorno.append(AST.getConsola())
-
-    retorno.append(AST.htmlTablaSimbolos())
-    retorno.append(AST.htmlErrores())
+    tab = AST.htmlTablaSimbolos()
+    retorno.append(tab)
+    taberr = AST.htmlErrores()
+    retorno.append(taberr)
     return retorno
