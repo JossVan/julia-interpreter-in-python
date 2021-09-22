@@ -1,3 +1,4 @@
+from Abstractas.NodoAST import NodoAST
 from TablaSimbolos.Errores import Errores
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
@@ -811,14 +812,15 @@ def parse(input) :
                 else:
                     NodoRaiz.agregarHijoNodo(inst.getNodo())
 
-    retorno.append(AST.getDot(NodoRaiz))
-
     """for simbolo in tablita.values():
         print(simbolo.getValor())"""
     err = ""
     if len(AST.getErrores()) > 0:
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
+    cadena = AST.getDot(NodoRaiz)
+    print(cadena)
+    retorno.append(cadena)
     if err != "":
         retorno.append(err)
     else: 
