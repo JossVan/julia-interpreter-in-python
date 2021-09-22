@@ -75,12 +75,19 @@ class Array(NodoAST):
                 pos2 = array[1]-1
                 pos3 = array[2]-1
                 if pos1 >= 0 and pos2 >=0 and pos3 >=0:
-                    #pasadaUno = self.convertir(tree,table,b)
-                    #pasadaDos = self.convertir(tree,table,pasadaUno,[])
                     nodito = b[pos1][pos2][pos3]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
+                    elif isinstance(nodito,list):
+                        lista = []
+                        for v in nodito :
+                            if isinstance(v,NodoAST):
+                                valor = v.ejecutar(tree,table)
+                                lista.append(valor)
+                            else:
+                                lista.append(v)
+                        return lista
                     return nodito  
                 else : 
                     err = Errores(str(array[0]-1),"Semántico","Desbordamiento de arreglo", self.fila,self.columna)
@@ -129,9 +136,24 @@ class Array(NodoAST):
         if isinstance(traerValor.valor, list):
             h = self.desanidar(tree,table,traerValor.valor)
             if len(array) == 1:
-                    h[posi-1].append(valor)
-                    traerValor.valor = h
-                    table.actualizarValor(self.id,traerValor.valor)
+                nueva = []
+                if isinstance(valor, list):
+                    for i in valor:
+                        if isinstance(i,Arreglos):
+                            v = i.contenido
+                            if isinstance(v,list):
+                                for val in v:
+                                    if isinstance(val,NodoAST):
+                                        valorcito = val.ejecutar(tree,table)
+                                        nueva.append(valorcito)
+                            else:
+                                nueva.append(v)
+                        else:
+                            nueva.append(i)
+                    valor = nueva
+                h[posi-1].append(valor)
+                traerValor.valor = h
+                table.actualizarValor(self.id,traerValor.valor)
             return traerValor.valor
         
 
@@ -160,10 +182,12 @@ class Array(NodoAST):
                     self.desanidar(tree,table,i)
                 elif isinstance(i,Arreglos):
                     result = i.ejecutar(tree,table)
+                    
                     item[contador] = result 
 
                 contador = contador +1
             return item
+            
     def ejecutarMatriz(self,tree,table,array,nuevo):
 
         if isinstance(array,list):

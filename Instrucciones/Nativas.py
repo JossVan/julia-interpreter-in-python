@@ -173,13 +173,6 @@ class Pilas(NodoAST):
             if isinstance(self.valor, NodoAST):
                 val = self.valor.ejecutar(tree,table)
                 if isinstance(val,list):   
-                    '''tam = self.getLen(val)
-                    if tam != None:
-                        return tam       
-                    array = np.array(val)
-                    return array.size'''
-                    #tab = self.convertir(tree,table,val,[])
-                    print(len(val))
                     return len(val)
         elif self.funcion == Tipo_Primitivas.PUSH:
             if not isinstance(self.id, Array):
@@ -188,6 +181,12 @@ class Pilas(NodoAST):
                 val = self.id.insertar(self.valor,tree,table)
                 return val
             if isinstance(val,list):
+                if len(self.valor) == 1:
+                    if isinstance(self.valor[0],Arreglos):
+                        t = self.valor[0].ejecutar(tree,table)
+                        val.append(t)
+                        return val
+
                 val.append(self.valor)
 
             return val
