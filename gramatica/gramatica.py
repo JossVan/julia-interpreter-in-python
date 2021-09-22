@@ -819,7 +819,6 @@ def parse(input) :
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
     cadena = AST.getDot(NodoRaiz)
-    print(cadena)
     retorno.append(cadena)
     if err != "":
         retorno.append(err)
