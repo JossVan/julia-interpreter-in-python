@@ -35,7 +35,8 @@ class Array(NodoAST):
         if len(array) == 1:
             if isinstance(b, list):
                 if array[0] -1 >= 0:
-                    nodito = b[array[0]-1]
+                    h = self.desanidar(tree,table,b)
+                    nodito = h[array[0]-1]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
@@ -53,10 +54,8 @@ class Array(NodoAST):
             if isinstance(b, list):
                 pos1 = array[0]-1
                 pos2 = array[1]-1
-                nuevo = []
                 if pos1 >= 0 and pos2 >=0:
-                    nuevo = self.retornarResultado(tree,table,b,nuevo)
-                    nodito = nuevo[pos1][pos2]
+                    nodito = b[pos1][pos2]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
@@ -75,13 +74,20 @@ class Array(NodoAST):
                 pos1 = array[0]-1
                 pos2 = array[1]-1
                 pos3 = array[2]-1
-                nuevo = []
                 if pos1 >= 0 and pos2 >=0 and pos3 >=0:
-                    nuevo = self.ejecutarMatriz(tree,table,b,nuevo)
-                    nodito = nuevo[pos1][pos2][pos3]
+                    nodito = b[pos1][pos2][pos3]
                     if isinstance(nodito, NodoAST):
                         nodito = nodito.ejecutar(tree,table)
                         return nodito
+                    elif isinstance(nodito,list):
+                        lista = []
+                        for v in nodito :
+                            if isinstance(v,NodoAST):
+                                valor = v.ejecutar(tree,table)
+                                lista.append(valor)
+                            else:
+                                lista.append(v)
+                        return lista
                     return nodito  
                 else : 
                     err = Errores(str(array[0]-1),"Semántico","Desbordamiento de arreglo", self.fila,self.columna)
@@ -128,13 +134,26 @@ class Array(NodoAST):
         
         traerValor = table.BuscarIdentificador(self.id)
         if isinstance(traerValor.valor, list):
+            h = self.desanidar(tree,table,traerValor.valor)
             if len(array) == 1:
-                if isinstance(traerValor.valor[0],list):
-                    if isinstance(valor,list):
-                        traerValor.valor[0].append(valor[0])
-                    else:
-                        traerValor.valor[0].append(valor)
-                    table.actualizarValor(self.id,traerValor.valor)
+                nueva = []
+                if isinstance(valor, list):
+                    for i in valor:
+                        if isinstance(i,Arreglos):
+                            v = i.contenido
+                            if isinstance(v,list):
+                                for val in v:
+                                    if isinstance(val,NodoAST):
+                                        valorcito = val.ejecutar(tree,table)
+                                        nueva.append(valorcito)
+                            else:
+                                nueva.append(v)
+                        else:
+                            nueva.append(i)
+                    valor = nueva
+                h[posi-1].append(valor)
+                traerValor.valor = h
+                table.actualizarValor(self.id,traerValor.valor)
             return traerValor.valor
         
 
@@ -146,25 +165,29 @@ class Array(NodoAST):
         nodoId.agregarHijo(self.id)
         nodoPadre.agregarHijoNodo(nodoId)
         nodopos = NodoArbol("Posición")
+        nodopos.agregarHijo("[")
         if isinstance(self.posicion,list):
             for pos in self.posicion:
-                nodopos.agregarHijoNodo(pos.getNodo())         
+                nodopos.agregarHijoNodo(pos.getNodo())     
+        nodopos.agregarHijo("]")    
         nodoPadre.agregarHijoNodo(nodopos)
         return nodoPadre
     
-    def retornarResultado(self,tree,table, array,nuevo):
-        for i in array:
-            if isinstance(i, list):
-                self.retornarResultado(tree,table,i,nuevo)
-            elif isinstance(i, NodoAST):
-                val = i.ejecutar(tree,table)
-                nuevo.append(val)
-        
-        if isinstance(array, NodoAST):
-            val= array.ejecutar(tree,table)
-            nuevo.append(val)
-        return nuevo
     
+    def desanidar(self,tree,table,item):
+        contador = 0
+        if isinstance(item,list):
+            for i in item:
+                if isinstance(i,list):
+                    self.desanidar(tree,table,i)
+                elif isinstance(i,Arreglos):
+                    result = i.ejecutar(tree,table)
+                    
+                    item[contador] = result 
+
+                contador = contador +1
+            return item
+            
     def ejecutarMatriz(self,tree,table,array,nuevo):
 
         if isinstance(array,list):

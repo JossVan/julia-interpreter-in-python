@@ -76,5 +76,7 @@ class If(NodoAST):
             NodoPadre.agregarHijoNodo(NodoElse)
         if self.instrucciones_elseif!= None:
             NodoPadre.agregarHijoNodo(self.instrucciones_elseif.getNodo())
+        NodoPadre.agregarHijo("end")
+        NodoPadre.agregarHijo(";")
         return NodoPadre
         

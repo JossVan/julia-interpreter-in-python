@@ -103,6 +103,8 @@ class For(NodoAST):
                         elif isinstance(i, NodoAST):
                             #val = i.ejecutar(tree,nuevaTabla)
                             nuevaTabla.actualizarValor(id,i)
+                        elif isinstance(i, list):
+                            nuevaTabla.actualizarValor(id,i)
                         if self.instrucciones != None:
                             for instruccion in self.instrucciones:
                                 resp=instruccion.ejecutar(tree,nuevaTabla)
@@ -128,6 +130,8 @@ class For(NodoAST):
         for instruccion in self.instrucciones:
             NodoInst.agregarHijoNodo(instruccion.getNodo())
         NodoNuevo.agregarHijoNodo(NodoInst)
+        NodoNuevo.agregarHijo("end")
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo                
 
         

@@ -37,9 +37,9 @@ def reportes():
 @app.route('/AST')
 def AST():
     if result[0] != None:
-        return render_template('AST.html', img = result[0])
+        return render_template('AST.html', dot = result[0])
     else:
-        return render_template('AST.html', img ="")
+        return render_template('AST.html', dot ="")
 
 @app.route('/TablaSimbolos')
 def tabla():
@@ -47,6 +47,6 @@ def tabla():
 
 @app.route('/Errores')
 def errores():
-    return render_template('errores.html', tabla = result[2])
+    return render_template('errores.html', tabla = result[3])
 if __name__ == '__main__':
     app.run(debug = True)

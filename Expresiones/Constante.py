@@ -28,12 +28,16 @@ class Constante(NodoAST):
     def getNodo(self):
         NuevoNodo = NodoArbol("Constante")
         if self.valor.tipo == TipoObjeto.CADENA:
+            NuevoNodo.agregarHijo("String")
             NuevoNodo.agregarHijo(self.valor.toString())
         elif self.valor.tipo == TipoObjeto.ENTERO:
+            NuevoNodo.agregarHijo("Int64")
             NuevoNodo.agregarHijo(str(self.valor.getEntero()))
         elif self.valor.tipo == TipoObjeto.DECIMAL:
+            NuevoNodo.agregarHijo("Float64")
             NuevoNodo.agregarHijo(str(self.valor.getFloat()))
         elif self.valor.tipo == TipoObjeto.BOOLEANO:
+            NuevoNodo.agregarHijo("Bool")
             NuevoNodo.agregarHijo(str(self.valor.getBoolean()))
         elif self.valor.tipo == TipoObjeto.NEGATIVO:
             if isinstance(self.valor, NodoAST):

@@ -1,3 +1,4 @@
+from Expresiones.Arreglos import Arreglos
 from Abstractas.NodoArbol import NodoArbol
 from Instrucciones.Return import Return
 from TablaSimbolos.Simbolo import Simbolo
@@ -52,8 +53,14 @@ class Llamadas(NodoAST):
         Nodopar = NodoArbol("Parámetros")
         Nodoid.agregarHijo(self.id)
         NodoPadre.agregarHijoNodo(Nodoid)
+        NodoPadre.agregarHijo("(")
+        cont = 1
         for parametro in self.parametros:
             Nodopar.agregarHijoNodo(parametro.getNodo())
+            if cont < len(self.parametros):
+                Nodopar.agregarHijo(",")
+                cont= cont+1
         if self.parametros != None:
             NodoPadre.agregarHijoNodo(Nodopar)
+        NodoPadre.agregarHijo(")")
         return NodoPadre

@@ -13,5 +13,7 @@ class Break(NodoAST):
     def ejecutar(self, tree, table):
         return self
     def getNodo(self):
-        NuevoNodo = NodoArbol("Break")
+        NuevoNodo = NodoArbol("BREAK")
+        NuevoNodo.agregarHijo("break")
+        NuevoNodo.agregarHijo(";")
         return NuevoNodo

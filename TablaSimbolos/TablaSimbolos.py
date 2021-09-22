@@ -1,8 +1,5 @@
 
-from Abstractas.NodoAST import NodoAST
-from TablaSimbolos.Tipos import Tipo_Acceso
-from TablaSimbolos.Errores import Errores
-
+from Expresiones.Arreglos import Arreglos
 class TablaSimbolos:
     def __init__(self,nombre, anterior = None):
         self.tabla = {} 
@@ -57,15 +54,15 @@ class TablaSimbolos:
         while tablaActual != None:
             if id in tablaActual.tabla :
                 if isinstance(tablaActual.tabla[id].valor, list):
-                    tab = tablaActual.tabla[id].valor
-                    nuevo = []
-                    if tree.getCont() > 0:
-                     tablaActual.tabla[id].valor[pos1-1][pos2-1] = valor
-                    else:
+                    #tab = tablaActual.tabla[id].valor
+                    #nuevo = []
+                    #if tree.getCont() > 0:
+                    tablaActual.tabla[id].valor[pos1-1][pos2-1] = valor
+                    '''else:
                         nuevo = self.retornarResultado(None,tablaActual,tab,nuevo)
                         nuevo[pos1-1][pos2-1] = valor  
                         tablaActual.tabla[id].valor = nuevo     
-                        tree.aumentar()
+                        tree.aumentar()'''
                     return "ok"          
             else:
                 tablaActual = tablaActual.anterior
@@ -75,31 +72,25 @@ class TablaSimbolos:
         while tablaActual != None:
             if id in tablaActual.tabla :
                 if isinstance(tablaActual.tabla[id].valor, list):
-                    tab = tablaActual.tabla[id].valor
-                    nuevo = []
-                    if tree.getCont() > 0:
-                     tablaActual.tabla[id].valor[pos1-1][pos2-1][pos3-1] = valor
-                    else:
-                        nuevo = self.retornarResultado(None,tablaActual,tab,nuevo)
-                        nuevo[pos1-1][pos2-1] = valor  
-                        tablaActual.tabla[id].valor = nuevo     
-                        tree.aumentar()
+                    nuevo = self.convertir(tree,tablaActual,valor,[])
+                    segundaPasada = self.convertir(tree,tablaActual,nuevo,[])
+                    segundaPasada[pos1-1][pos2-1][pos3-1] = valor
+                    tablaActual.tabla[id].valor = segundaPasada
                     return "ok"          
             else:
                 tablaActual = tablaActual.anterior
         return None
-    def retornarResultado(self,tree,table, array,nuevo):
-        for i in array:
-            if isinstance(i, list):
-                self.retornarResultado(tree,table,i,nuevo)
-            elif isinstance(i, NodoAST):
-                val = i.ejecutar(tree,table)
-                nuevo.append(val)
-        
-        if isinstance(array, NodoAST):
-            val= array.ejecutar(tree,table)
-            nuevo.append(val)
-        return nuevo
+    def convertir(self,tree,table,item,lista):
+
+        if isinstance(item, list):
+            for i in item:
+                self.convertir(tree,table,i,lista)
+        elif isinstance(item, Arreglos):
+            valor = item.ejecutar(tree,table)
+            lista.append(valor)
+        else:
+            lista.append(item)
+        return lista
 
     def addSimboloLocal(self, simbolo):
         self.tabla[simbolo.getID()] = simbolo

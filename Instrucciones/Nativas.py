@@ -92,7 +92,7 @@ class Nativas_conTipo(NodoAST):
             NodoNuevo.agregarHijo("Parse")
         elif self.funcion == Tipo_Primitivas.TRUNC:
             NodoNuevo.agregarHijo("Trunc")
-        
+        NodoNuevo.agregarHijo("(")
         if self.tipo == Tipo_Dato.CADENA:
             NodoNuevo.agregarHijo("String")
         elif self.tipo == Tipo_Dato.CARACTER:
@@ -103,7 +103,9 @@ class Nativas_conTipo(NodoAST):
             NodoNuevo.agregarHijo("Float64")
         elif self.tipo == Tipo_Dato.BOOLEANO:
             NodoNuevo.agregarHijo("Bool")
+        NodoNuevo.agregarHijo(",")
         NodoNuevo.agregarHijoNodo(self.valor.getNodo())
+        NodoNuevo.agregarHijo(")")
         return NodoNuevo
 class Nativas_SinTipo(NodoAST):
 
@@ -153,8 +155,9 @@ class Nativas_SinTipo(NodoAST):
             NodoNuevo.agregarHijo("Typeof")
         elif self.funcion == Tipo_Primitivas.TRUNC:
             NodoNuevo.agregarHijo("Trunc")
+        NodoNuevo.agregarHijo("(")
         NodoNuevo.agregarHijoNodo(self.valor.getNodo())
-
+        NodoNuevo.agregarHijo(")")
         return NodoNuevo
 
 class Pilas(NodoAST):
@@ -170,11 +173,7 @@ class Pilas(NodoAST):
             if isinstance(self.valor, NodoAST):
                 val = self.valor.ejecutar(tree,table)
                 if isinstance(val,list):   
-                    tam = self.getLen(val)
-                    if tam != None:
-                        return tam       
-                    array = np.array(val)
-                    return array.size
+                    return len(val)
         elif self.funcion == Tipo_Primitivas.PUSH:
             if not isinstance(self.id, Array):
                 val = self.id.ejecutar(tree,table)
@@ -182,34 +181,25 @@ class Pilas(NodoAST):
                 val = self.id.insertar(self.valor,tree,table)
                 return val
             if isinstance(val,list):
-                if isinstance(val[0],list):
-                    if isinstance(self.valor,list):
-                        val[0].append(self.valor[0])
-                    else:
-                        val.append(self.valor)
-                    table.actualizarValor(self.id.id,val)  
-                else:    
-                    if isinstance(self.valor,list):
-                        val.append(self.valor[0])
-                    else:            
-                        val.append(self.valor)
-                    table.actualizarValor(self.id.id,val)
+                if len(self.valor) == 1:
+                    if isinstance(self.valor[0],Arreglos):
+                        t = self.valor[0].ejecutar(tree,table)
+                        val.append(t)
+                        return val
+
+                val.append(self.valor)
+
             return val
         elif self.funcion == Tipo_Primitivas.POP:
             result = self.id.ejecutar(tree,table)
             retorno = []
             if result != None:
                 if isinstance(result,list):
-                    if isinstance(result[0],list):
-                        tam = int(len(result[0])-1)
-                        retorno = result[0][tam]
-                        result[0].pop(tam)
-                        table.actualizarValor(self.id.id,result)
-                    else:
-                        tam = int(len(result)-1)
-                        retorno = result[tam]
-                        result.pop(tam)
-                        table.actualizarValor(self.id.id,result)
+
+                    tam = int(len(result)-1)
+                    retorno = result[tam]
+                    result.pop(tam)
+                    table.actualizarValor(self.id.id,result)
 
                 return retorno
                 
@@ -217,8 +207,30 @@ class Pilas(NodoAST):
         NodoNuevo = NodoArbol("Funciones_Arreglos")
         if self.funcion == Tipo_Primitivas.LENGTH:
             NodoNuevo.agregarHijo("Length")
+            NodoNuevo.agregarHijo("(")
             NodoNuevo.agregarHijoNodo(self.valor.getNodo())
-        return NodoNuevo
+            NodoNuevo.agregarHijo(")")
+            return NodoNuevo
+        elif self.funcion == Tipo_Primitivas.PUSH:
+            NodoNuevo.agregarHijo("push")
+            NodoNuevo.agregarHijo("!")
+            NodoNuevo.agregarHijo("(")
+            NodoNuevo.agregarHijoNodo(self.id.getNodo())
+            NodoNuevo.agregarHijo(",")
+            if isinstance(self.valor,list):
+                for i in self.valor:
+                    NodoNuevo.agregarHijoNodo(i.getNodo())   
+            elif isinstance(self.valor,NodoAST):
+                NodoNuevo.agregarHijo(self.valor.getNodo())     
+            NodoNuevo.agregarHijo(")")
+            return NodoNuevo
+        elif self.funcion == Tipo_Primitivas.POP:
+            NodoNuevo.agregarHijo("pop")
+            NodoNuevo.agregarHijo("!")
+            NodoNuevo.agregarHijo("(")
+            NodoNuevo.agregarHijoNodo(self.id.getNodo())
+            NodoNuevo.agregarHijo(")")
+            return NodoNuevo
     
     def getLen(self,array):
 

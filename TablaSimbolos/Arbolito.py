@@ -1,7 +1,7 @@
 from TablaSimbolos.Errores import Errores
 from TablaSimbolos.Tipos import Tipo_Acceso
 from TablaSimbolos.Simbolo import Simbolo
-from graphviz import Graph
+#from graphviz import Graph
 from Instrucciones.Funciones import Funciones
 from datetime import datetime
 class Arbolito:
@@ -15,7 +15,7 @@ class Arbolito:
         self.dot = ""
         self.general = []
         self.contador = 0
-        self.chart_data = Graph()
+        #self.chart_data = Graph()
         self.cont = 0 
 
     def agregarTS(self, id, simbolo):
@@ -75,17 +75,17 @@ class Arbolito:
         self.funciones.append(funcion)
 
     def getDot(self, raiz):
-        #self.dot = ""
-        #self.dot += "digraph {\n"
-        #self.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n"
-        self.chart_data.node("n0",raiz.getValor().replace("\"","\\\""))
-        self.contador = 2
+        self.dot = ""
+        self.dot += "digraph {\n"
+        self.dot += "n0[label=\"" + raiz.getValor().replace("\"", "\\\"") + "\"];\n"
+        #self.chart_data.node("n0",raiz.getValor().replace("\"","\\\""))
+        self.contador = 1
         self.recorrerAST("n0", raiz)
-        chart_output = self.chart_data.pipe(format='svg').decode('utf-8')
+        #chart_output = self.chart_data.pipe(format='svg').decode('utf-8')
         #chart_output = self.chart_data.pipe(format='png')
         #chart_output = base64.b64encode(chart_output).decode('utf-8')
-        #self.dot += "}"
-        return chart_output
+        self.dot += "}"
+        return self.dot
 
     def recorrerAST(self, idPadre, nodoPadre):
         for hijo in nodoPadre.getHijos():
@@ -94,10 +94,10 @@ class Arbolito:
                 hijito = "Vacío"
             else:
                 hijito = hijo.getValor().replace("\"", "\\\"")
-            self.chart_data.node(nombreHijo,hijito)
-            self.chart_data.edge(idPadre, nombreHijo)
-            #self.dot += nombreHijo + "[label=\"" + hijito + "\"];\n"
-            #self.dot += idPadre + "->" + nombreHijo + ";\n"
+            #self.chart_data.node(nombreHijo,hijito)
+            #self.chart_data.edge(idPadre, nombreHijo)
+            self.dot += nombreHijo + "[label=\"" + hijito + "\"];\n"
+            self.dot += idPadre + "->" + nombreHijo + ";\n"
             self.contador += 1
             self.recorrerAST(nombreHijo, hijo)
     
