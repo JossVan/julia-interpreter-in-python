@@ -812,7 +812,6 @@ def parse(input) :
                     NodoRaiz.agregarHijoNodo(inst.getNodo())
 
     retorno.append(AST.getDot(NodoRaiz))
-   # tablita = AST.getTSGlobal().tabla
 
     """for simbolo in tablita.values():
         print(simbolo.getValor())"""

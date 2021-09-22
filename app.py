@@ -25,22 +25,18 @@ def principal():
 
 #reportes
 @app.route('/reportes', methods=["GET", "POST"])
-def reportes():
-    if request.method =="POST":
-        
-        valor = request.form['btn']
-        if valor == "ast":
-            return render_template('AST.html')
-  
+def reportes(): 
     return render_template('reportes.html')
 
 @app.route('/AST')
 def AST():
-    if result[0] != None:
-        return render_template('AST.html', dot = result[0])
-    else:
+    try:
+        if result[0] != None:
+            return render_template('AST.html', dot = result[0])
+        else:
+            return render_template('AST.html', dot ="")
+    except:
         return render_template('AST.html', dot ="")
-
 @app.route('/TablaSimbolos')
 def tabla():
     return render_template('tabla.html', tabla = result[2])
