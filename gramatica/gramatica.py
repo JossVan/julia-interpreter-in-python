@@ -807,15 +807,7 @@ def parse(input) :
             for inst in instruccion:
                 instr= inst.ejecutar(AST,AST.getTSGlobal())
                 if isinstance(instr,Errores):
-                    if len(AST.getErrores()) > 0:
-                        err=""
-                        for error in AST.getErrores():
-                            err+=">>" +error.getCadena()+"\n"
-                        retorno.append(None)
-                        retorno.append(err)
-                        retorno.append(AST.htmlErrores())
-                        return retorno
-                    break
+                    continue
                 else:
                     NodoRaiz.agregarHijoNodo(inst.getNodo())
 
@@ -824,11 +816,15 @@ def parse(input) :
 
     """for simbolo in tablita.values():
         print(simbolo.getValor())"""
+    err = ""
     if len(AST.getErrores()) > 0:
-        err=""
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
-        return err
-    retorno.append(AST.getConsola())
+    if err != "":
+        retorno.append(err)
+    else: 
+        retorno.append(AST.getConsola())
+
     retorno.append(AST.htmlTablaSimbolos())
+    retorno.append(AST.htmlErrores())
     return retorno

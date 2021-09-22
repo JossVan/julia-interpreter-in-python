@@ -195,15 +195,21 @@ class Asignacion(NodoAST):
             for inst in self.valor:
                 NodoNuevo.agregarHijoNodo(inst.getNodo())
         if self.tipo == Tipo_Dato.BOOLEANO:
+            NodoNuevo.agregarHijo("::")
             NodoNuevo.agregarHijo("Bool")
         elif self.tipo == Tipo_Dato.CADENA:
+            NodoNuevo.agregarHijo("::")
             NodoNuevo.agregarHijo("String")
         elif self.tipo == Tipo_Dato.ENTERO:
+            NodoNuevo.agregarHijo("::")
             NodoNuevo.agregarHijo("Int64")
         elif self.tipo == Tipo_Dato.DECIMAL:
+            NodoNuevo.agregarHijo("::")
             NodoNuevo.agregarHijo("Float64")
         elif self.tipo == Tipo_Dato.CARACTER:
+            NodoNuevo.agregarHijo("::")
             NodoNuevo.agregarHijo("Char")
         
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo
 

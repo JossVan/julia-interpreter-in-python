@@ -35,4 +35,6 @@ class While(NodoAST):
         for instruccion in self.instrucciones:
             inst.agregarHijoNodo(instruccion.getNodo())
         NodoNuevo.agregarHijoNodo(inst)
+        NodoNuevo.agregarHijo("end")
+        NodoNuevo.agregarHijo(";")
         return NodoNuevo

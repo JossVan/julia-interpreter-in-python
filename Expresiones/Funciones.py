@@ -74,28 +74,45 @@ class Funciones_matematicas(NodoAST):
         NuevoNodo = NodoArbol("Funciones")
         if self.funcion == Tipo_FuncionAritmetica.lowercase:
             NuevoNodo.agregarHijo("Lowercase")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.uppercase:
             NuevoNodo.agregarHijo("Uppercase")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.seno:
             NuevoNodo.agregarHijo("Sin")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.coseno:
             NuevoNodo.agregarHijo("Cos")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.tangente:
             NuevoNodo.agregarHijo("Tan")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.sqrt:
             NuevoNodo.agregarHijo("Sqrt")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.log10:
             NuevoNodo.agregarHijo("Log10")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(")")
         elif self.funcion == Tipo_FuncionAritmetica.log:
             NuevoNodo.agregarHijo("Log")
+            NuevoNodo.agregarHijo("(")
             NuevoNodo.agregarHijoNodo(self.valor1.getNodo())
+            NuevoNodo.agregarHijo(",")
             NuevoNodo.agregarHijoNodo(self.valor2.getNodo())
+            NuevoNodo.agregarHijo(")")
         
         return NuevoNodo
