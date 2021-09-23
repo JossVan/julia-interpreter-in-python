@@ -1,3 +1,4 @@
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from TablaSimbolos.Errores import Errores
 from Abstractas.NodoArbol import NodoArbol
 from TablaSimbolos.Tipos import Tipo_Primitivas, Tipo_Print
@@ -37,6 +38,9 @@ class Print(NodoAST):
                                 tree.updateConsola(str(array))
                     elif isinstance(resultado, Errores):
                         return resultado
+                    elif isinstance(resultado, TablaSimbolos):
+                        cadena =self.imprimirTablaSimbolo(resultado)
+                        tree.updateConsola(str(cadena))
                     else:
                         tree.updateConsola(str(resultado))
         if self.tipo == Tipo_Print.PRINTLN:
@@ -61,6 +65,9 @@ class Print(NodoAST):
                                 tree.updateConsola(str(array))
                     elif isinstance(resultado, Errores):
                         return resultado
+                    elif isinstance(resultado, TablaSimbolos):
+                        cadena =self.imprimirTablaSimbolo(resultado)
+                        tree.updateConsola(str(cadena))
                     else:
                         tree.updateConsola(str(resultado))
             tree.updateConsola("\n")
@@ -102,3 +109,19 @@ class Print(NodoAST):
             
         else:
             array.append(resultado)
+    
+    def imprimirTablaSimbolo(self,resultado):
+        if isinstance(resultado, TablaSimbolos):
+            cadena = resultado.nombre+"("
+            contador = 1
+            for v in  resultado.tabla:
+                res = resultado.tabla[v]
+                if isinstance(res,TablaSimbolos):
+                    cadena +=self.imprimirTablaSimbolo(res)
+                else:
+                    cadena+= str(resultado.tabla[v])
+                if contador < len(resultado.tabla):
+                    cadena+=","
+                contador = contador +1
+            cadena+=")"
+        return cadena
