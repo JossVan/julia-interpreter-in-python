@@ -1,3 +1,4 @@
+from Expresiones.Acceso import Acceso
 from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
@@ -19,7 +20,7 @@ class Asignacion(NodoAST):
         self.columna = columna
 
     def ejecutar(self, tree, table):
-        
+        id =""
         if isinstance(self.id,Identificador):
             id = self.id.id
         elif isinstance(self.id, Array):
@@ -27,6 +28,9 @@ class Asignacion(NodoAST):
             return
         elif isinstance(self.id, str):
             id = self.id
+        elif isinstance(self.id, Acceso):
+            id = self.id.verificar(tree,table,self.valor)
+            return
         '''else:
             err = Errores(self.id,"Semántico", "el valor de asignación debe ser un identificador", self.fila,self.columna)
             tree.insertError(err)'''
@@ -65,7 +69,7 @@ class Asignacion(NodoAST):
                     valor = self.valor.ejecutar(tree,table)
                     if isinstance(valor,Errores):
                         return valor
-                    if isinstance(valor, TablaSimbolos):
+                    elif isinstance(valor, TablaSimbolos):
                         simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "STRUCT")
                     else:
                         simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Primitivo")

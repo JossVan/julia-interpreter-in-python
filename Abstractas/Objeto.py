@@ -8,6 +8,7 @@ class TipoObjeto(Enum):
     CADENA = 4
     NEGATIVO = 5
     ERROR = 6
+    NOTHING = 7
 
 
 class Objeto(ABC):

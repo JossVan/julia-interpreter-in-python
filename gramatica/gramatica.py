@@ -474,7 +474,9 @@ def p_expresiones_booleanas(t):
     '''E : R_TRUE
         | R_FALSE'''
     t[0] = Constante(Primitivo(TipoObjeto.BOOLEANO, t[1]), t.lineno(0), t.lexpos(0))
-
+def p_expresiones_nothing (t):
+    'E : R_NOTHING'
+    t[0] = Constante(Primitivo(TipoObjeto.NOTHING, t[1]), t.lineno(0), t.lexpos(0))
 def p_expresiones_cadena(t):
     'E : CADENA'
     t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(0), t.lexpos(0))
@@ -749,16 +751,16 @@ def p_rango_arreglos(t):
 
 def p_structs(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID ELEMENTOS  R_END PTCOMA'
-    t[0] = Struct(True,t[3], t[4],t.lineno(1), t.lexpos(0) )
+    t[0] = Struct(True,t[3], t[4],t.lineno(2), t.lexpos(0) )
 def p_structs2(t):
     'STRUCTS : R_STRUCT ID ELEMENTOS  R_END PTCOMA'
-    t[0] = Struct(False,t[2], t[3],t.lineno(1), t.lexpos(0) )
+    t[0] = Struct(False,t[2], t[3],t.lineno(2), t.lexpos(0) )
 def p_structs_mutables(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID R_END PTCOMA'
-    t[0] = Struct(True,t[3], None,t.lineno(1), t.lexpos(0) )
+    t[0] = Struct(True,t[3], None,t.lineno(2), t.lexpos(0) )
 def p_structs_vacios(t):
     'STRUCTS : R_STRUCT ID R_END PTCOMA'
-    t[0] = Struct(False,t[2], None,t.lineno(1), t.lexpos(0) )
+    t[0] = Struct(False,t[2], None,t.lineno(2), t.lexpos(0) )
 def p_elementos(t):
     'ELEMENTOS : ELEMENTOS ELEMENTO'
     if t[2] != "":
@@ -767,22 +769,22 @@ def p_elementos(t):
 
 def p_elementos_elemento(t):
     'ELEMENTOS : ELEMENTO'
-    if t[1] == "":
+    if t[1] == "":  
         t[0] = []
     else:
         t[0] = [t[1]]
 
 def p_elemento(t):
     'ELEMENTO  : ID PTCOMA'
-    t[0] = Elemento(t[1], None,t.lineno(1), t.lexpos(1))
+    t[0] = Elemento(t[1], None,t.lineno(2), t.lexpos(1))
 
 def p_elemento_declaraciontipo(t):
     'ELEMENTO : ID DOSPUNTOS TIPO PTCOMA'
-    t[0] = Elemento(t[1], t[3],t.lineno(1), t.lexpos(1))
+    t[0] = Elemento(t[1], t[3],t.lineno(2), t.lexpos(1))
 
 def p_elemento_declaracion_tipo(t):
     'ELEMENTO : ID DOSPUNTOS ID PTCOMA'
-    t[0] = Elemento(t[1], t[3],t.lineno(1), t.lexpos(1))
+    t[0] = Elemento(t[1], t[3],t.lineno(2), t.lexpos(1))
 
 def p_acceso1(t):
     'ACCESOS : ACCESOS PUNTO ACCESO'
@@ -794,7 +796,7 @@ def p_acceso2(t):
     t[0] = [t[1]]
 def p_acceso3(t):
     'ACCESO : ID'
-    t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
+    t[0] = Identificador(t[1],t.lineno(1), t.lexpos(0))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % str(t))
@@ -836,7 +838,7 @@ def parse(input) :
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
     cadena = AST.getDot(NodoRaiz)
-    print(cadena)
+  #  print(cadena)
     retorno.append(cadena)
     if err != "":
         retorno.append(err)

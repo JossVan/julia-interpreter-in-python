@@ -14,6 +14,9 @@ class Struct(NodoAST):
         
         return self.elementos
     
+    def mutables(self):
+        return self.mutable
+
     def getNodo(self):
         NodoNuevo = NodoArbol("STRUCT")
 
