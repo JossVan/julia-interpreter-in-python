@@ -1,3 +1,4 @@
+from TablaSimbolos.TablaSimbolos import TablaSimbolos
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
 from Expresiones.Identificador import Identificador
@@ -64,7 +65,10 @@ class Asignacion(NodoAST):
                     valor = self.valor.ejecutar(tree,table)
                     if isinstance(valor,Errores):
                         return valor
-                    simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Primitivo")
+                    if isinstance(valor, TablaSimbolos):
+                        simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "STRUCT")
+                    else:
+                        simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "Primitivo")
                     if self.acceso == Tipo_Acceso.GLOBAL:           
                         table.actualizarSimboloGlobal(simbolo)
                     else:
@@ -94,7 +98,7 @@ class Asignacion(NodoAST):
                     else:
                         error = Errores(self.valor,"Semántico","La variable declarada debe ser una cadena",self.fila,self.columna)
                         tree.insertError(error)
-                if self.tipo == Tipo_Dato.BOOLEANO:
+                elif self.tipo == Tipo_Dato.BOOLEANO:
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, bool):
@@ -115,7 +119,7 @@ class Asignacion(NodoAST):
                     else: 
                         error = Errores(self.valor,"Semántico","El valor de la variable debe ser tipo booleano",self.fila,self.columna)
                         tree.insertError(error)
-                if self.tipo == Tipo_Dato.CARACTER:
+                elif self.tipo == Tipo_Dato.CARACTER:
                      if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, chr):
@@ -136,7 +140,7 @@ class Asignacion(NodoAST):
                      else: 
                         error = Errores(self.valor,"Semántico","El valor de la variable debe ser de tipo caracter",self.fila,self.columna)
                         tree.insertError(error)
-                if self.tipo == Tipo_Dato.DECIMAL:
+                elif self.tipo == Tipo_Dato.DECIMAL:
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, float):
@@ -157,7 +161,7 @@ class Asignacion(NodoAST):
                     else: 
                         error = Errores(self.valor,"Semántico","El valor de la variable debe ser de tipo Float64",self.fila,self.columna)
                         tree.insertError(error)
-                if self.tipo == Tipo_Dato.ENTERO:
+                elif self.tipo == Tipo_Dato.ENTERO:
                     if isinstance(self.valor,NodoAST):
                         valor = self.valor.ejecutar(tree,table)
                         if isinstance(valor, int):
@@ -178,6 +182,25 @@ class Asignacion(NodoAST):
                     else: 
                         error = Errores(self.valor,"Semántico","El valor de la variable debe ser de tipo Int64",self.fila,self.columna)
                         tree.insertError(error)
+                        return error
+                else :
+                    result = tree.getStruct(self.tipo)
+                    if result == None:
+                        error = Errores(self.valor,"Semántico","El tipo de la variable no existe",self.fila,self.columna)
+                        tree.insertError(error)
+                        return error
+                    else:
+                        valor = self.valor.ejecutar(tree,table)
+                        if isinstance(valor,Errores):
+                            return valor
+                        if isinstance(valor, TablaSimbolos):
+                            simbolo = Simbolo(id,valor,self.acceso,self.fila,self.columna, "STRUCT")
+                        if self.acceso == Tipo_Acceso.GLOBAL:           
+                            table.actualizarSimboloGlobal(simbolo)
+                        else:
+                            table.actualizarSimbolo(simbolo)
+                        tree.agregarTS(id,simbolo)
+
     def getNodo(self):
         NodoNuevo = NodoArbol("Asignación")
         if self.tipo == Tipo_Acceso.GLOBAL:

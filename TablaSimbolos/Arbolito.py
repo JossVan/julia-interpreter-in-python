@@ -10,6 +10,7 @@ class Arbolito:
         self.instrucciones = instrucciones
         self.funciones = []
         self.errores = []
+        self.structs = []
         self.consola = ""
         self.TSglobal = None
         self.dot = ""
@@ -70,9 +71,18 @@ class Arbolito:
             if funcion.nombre == nombre:
                 return funcion
         return None
-    
+
+    def getStruct(self, nombre):
+        for struct in self.structs:
+            if struct.nombre == nombre:
+                return struct
+        return None
+
     def addFuncion(self, funcion):
         self.funciones.append(funcion)
+
+    def addStruct(self, struct):
+        self.structs.append(struct)
 
     def getDot(self, raiz):
         self.dot = ""

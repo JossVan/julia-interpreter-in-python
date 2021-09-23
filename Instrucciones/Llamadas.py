@@ -16,11 +16,12 @@ class Llamadas(NodoAST):
         
     def ejecutar(self, tree, table):
         funcion = tree.getFuncion(self.id)
-        
-        if funcion == None:
-            err = Errores(self.id, "Semántico", "La función no existe", self.fila, self.columna)
+        struct = tree.getStruct(self.id)
+        if funcion == None and struct == None:
+            err = Errores(self.id, "Semántico", "Instruccion no reconocida", self.fila, self.columna)
             tree.insertError(err)
-        else:
+            return
+        elif funcion != None and struct == None:
             NuevaTabla = TablaSimbolos(self.id,table)
             if self.parametros != None:
                 if len(funcion.parametros) == len(self.parametros):
@@ -45,6 +46,22 @@ class Llamadas(NodoAST):
                 resultado = funcion.ejecutar(tree,NuevaTabla)
                 if isinstance(resultado,Return):
                     return resultado.valor
+        elif struct != None:
+            #HAY UNA ASIGNACION DE TIPO STRUCT
+            elementos = struct.ejecutar(tree,table)
+            if len(elementos) == len(self.parametros):
+                contador = 0
+                tablita = TablaSimbolos(self.id)
+                for par in  self.parametros:
+                    verificar = elementos[contador].verificarTipo(tree, table, par)
+                    if  verificar:
+                        if isinstance(par,NodoAST):
+                            par = par.ejecutar(tree,table)
+                        tablita.tabla[elementos[contador].id] = par
+                    elif isinstance(verificar,Errores):
+                        return verificar
+                    contador = contador +1
+                return tablita
 
     def getNodo(self):
         
@@ -55,12 +72,12 @@ class Llamadas(NodoAST):
         NodoPadre.agregarHijoNodo(Nodoid)
         NodoPadre.agregarHijo("(")
         cont = 1
-        for parametro in self.parametros:
-            Nodopar.agregarHijoNodo(parametro.getNodo())
-            if cont < len(self.parametros):
-                Nodopar.agregarHijo(",")
-                cont= cont+1
         if self.parametros != None:
+            for parametro in self.parametros:
+                Nodopar.agregarHijoNodo(parametro.getNodo())
+                if cont < len(self.parametros):
+                    Nodopar.agregarHijo(",")
+                    cont= cont+1
             NodoPadre.agregarHijoNodo(Nodopar)
         NodoPadre.agregarHijo(")")
         return NodoPadre

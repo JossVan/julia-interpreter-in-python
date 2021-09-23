@@ -1,3 +1,5 @@
+from Expresiones.Acceso import Acceso
+from Abstractas.NodoAST import NodoAST
 from TablaSimbolos.Errores import Errores
 from Abstractas.NodoArbol import NodoArbol
 from Expresiones.Array import Array
@@ -229,7 +231,8 @@ def p_iniciop(t):
 
 def p_iniciofi(t):
     '''INIT     : FUNCIONES
-                | INSTRUCCIONES'''
+                | INSTRUCCIONES
+                | STRUCTS '''
     
     t[0] = t[1]
 
@@ -255,7 +258,6 @@ def p_instruccionesI(t):
                         | I
                         | LLAMADAS PTCOMA
                         | NATIVAS PTCOMA
-                        | STRUCTS
                         | BREAK
                         | CONTINUE
                         | RETURN'''
@@ -330,7 +332,9 @@ def p_lista(t):
 
 def p_asignaciones(t):
     '''ASIGNACION : R_GLOBAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA
-                  | R_LOCAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'''
+                  | R_LOCAL E IGUAL LISTA DOSPUNTOS TIPO PTCOMA
+                  | R_GLOBAL E IGUAL LISTA DOSPUNTOS ID PTCOMA
+                  | R_LOCAL E IGUAL LISTA DOSPUNTOS ID PTCOMA'''
 
     if t[1] == 'global':
         t [0] = Asignacion(Tipo_Acceso.GLOBAL, t[2], t[4], t[6], t.lineno(0), t.lexpos(0))
@@ -338,7 +342,8 @@ def p_asignaciones(t):
         t [0] = Asignacion(Tipo_Acceso.LOCAL, t[2], t[4], t[6], t.lineno(0), t.lexpos(0))
 
 def p_asignacionesp(t):
-    'ASIGNACION : E IGUAL LISTA DOSPUNTOS TIPO PTCOMA'
+    '''ASIGNACION : E IGUAL LISTA DOSPUNTOS TIPO PTCOMA
+                    | E IGUAL LISTA DOSPUNTOS ID PTCOMA'''
 
     t [0] = Asignacion(Tipo_Acceso.NONE, t[1], t[3], t[5], t.lineno(2), t.lexpos(2))
 
@@ -474,6 +479,13 @@ def p_expresiones_cadena(t):
     'E : CADENA'
     t[0] = Constante(Primitivo(TipoObjeto.CADENA, t[1]), t.lineno(0), t.lexpos(0))
 
+def p_expresion_llamada(t):
+    'E : LLAMADAS'
+    t[0] = t[1]
+
+def p_expresion_accesos(t):
+    'E : ACCESOS'
+    t[0] = Acceso(t[1],t.lineno(1), t.lexpos(1))
 def p_expresiones_id(t):
     'E : ID'
     t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
@@ -499,9 +511,7 @@ def p_idarray(t):
 def p_expresiones_nativas(t):
     'E : NATIVAS'
     t[0] = t[1]
-def p_expresion_llamada(t):
-    'E : LLAMADAS'
-    t[0] = t[1]
+
 def p_expresiones_relacionales(t):
     ''' RE :  RE MENQUE RE
             | RE MAYQUE RE
@@ -705,7 +715,6 @@ def p_instrucciones_loop_inst(t):
                             | I
                             | LLAMADAS PTCOMA
                             | NATIVAS PTCOMA
-                            | STRUCTS
                             | BREAK
                             | CONTINUE'''
 
@@ -739,23 +748,19 @@ def p_rango_arreglos(t):
     t[0] = Rango(t[1], t[3],t[5],t.lineno(1), t.lexpos(0))
 
 def p_structs(t):
-    'STRUCTS : R_MUTABLE R_STRUCT ID ELEMENTOS R_END PTCOMA'
-    t[3] = Identificador(t[3],t.lineno(1), t.lexpos(1))
+    'STRUCTS : R_MUTABLE R_STRUCT ID ELEMENTOS  R_END PTCOMA'
     t[0] = Struct(True,t[3], t[4],t.lineno(1), t.lexpos(0) )
 def p_structs2(t):
-    'STRUCTS : R_STRUCT ID ELEMENTOS PTCOMA'
-    t[2] = Identificador(t[2],t.lineno(1), t.lexpos(1))
+    'STRUCTS : R_STRUCT ID ELEMENTOS  R_END PTCOMA'
     t[0] = Struct(False,t[2], t[3],t.lineno(1), t.lexpos(0) )
 def p_structs_mutables(t):
     'STRUCTS : R_MUTABLE R_STRUCT ID R_END PTCOMA'
-    t[3] = Identificador(t[3],t.lineno(1), t.lexpos(1))
     t[0] = Struct(True,t[3], None,t.lineno(1), t.lexpos(0) )
 def p_structs_vacios(t):
     'STRUCTS : R_STRUCT ID R_END PTCOMA'
-    t[2] = Identificador(t[2],t.lineno(1), t.lexpos(1))
     t[0] = Struct(False,t[2], None,t.lineno(1), t.lexpos(0) )
 def p_elementos(t):
-    'ELEMENTOS : ELEMENTOS COMA ELEMENTO'
+    'ELEMENTOS : ELEMENTOS ELEMENTO'
     if t[2] != "":
         t[1].append(t[2])
     t[0] = t[1]
@@ -768,14 +773,28 @@ def p_elementos_elemento(t):
         t[0] = [t[1]]
 
 def p_elemento(t):
-    'ELEMENTO  : ID'
-    t[1] = Identificador(t[1],t.lineno(0), t.lexpos(0))
-    t[0] = Elemento(None, t[1],t.lineno(1), t.lexpos(1))
+    'ELEMENTO  : ID PTCOMA'
+    t[0] = Elemento(t[1], None,t.lineno(1), t.lexpos(1))
 
 def p_elemento_declaraciontipo(t):
-    'ELEMENTO : ID DOSPUNTOS TIPO'
-    t[1] = Identificador(t[1],t.lineno(0), t.lexpos(0))
-    t[0] = Elemento(t[4], t[1],t.lineno(1), t.lexpos(1))
+    'ELEMENTO : ID DOSPUNTOS TIPO PTCOMA'
+    t[0] = Elemento(t[1], t[3],t.lineno(1), t.lexpos(1))
+
+def p_elemento_declaracion_tipo(t):
+    'ELEMENTO : ID DOSPUNTOS ID PTCOMA'
+    t[0] = Elemento(t[1], t[3],t.lineno(1), t.lexpos(1))
+
+def p_acceso1(t):
+    'ACCESOS : ACCESOS PUNTO ACCESO'
+    if t[3] != "":
+       t[1].append(t[3])
+    t[0] = t[1]
+def p_acceso2(t):
+    'ACCESOS : ACCESO'
+    t[0] = [t[1]]
+def p_acceso3(t):
+    'ACCESO : ID'
+    t[0] = Identificador(t[1],t.lineno(1), t.lexpos(1))
 
 def p_error(t):
     print("Error sintáctico en '%s'" % str(t))
@@ -802,7 +821,9 @@ def parse(input) :
         if isinstance(instruccion, Funciones):
             AST.addFuncion(instruccion)
             NodoRaiz.agregarHijoNodo(instruccion.getNodo())
-        # Aqui agregar demás validaciones (return, break o continue en lugar incorrecto)
+        elif isinstance(instruccion, Struct):
+            AST.addStruct(instruccion)
+            NodoRaiz.agregarHijoNodo(instruccion.getNodo())
         else:
             for inst in instruccion:
                 instr= inst.ejecutar(AST,AST.getTSGlobal())
@@ -810,21 +831,19 @@ def parse(input) :
                     continue
                 else:
                     NodoRaiz.agregarHijoNodo(inst.getNodo())
-
-    retorno.append(AST.getDot(NodoRaiz))
-   # tablita = AST.getTSGlobal().tabla
-
-    """for simbolo in tablita.values():
-        print(simbolo.getValor())"""
     err = ""
     if len(AST.getErrores()) > 0:
         for error in AST.getErrores():
             err+=">>" +error.getCadena()+"\n"
+    cadena = AST.getDot(NodoRaiz)
+    print(cadena)
+    retorno.append(cadena)
     if err != "":
         retorno.append(err)
     else: 
         retorno.append(AST.getConsola())
-
-    retorno.append(AST.htmlTablaSimbolos())
-    retorno.append(AST.htmlErrores())
+    tab = AST.htmlTablaSimbolos()
+    retorno.append(tab)
+    taberr = AST.htmlErrores()
+    retorno.append(taberr)
     return retorno
