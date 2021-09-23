@@ -28,8 +28,9 @@ class Funciones(NodoAST):
         NodoNuevo.agregarHijo(self.nombre)
         Nodopar = NodoArbol("Parámetros")
         Nodoinst = NodoArbol("Instrucciones")
-        for parametro in self.parametros:
-            Nodopar.agregarHijoNodo(parametro.getNodo())
+        if self.parametros != None:
+            for parametro in self.parametros:
+                Nodopar.agregarHijoNodo(parametro.getNodo())
         for instruccion in self.instrucciones:
             Nodoinst.agregarHijoNodo(instruccion.getNodo())
         
